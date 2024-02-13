@@ -1,0 +1,31 @@
+.week {
+    display: flex;
+    padding: 2rem;
+    text-align: center;
+    justify-content: space-around;
+
+}
+
+.days {
+    background-color: rgb(240, 142, 174);
+    border-radius: 7%;
+    padding: 1rem;
+    margin: 2rem;
+    width: 5.5rem;
+    height: 10rem;
+}
+
+.hour {
+    background-color: rgb(240, 142, 174);
+    border-radius: 7%;
+    padding: 0.5rem;
+    margin: 1rem;
+}
+
+.MiniCards{
+    display: flex;
+    padding: 2rem;
+    text-align: center;
+    flex-direction: row;
+   
+}
