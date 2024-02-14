@@ -83,12 +83,13 @@ const App = () => {
 
 //Navbar qui apparait au clik avec l'input pour la saisie d'une ville
 const handleCityClick = () => {
+  console.log("déclenché");
   setShowNavBar(true);
 };
 
 //saisie input et à la soumission la Navbar disparait
 const handleWeatherInput = async (city) => {
-    // Appel de l'API avec la city soumise
+    // Appel de l'API avec la city soumise dans la nav
     try {
       const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes&lang=fr`);
       const data = await response.json();
@@ -104,26 +105,10 @@ const handleWeatherInput = async (city) => {
   };
 
 
-//fetch pour la saisie d'une nouvelle localité
-// const submitCity = () => {
-//   const weatherData = async () => {
-//     const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`).then(response => response.json());
-//     const data = response;
-//     setCurrentWeather(data);
-    
-//     // Réinitialiser le champ de saisie et masquer l'input
-//     setWeatherInput('');
-//     setShowInput(false);
-//     console.log('Ville soumise:', weatherInput);
-//   };
-//   weatherData();
-// };
-
-
 //récup du tableau astro pour lever et couher de soleil - à voir
-const astro = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday && 
-  forecastWeather.forecast.forecastday;
-  console.log(astro);
+// const astro = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday && 
+//   forecastWeather.forecast.forecastday;
+//   console.log(astro);
   // console.log(astro[0].astro.sunrise);
   
 
