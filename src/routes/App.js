@@ -7,7 +7,10 @@ import feelsLikeIcon from "../assets/icons/feelslike.svg"
 import humidityIcon from "../assets/icons/humidity.svg"
 import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
+import sunsetIcon from "../assets/icons/sunset.svg";
+import sunriseIcon from "../assets/icons/sunrise.svg"
 import { FaSearchLocation } from "react-icons/fa";
+import { BiMessageSquareDetail } from "react-icons/bi";
 import { Drawer, Form, Input, Row, Col, Space, Button } from 'antd';
 import { TiInfoLarge } from "react-icons/ti";
 import { formatTime } from '../utils/dateUtils';
@@ -122,13 +125,25 @@ e.preventDefault();
 submitCity();
 };
 
+const astro = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday && 
+  forecastWeather.forecast.forecastday;
+  console.log(astro);
+  console.log(astro[0].astro.sunrise);
+  
+  // const listSun = astro.map((key) => {
+  //   return (
+  //     <p>{key}</p>
+  //   )
+  // })
+  
+  // console.log(listSun);
 
   return (
     <div className="container">
         <>
       <Drawer
         title="Saisir une autre ville"
-        width={450}
+        width={250}
         onClose={onClose}
         open={open}
         styles={{
@@ -139,8 +154,8 @@ submitCity();
         }}
       >
         <Form layout="vertical" onSubmit={handleFormSubmit}>
-          <Row gutter={16}>
-            <Col span={12}>
+          <Row gutter={24}>
+            <Col span={24}>
               <Form.Item
                 name="city"
                 label=""
@@ -168,11 +183,12 @@ submitCity();
             {/* onClick = navigation vers les paramètres */}
             {/* <h4>{format(parseISO(dataWeather?.location?.localtime))}</h4> */}
             <h3 className='city-name' onClick={showDrawer}>{currentWeather?.location?.name}</h3>
-            <h3 className='current-temp' onClick={showModal}>{currentWeather?.current?.temp_c}°C <TiInfoLarge width={3} height={3}/></h3>
-            
-            <img src={currentWeather?.current?.condition?.icon} alt="current weather condition icon" className='icon-weather-display'/>
+            <h3 className='current-temp' onClick={showModal}>{currentWeather?.current?.temp_c}°C </h3>
+            <BiMessageSquareDetail width={3} height={3}/>
+            {/* <TiInfoLarge width={3} height={3}/> */}
+            <img src={currentWeather?.current?.condition?.icon} alt="" />
             <p>{currentWeather?.current?.condition?.text}</p>
-      </div>
+        </div>
       <Modal open={isModalOpen} onOk={handleOk}>
             <div className="forecast">
               <h4>Détails Temps Actuel</h4>
@@ -204,6 +220,19 @@ submitCity();
       <div className="weather-meme">
 
       </div>
+      <div className='sun-display'>
+            <div className="sun-infos">
+              <div>
+                  <img src={sunriseIcon} className="sun-icons" alt="" />
+                  <p>{astro[0].astro.sunrise}</p>
+              </div>
+              <div>
+                  <img src={sunsetIcon} className="sun-icons"alt="" />
+                  <p>{astro[0].astro.sunset}</p>
+              </div> 
+            </div>
+      </div>
+      
 
 
     </div>
