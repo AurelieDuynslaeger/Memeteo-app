@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+/* import { format } from 'date-fns';
+import { fr } from 'date-fns/locale'; */
 import { Modal } from 'antd';
 import airQualityIcon from "../assets/icons/airquality.svg"
 import feelsLikeIcon from "../assets/icons/feelslike.svg"
@@ -8,10 +8,13 @@ import humidityIcon from "../assets/icons/humidity.svg"
 import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
 import { FaSearchLocation } from "react-icons/fa";
+import { MdMyLocation } from "react-icons/md";
 import { Drawer, Form, Input, Row, Col, Space, Button } from 'antd';
 import { TiInfoLarge } from "react-icons/ti";
 import { formatTime } from '../utils/dateUtils';
 import "../stylesheet/Root.scss";
+import WeatherSkeleton from '../components/WeatherSkeleton.js';
+
 
 const App = () => {
 
@@ -31,8 +34,10 @@ const App = () => {
   const [open, setOpen] = useState(false);
   const [weatherInput, setWeatherInput] = useState('');
 
+  const [loadingCity, setLoadingCity] = useState(false);
 
-    useEffect(() => {
+
+  useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
@@ -122,7 +127,32 @@ e.preventDefault();
 submitCity();
 };
 
+/* geolocalisation */
+function handleCurrentLocation() {
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async(position)=>{
+      const { latitude, longitude } = position.coords;
+       setLoadingCity(true);
+       setWeatherInput('');
+       setOpen(false);
+      try {
+          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes&lang=fr`).then(response => response.json()); 
+          setTimeout(() => {
+            const data = response;
+            setCurrentWeather(data);
+            setLoadingCity(false);
+          }, 500);
+      } catch(error) {
+        setLoadingCity(false);
+      }
+    });
+  }
+}
 
+// Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
+if (loadingCity) {
+  return <WeatherSkeleton />;
+} else {
   return (
     <div className="container">
         <>
@@ -138,6 +168,10 @@ submitCity();
           },
         }}
       >
+        <MdMyLocation 
+          title="Votre position actuelle" // when you hover, you can see this title
+          onClick={handleCurrentLocation}
+         />
         <Form layout="vertical" onSubmit={handleFormSubmit}>
           <Row gutter={16}>
             <Col span={12}>
@@ -146,17 +180,17 @@ submitCity();
                 label=""
                 rules={[
                   {
-                    required: !!weatherInput,
+                    //required: !!weatherInput,
                     message: 'Tapez votre recherche',
                   },
                 ]}
               >
                 <Input placeholder="Tapez votre recherche ici..." value={weatherInput} onChange={handleInputChange}/>
-                <Space>
+                {/* <Space>
                   <Button type="primary" htmlType='submit'>
                   <FaSearchLocation/>
                   </Button>
-                </Space>
+                </Space> */}
               </Form.Item>
             </Col>
           </Row>
@@ -204,10 +238,8 @@ submitCity();
       <div className="weather-meme">
 
       </div>
-
-
     </div>
   )
-}
+}}
 
 export default App
