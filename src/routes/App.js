@@ -16,8 +16,6 @@ import "../stylesheet/Root.scss";
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
 
 
-const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-
 const App = () => {
 
 
@@ -134,11 +132,11 @@ function handleCurrentLocation() {
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(async(position)=>{
       const { latitude, longitude } = position.coords;
-      setWeatherInput(`${latitude},${longitude}`);
-      
+       setLoadingCity(true);
+       setWeatherInput('');
+       setOpen(false);
       try {
-          setLoadingCity(true);
-          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`).then(response => response.json()); 
+          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes&lang=fr`).then(response => response.json()); 
           setTimeout(() => {
             const data = response;
             setCurrentWeather(data);
@@ -182,7 +180,7 @@ if (loadingCity) {
                 label=""
                 rules={[
                   {
-                    required: !!weatherInput,
+                    //required: !!weatherInput,
                     message: 'Tapez votre recherche',
                   },
                 ]}
