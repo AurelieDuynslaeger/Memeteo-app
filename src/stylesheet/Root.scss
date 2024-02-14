@@ -31,12 +31,48 @@ margin: auto;
   }
 }
 
+//l'icone détail n'apparait que sur les écrans mobiles
+.mobile-icon {
+  display: block; 
+}
+
+//détail météo masqués sur mobile et déclenchés au clik
+.weather-details {
+  display: none;
+  /* Ajoutez vos styles pour les détails de la météo ici */
+
+  &.show-mobile {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-icon {
+    //l'icone détail est masquée sur les tablettes et desktop
+    display: none; 
+  }
+
+  .weather-details {
+    //la div weather details apparait sur tablette et desktop
+    display: block; 
+  }
+}
+
 .sun-infos{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   .sun-icons{
     width: 2rem;
+  }
+  .sun-hours {
+    font-size: 0.7rem;
+  }
+  .sun-couple{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }
 

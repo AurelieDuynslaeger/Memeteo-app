@@ -1,40 +1,37 @@
 import React, { useEffect, useState } from 'react'
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import { Modal } from 'antd';
+// import { format } from 'date-fns';
+// import { fr } from 'date-fns/locale';
+// import sunsetIcon from "../assets/icons/sunset.svg";
+// import sunriseIcon from "../assets/icons/sunrise.svg";
 import airQualityIcon from "../assets/icons/airquality.svg"
 import feelsLikeIcon from "../assets/icons/feelslike.svg"
 import humidityIcon from "../assets/icons/humidity.svg"
 import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
-import sunsetIcon from "../assets/icons/sunset.svg";
-import sunriseIcon from "../assets/icons/sunrise.svg"
-import { FaSearchLocation } from "react-icons/fa";
 import { BiMessageSquareDetail } from "react-icons/bi";
-import { Drawer, Form, Input, Row, Col, Space, Button } from 'antd';
-import { TiInfoLarge } from "react-icons/ti";
-import { formatTime } from '../utils/dateUtils';
+// import { formatTime } from '../utils/dateUtils';
 import "../stylesheet/Root.scss";
+import HeaderNav from '../components/HeaderNav';
 
 const App = () => {
 
-
-    
   //météo a l'instant T
   const [currentWeather, setCurrentWeather] = useState({});
   //météo prévisions 24h (pluie et heure par heure)
   const [forecastWeather, setForecastWeather] = useState({});
   //météo prévisions 7 (jour-temps-icon)
   const [forecastWeather7, setForecastWeather7] = useState({});
-  //meme conditionné sur les prévisions
-  // const [memeWeather, setmemeWeather] = useState({});
-  //modal détails du jour
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  //état de la navBar à false, passe à true au clik sur la ville
+  const [showNavBar, setShowNavBar] = useState(false);
   //menu input pour saisie de la ville
-  const [open, setOpen] = useState(false);
   const [weatherInput, setWeatherInput] = useState('');
 
+  //div Détails Météo qui n'apparait qu'au clik sur mobile, et qui est en display sur tablette et desktop
+  const [showMobileDetails, setShowMobileDetails] = useState(false);
 
+   //fetch current data weather
     useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
@@ -50,7 +47,7 @@ const App = () => {
   
     weatherData();
   }, [weatherInput]);
-
+    //fetch forecast 24h
   useEffect(() => {
     const weatherDataForecast = async () => {
       let apiUrl;
@@ -66,6 +63,7 @@ const App = () => {
     weatherDataForecast();
   }, [weatherInput]);
 
+    //fetch forecast 5jrs
   useEffect(() => {
     const weatherForecast7 = async () => {
       let apiUrl;
@@ -81,117 +79,73 @@ const App = () => {
     weatherForecast7();
   }, [weatherInput]);
 
-  // useEffect(() => {
-  //   const weatherMeme = async () => {
-  //     const response = await fetch("https://api.giphy.com/v1/gifs/search?api_key=NhMenzJ8ulP0QRBmKtl0MFPfJFfyoVTF&q=cold&limit=1&offset=0&rating=g&lang=en&bundle=messaging_non_clips").then(response => response.json());
-  //     const data = response;
-  //     setmemeWeather(data);
-  //   };
-  //   weatherMeme();
-  // });
 
-  //modal open et fermeture
-const showModal = () => {
-  setIsModalOpen(true);
-}
-const handleOk = () => {
-  setIsModalOpen(false);
+//Navbar qui apparait au clik avec l'input pour la saisie d'une ville
+const handleCityClick = () => {
+  setShowNavBar(true);
 };
 
-//menu open sur input ville
-const showDrawer = () => {
-  setOpen(true);
-};
-const onClose = () => {
-  setOpen(false);
-};
+//saisie input et à la soumission la Navbar disparait
+const handleWeatherInput = async (city) => {
+    // Appel de l'API avec la city soumise
+    try {
+      const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes&lang=fr`);
+      const data = await response.json();
+      setCurrentWeather(data);
+      setShowNavBar(false);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données météo:', error);
+    }
+  };
+
+  const handleMobileIconClick = () => {
+    setShowMobileDetails(!showMobileDetails);
+  };
+
 
 //fetch pour la saisie d'une nouvelle localité
-const submitCity = () => {
-  const weatherData = async () => {
-    const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`).then(response => response.json());
-    const data = response;
-    setCurrentWeather(data);
-  };
-  weatherData();
-}
+// const submitCity = () => {
+//   const weatherData = async () => {
+//     const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`).then(response => response.json());
+//     const data = response;
+//     setCurrentWeather(data);
+    
+//     // Réinitialiser le champ de saisie et masquer l'input
+//     setWeatherInput('');
+//     setShowInput(false);
+//     console.log('Ville soumise:', weatherInput);
+//   };
+//   weatherData();
+// };
 
-const handleInputChange = (e) => {
-setWeatherInput(e.target.value);
-};
 
-const handleFormSubmit = (e) => {
-e.preventDefault();
-submitCity();
-};
-
+//récup du tableau astro pour lever et couher de soleil - à voir
 const astro = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday && 
   forecastWeather.forecast.forecastday;
   console.log(astro);
-  console.log(astro[0].astro.sunrise);
+  // console.log(astro[0].astro.sunrise);
   
-  // const listSun = astro.map((key) => {
-  //   return (
-  //     <p>{key}</p>
-  //   )
-  // })
-  
-  // console.log(listSun);
 
   return (
     <div className="container">
-        <>
-      <Drawer
-        title="Saisir une autre ville"
-        width={250}
-        onClose={onClose}
-        open={open}
-        styles={{
-          body: {
-            paddingBottom: 80,
-            height:30,
-          },
-        }}
-      >
-        <Form layout="vertical" onSubmit={handleFormSubmit}>
-          <Row gutter={24}>
-            <Col span={24}>
-              <Form.Item
-                name="city"
-                label=""
-                rules={[
-                  {
-                    required: !!weatherInput,
-                    message: 'Tapez votre recherche',
-                  },
-                ]}
-              >
-                <Input placeholder="Tapez votre recherche ici..." value={weatherInput} onChange={handleInputChange}/>
-                <Space>
-                  <Button type="primary" htmlType='submit'>
-                  <FaSearchLocation/>
-                  </Button>
-                </Space>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Drawer>
-        </>
+      {/* composant Navbar qui n'apparait que si on clik sur la ville */}
+      {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
       <div className='city'>
-            {/* <CiSettings/> */}
-            {/* onClick = navigation vers les paramètres */}
-            {/* <h4>{format(parseISO(dataWeather?.location?.localtime))}</h4> */}
-            <h3 className='city-name' onClick={showDrawer}>{currentWeather?.location?.name}</h3>
-            <h3 className='current-temp' onClick={showModal}>{currentWeather?.current?.temp_c}°C </h3>
-            <BiMessageSquareDetail width={3} height={3}/>
-            {/* <TiInfoLarge width={3} height={3}/> */}
+
+            <h3 className='city-name'  onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
+            <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
+
+            {/* Icône mobile visible uniquement sur les appareils mobiles */}
+            <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} />
+
             <img src={currentWeather?.current?.condition?.icon} alt="" />
             <p>{currentWeather?.current?.condition?.text}</p>
-        </div>
-      <Modal open={isModalOpen} onOk={handleOk}>
-            <div className="forecast">
-              <h4>Détails Temps Actuel</h4>
+      </div>
+      {/* Div des détails de la météo */}
+      <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
+        {/* Contenu des détails de la météo */}
+        <div className="forecast">
+              {/* <h4>Détails Temps Actuel</h4> */}
               <div className='forecast-details'>
                 <div className='details-card'>
                   {/* créer un composant DetailWeatherCard */}
@@ -216,26 +170,26 @@ const astro = forecastWeather && forecastWeather.forecast && forecastWeather.for
                 </div>
               </div>
             </div>
-      </Modal>
+      </div>
       <div className="weather-meme">
 
       </div>
+      {/* 
       <div className='sun-display'>
             <div className="sun-infos">
-              <div>
+              <div className='sun-couple'>
                   <img src={sunriseIcon} className="sun-icons" alt="" />
-                  <p>{astro[0].astro.sunrise}</p>
+                  <p className='sun-hours'>{astro[0].astro.sunrise}</p>
               </div>
-              <div>
+              <div className='sun-couple'>
                   <img src={sunsetIcon} className="sun-icons"alt="" />
-                  <p>{astro[0].astro.sunset}</p>
+                  <p className='sun-hours'>{astro[0].astro.sunset}</p>
               </div> 
             </div>
-      </div>
-      
-
+      </div> */}
 
     </div>
+
   )
 }
 
