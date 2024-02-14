@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 // import { format } from 'date-fns';
 // import { fr } from 'date-fns/locale';
+// import { formatTime } from '../utils/dateUtils';
 // import sunsetIcon from "../assets/icons/sunset.svg";
 // import sunriseIcon from "../assets/icons/sunrise.svg";
 import airQualityIcon from "../assets/icons/airquality.svg"
@@ -9,9 +10,10 @@ import humidityIcon from "../assets/icons/humidity.svg"
 import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
 import { BiMessageSquareDetail } from "react-icons/bi";
-// import { formatTime } from '../utils/dateUtils';
-import "../stylesheet/Root.scss";
 import HeaderNav from '../components/HeaderNav';
+import DetailCard from '../components/DetailCard';
+import "../stylesheet/Root.scss";
+
 
 const App = () => {
 
@@ -21,7 +23,6 @@ const App = () => {
   const [forecastWeather, setForecastWeather] = useState({});
   //météo prévisions 7 (jour-temps-icon)
   const [forecastWeather7, setForecastWeather7] = useState({});
-
 
   //état de la navBar à false, passe à true au clik sur la ville
   const [showNavBar, setShowNavBar] = useState(false);
@@ -145,31 +146,14 @@ const astro = forecastWeather && forecastWeather.forecast && forecastWeather.for
       <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
         {/* Contenu des détails de la météo */}
         <div className="forecast">
-              {/* <h4>Détails Temps Actuel</h4> */}
-              <div className='forecast-details'>
-                <div className='details-card'>
-                  {/* créer un composant DetailWeatherCard */}
-                  {/* props : src width height data  */}
-                  <img src={windIcon} alt="" width={40} height={40} /> 
-                  <p>{currentWeather?.current?.wind_kph} km/h</p>
-                  {/* {currentWeather?.current?.wind_dir} = Ouest (condtionnement à venir) */}
-                </div>
-                <div className='details-card'>
-                  <img src={humidityIcon} alt="" width={40} height={40} />
-                  <p>Humidité : {currentWeather?.current?.humidity} %</p>
-                </div>
-                <div className='details-card'>
-                  <img src={uvIcon} alt="" width={40} height={40} />
-                  <p>Indice : {currentWeather?.current?.uv}</p> 
-                </div>
-                <div className='details-card'>
-                  <img src={feelsLikeIcon} alt="" width={40} height={40} /> <p>Ressenti : {currentWeather?.current?.feelslike_c} °C </p>
-                </div>
-                <div className='details-card'>
-                  <img src={airQualityIcon} alt="" width={40} height={40} /> <p> Qualité de l'air : indice {currentWeather?.current?.air_quality['gb-defra-index']} </p>
-                </div>
-              </div>
-            </div>
+          <div className='forecast-details'>
+            <DetailCard iconSrc={windIcon} description="Vitesse du vent" value={`${currentWeather?.current?.wind_kph} km/h`} />
+            <DetailCard iconSrc={humidityIcon} description="Humidité" value={`${currentWeather?.current?.humidity} %`} />
+            <DetailCard iconSrc={uvIcon} description="Indice UV" value={currentWeather?.current?.uv} />
+            <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${currentWeather?.current?.feelslike_c} °C`} />
+            <DetailCard iconSrc={airQualityIcon} description="Qualité de l'air" value={`indice ${currentWeather?.current?.air_quality['gb-defra-index']}`} />
+          </div>
+        </div>
       </div>
       <div className="weather-meme">
 
