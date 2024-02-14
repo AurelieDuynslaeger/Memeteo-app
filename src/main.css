@@ -1,5 +1,5 @@
 .week {
-    display: flex;
+   display: flex;
     padding: 2rem;
     text-align: center;
     justify-content: space-around;
@@ -28,4 +28,14 @@
     text-align: center;
     flex-direction: row;
    
+}
+
+.rain{
+    padding: 0.5rem;
+    margin: 1rem;
+}
+
+.precip{
+    display: flex;
+    text-align: center;
 }

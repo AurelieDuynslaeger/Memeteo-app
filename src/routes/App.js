@@ -8,6 +8,7 @@ import { formatTime } from '../utils/dateUtils.js';
 import Day from '../components/Day.js';
 import nonprecip from '../assets/icons/nonPrecipitation.svg';
 import precip from '../assets/icons/precipitation.svg';
+import Precipitation from '../components/Precipitation.js';
 
 
 
@@ -46,18 +47,21 @@ const App = () => {
     fetchData();
   });
 
-  // const onChange = (currentSlide) => {
-  //   console.log(currentSlide)
-  // }
+    // const onChange = (currentSlide) => {
+    //   console.log(currentSlide);
+    // };
 
   const days = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday.map((day, index) =>
   (
-    <Week
+    <div className="week">
+      <Week
         key={index}
         name={format(new Date(day.date), 'EEEE', { locale: fr })}
         weather={day.day.condition.icon}
         temperature={day.day.avgtemp_c}
       />
+    </div>
+    
   ))
 
   const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
@@ -74,10 +78,29 @@ const App = () => {
     </div>
   ))
 
+  const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday && 
+    forecastWeather.forecast.forecastday.map((day, index) =>
+    (
+      <div className="precip" key={index}>
+      {day.hour.map((hour, idx) => (
+        <Precipitation
+          key={idx}
+          minutes={formatTime(hour.time)}
+          rain={hour.chance_of_rain > 0 ? (
+          <img src={precip} alt="Precipitating" />) : 
+          (<img src={nonprecip} alt="Not Precipitating" />)} 
+        />
+      ))} 
+      </div>
+
+    )
+    )
+
 
 
   return (
     <div>
+     
 
       <div className="week">
         {days}
@@ -87,6 +110,10 @@ const App = () => {
         {hours}
       </div>
 
+      <div>
+        {minutes}
+      </div>
+      
 
     </div>
 
