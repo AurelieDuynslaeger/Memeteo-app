@@ -1,7 +1,7 @@
 import React from 'react'
 import '../main.css';
 
-const Week = () => ({name,weather, temperature}) => {
+const Week = ({name,weather, temperature}) => {
     return (
       
           <div className="days">

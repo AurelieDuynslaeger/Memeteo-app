@@ -5,6 +5,10 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import '../main.css';
 import { formatTime } from '../utils/dateUtils.js';
+import Day from '../components/Day.js';
+import nonprecip from '../assets/icons/nonPrecipitation.svg';
+import precip from '../assets/icons/precipitation.svg';
+
 
 
 
@@ -48,30 +52,24 @@ const App = () => {
 
   const days = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday.map((day, index) =>
   (
-    // <Week
-    //     key={index}
-    //     name={format(new Date(day.date), 'EEEE', { locale: fr })}
-    //     weather={day.day.condition.icon}
-    //     temperature={day.day.avgtemp_c}
-    //   />
-
-    <div className="days">
-      <p>{format(new Date(day.date), 'EEEE', { locale: fr })}</p>
-      <img src={day.day.condition.icon} alt="" />
-      <p>{day.day.avgtemp_c}°C</p>
-    </div>)
-
-  )
+    <Week
+        key={index}
+        name={format(new Date(day.date), 'EEEE', { locale: fr })}
+        weather={day.day.condition.icon}
+        temperature={day.day.avgtemp_c}
+      />
+  ))
 
   const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
-  (
+  (    
     <div className="MiniCards" key={index}>
-      {day.hour.map((hour, idx) => (
-        <div className="hour" key={idx}>
-          <p>{formatTime(hour.time)}</p>
-          <img src={`http:${hour.condition.icon}`} alt="" />
-          <p>{hour.temp_c}°C</p>
-        </div>
+      {day.hour.map((hour, index) => (
+        <Day
+          key={index}
+          time={formatTime(hour.time)}
+          weather={`http:${hour.condition.icon}`}
+          temperature={hour.temp_c}      
+        />
       ))}
     </div>
   ))
