@@ -23,12 +23,6 @@ import precip from '../assets/icons/precipitation.svg';
 import Precipitation from '../components/Precipitation.js';
 import '../stylesheet/carrousel.scss';
 
-const contentStyle = {
-  height: '300px',
-  lineHeight: '300px',
-  textAlign: 'center',
-};
-
 
 const App = () => {
     
