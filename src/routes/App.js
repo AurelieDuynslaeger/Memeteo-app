@@ -7,13 +7,12 @@ import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
 import { FaSearchLocation } from "react-icons/fa";
 import { MdMyLocation } from "react-icons/md";
-import { Drawer, Form, Input, Row, Col, Space, Button } from 'antd';
+import { Drawer, Form, Input, Row, Col } from 'antd';
 import { TiInfoLarge } from "react-icons/ti";
 import "../stylesheet/Root.scss";
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
 import Week from '../components/Week.js';
-import { Carousel, Button} from 'antd';
-import { Radio } from 'antd/lib/radio';
+import { Carousel, Radio} from 'antd';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import '../main.css';
