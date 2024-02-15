@@ -36,4 +36,14 @@ margin: auto;
     flex-basis: 50%;
     text-align: center;
   }
+  .SplashScreen-page{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+background-color: #BBCDD3;
+.LogoMemeteo{
+  max-width: 60%;
+}
 }
