@@ -21,12 +21,7 @@ import { formatTime } from '../utils/dateUtils';
 //import des composants
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
 import Week from '../components/Week.js';
-import { Carousel, Button} from 'antd';
-import { Radio } from 'antd/lib/radio';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import '../main.css';
-import { formatTime } from '../utils/dateUtils.js';
 import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
 import DetailCard from '../components/DetailCard.js';
