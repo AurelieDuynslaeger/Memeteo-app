@@ -1,4 +1,6 @@
 import React from 'react'
+import '../stylesheet/carrousel.scss';
+import '../main.css';
 
 const Precipitation = ({minutes, rain}) => {
   return (

@@ -1,5 +1,5 @@
 import Week from '../components/Week.js';
-import { Carousel } from 'antd';
+import { Carousel, Button, Radio } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -9,14 +9,26 @@ import Day from '../components/Day.js';
 import nonprecip from '../assets/icons/nonPrecipitation.svg';
 import precip from '../assets/icons/precipitation.svg';
 import Precipitation from '../components/Precipitation.js';
+import '../stylesheet/carrousel.scss';
 
+const contentStyle = {
+  height: '300px',
+  lineHeight: '300px',
+  textAlign: 'center',
+};
 
 
 
 const App = () => {
+  const [dotPosition, setDotPosition] = useState('right');
+  const handlePositionChange = ({ target: { value } }) => {
+    setDotPosition(value);
+  };
   const [forecastWeather7, setForecastWeather7] = useState({});
   const [forecastWeather, setForecastWeather] = useState({});
 
+
+  /////Appel API pour 7 jours/////
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,6 +44,8 @@ const App = () => {
     fetchData();
   });
 
+
+  ///// Appel API pour 1 jour /////
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,10 +61,12 @@ const App = () => {
     fetchData();
   });
 
-    // const onChange = (currentSlide) => {
-    //   console.log(currentSlide);
-    // };
 
+  // const onChange = (currentSlide) => {
+  //   console.log(currentSlide);
+  // };
+
+  ///// Carrousel page 1 pour la météo des 5 prochains jours /////
   const days = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday.map((day, index) =>
   (
     <div className="week">
@@ -61,36 +77,38 @@ const App = () => {
         temperature={day.day.avgtemp_c}
       />
     </div>
-    
+
   ))
 
+  ///// Carrousel page 2 pour la météo des 24 prochaines heures /////
   const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
-  (    
+  (
     <div className="MiniCards" key={index}>
       {day.hour.map((hour, index) => (
         <Day
           key={index}
           time={formatTime(hour.time)}
           weather={`http:${hour.condition.icon}`}
-          temperature={hour.temp_c}      
+          temperature={hour.temp_c}
         />
       ))}
     </div>
   ))
 
-  const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday && 
+  ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
+  const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
     forecastWeather.forecast.forecastday.map((day, index) =>
     (
       <div className="precip" key={index}>
-      {day.hour.map((hour, idx) => (
-        <Precipitation
-          key={idx}
-          minutes={formatTime(hour.time)}
-          rain={hour.chance_of_rain > 0 ? (
-          <img src={precip} alt="Precipitating" />) : 
-          (<img src={nonprecip} alt="Not Precipitating" />)} 
-        />
-      ))} 
+        {day.hour.map((hour, idx) => (
+          <Precipitation
+            key={idx}
+            minutes={formatTime(hour.time)}
+            rain={hour.chance_of_rain > 0 ? (
+              <img src={precip} alt="Precipitating" />) :
+              (<img src={nonprecip} alt="Not Precipitating" />)}
+          />
+        ))}
       </div>
 
     )
@@ -100,20 +118,41 @@ const App = () => {
 
   return (
     <div>
-     
+      <Radio.Group
+        onChange={handlePositionChange}
+        value={dotPosition}
+        style={{
+          marginBottom: 8,
+        }}
+      >
 
-      <div className="week">
-        {days}
-      </div>
+      </Radio.Group>
 
-      <div>
-        {hours}
-      </div>
+      <Carousel dotPosition={dotPosition}>
+        <div>
+          <p>Temps sur 7 jours</p>
+          <div className="week">
+            {days}
+          </div>
+        </div>
 
-      <div>
-        {minutes}
-      </div>
-      
+
+        <div>
+          <p>Temps sur 24h</p>
+          <div  className="MiniCards">
+            {hours}
+          </div>
+        </div>
+
+        <div>
+          <p>Précipitations dans l'heure</p>
+          <div  className="precip">
+            {minutes}
+          </div>
+          </div>
+
+
+      </Carousel>
 
     </div>
 
