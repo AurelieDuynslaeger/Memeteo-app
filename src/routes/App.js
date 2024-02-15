@@ -12,11 +12,10 @@ import { TiInfoLarge } from "react-icons/ti";
 import "../stylesheet/Root.scss";
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
 import Week from '../components/Week.js';
-import { Carousel, Button} from 'antd';
-import { Radio } from 'antd/lib/radio';
+import { Carousel, Radio} from 'antd';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import '../main.css';
+// import '../main.css';
 import { formatTime } from '../utils/dateUtils.js';
 import Day from '../components/Day.js';
 import nonprecip from '../assets/icons/nonPrecipitation.svg';
@@ -322,7 +321,7 @@ if (loadingCity) {
 
       <Carousel dotPosition={dotPosition}>
         <div>
-          <p>Temps sur 7 jours</p>
+          {/* <p>Temps sur 7 jours</p> */}
           <div className="week">
             {days}
           </div>
@@ -330,14 +329,14 @@ if (loadingCity) {
 
 
         <div>
-          <p>Temps sur 24h</p>
+          {/* <p>Temps sur 24h</p> */}
           <div  className="MiniCards">
             {hours}
           </div>
         </div>
 
         <div>
-          <p>Précipitations dans l'heure</p>
+          {/* <p>Précipitations dans l'heure</p> */}
           <div  className="precip">
             {minutes}
           </div>
