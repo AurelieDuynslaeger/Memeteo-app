@@ -1,0 +1,58 @@
+/* .week {
+   display: flex;
+    padding: 2rem;
+    text-align: center;
+    justify-content: space-around;
+    overflow-x: auto;
+    height: 250px;
+    padding: 3rem
+
+}
+
+.days {
+    background-color: rgb(240, 142, 174);
+    border-radius: 7%;
+    padding: 1rem;
+    
+}
+
+.hour {
+    background-color: rgb(240, 142, 174);
+    border-radius: 50%;
+    padding: 0.5rem;
+    width: 3.8rem;
+    margin: 0.1rem;
+    
+
+}
+
+.MiniCards{
+    display: flex;
+    text-align: center; 
+    justify-content: space-around;
+    overflow-x: auto;
+    height: 250px;
+}
+
+.rain{
+    padding: 0.5rem;
+    margin: 1rem;
+}
+
+.precip{
+    display: flex;
+    text-align: center;
+    overflow-x: auto;
+    height: 250px;
+}
+
+.ant-carousel {
+    box-shadow: 0 0.5rem 2rem black;
+    background-color: rgb(223, 217, 217);
+    display: flex;
+    align-items: center;
+}
+
+.slick-list {
+    height : 300px !important;
+} */
