@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 // import { format } from 'date-fns';
 // import { fr } from 'date-fns/locale';
-// import { formatTime } from '../utils/dateUtils';
+import { formatTime } from '../utils/dateUtils';
 // import sunsetIcon from "../assets/icons/sunset.svg";
 // import sunriseIcon from "../assets/icons/sunrise.svg";
 import airQualityIcon from "../assets/icons/airquality.svg"
@@ -9,7 +9,8 @@ import feelsLikeIcon from "../assets/icons/feelslike.svg"
 import humidityIcon from "../assets/icons/humidity.svg"
 import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
-import { BiMessageSquareDetail } from "react-icons/bi";
+// import { BiMessageSquareDetail } from "react-icons/bi";
+import { TbCloudQuestion } from "react-icons/tb";
 import HeaderNav from '../components/HeaderNav';
 import DetailCard from '../components/DetailCard';
 import "../stylesheet/Root.scss";
@@ -122,7 +123,8 @@ const handleWeatherInput = async (city) => {
             <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
 
             {/* Icône mobile visible uniquement sur les appareils mobiles */}
-            <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} />
+            <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
+            {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
 
             <img src={currentWeather?.current?.condition?.icon} alt="" />
             <p>{currentWeather?.current?.condition?.text}</p>
@@ -143,8 +145,8 @@ const handleWeatherInput = async (city) => {
       <div className="weather-meme">
 
       </div>
-      {/* 
-      <div className='sun-display'>
+      
+      {/* <div className='sun-display'>
             <div className="sun-infos">
               <div className='sun-couple'>
                   <img src={sunriseIcon} className="sun-icons" alt="" />

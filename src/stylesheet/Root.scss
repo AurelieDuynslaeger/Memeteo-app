@@ -18,18 +18,16 @@ margin: auto;
   .current-temp{
     font-size: 3rem;
     margin-top: 2rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: -1rem;
     font-weight: 300;
-  }
-  .icon-weather-display{
-   margin-top:3rem;
-   width: 6rem;
   }
 }
 
 //l'icone détail n'apparait que sur les écrans mobiles
 .mobile-icon {
   display: block; 
+  margin-bottom: 2rem;
+   width: 6rem;
 }
 
 //détail météo masqués sur mobile et déclenchés au clik
@@ -57,7 +55,7 @@ margin: auto;
 .sun-infos{
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   .sun-icons{
     width: 2rem;
   }
@@ -82,9 +80,10 @@ margin: auto;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-  }
-  .details-card{
-    flex-basis: 50%;
-    text-align: center;
+    .details-card{
+      flex-basis: 50%;
+      text-align: center;
+      font-size: 0.7rem;
+    }
   }
 }
