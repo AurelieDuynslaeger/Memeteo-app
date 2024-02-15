@@ -1,6 +1,6 @@
 
 import './stylesheet/Root.scss';
-import App from './routes/App';
+import App from "./routes/App";
 import ForecastDetails from './routes/ForecastDetails';
 import NotFound from './routes/NotFound';
 

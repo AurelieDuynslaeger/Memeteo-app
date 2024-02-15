@@ -1,0 +1,23 @@
+.weather-skeleton {
+    .container {
+      .city {
+        animation: pulse 1s infinite alternate;
+        .current-temp, .icon-weather-display, .weather-details .details-card {
+          width: 500px; 
+          height: 50px; 
+          background-color: #ccc; 
+          margin-bottom: 10px; 
+        }
+      }
+    }
+  
+    // Animation pulse
+    @keyframes pulse {
+      from {
+        opacity: 0.25; // Opacité initiale de l'élément
+      }
+      to {
+        opacity: 1; // Opacité finale de l'élément
+      }
+    }
+  }
