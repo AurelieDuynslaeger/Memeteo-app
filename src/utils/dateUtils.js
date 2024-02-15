@@ -4,3 +4,4 @@ export const formatTime = (dateTimeString) => {
   };
 
   ///convertir le timestamp de l'api, et n'en retirer que l'heure au format hh:mm
+
