@@ -1,23 +1,45 @@
 import React, { useEffect, useState } from 'react'
-// import { format } from 'date-fns';
-// import { fr } from 'date-fns/locale';
-import { formatTime } from '../utils/dateUtils';
-// import sunsetIcon from "../assets/icons/sunset.svg";
-// import sunriseIcon from "../assets/icons/sunrise.svg";
+
+//import des icones
 import airQualityIcon from "../assets/icons/airquality.svg"
 import feelsLikeIcon from "../assets/icons/feelslike.svg"
 import humidityIcon from "../assets/icons/humidity.svg"
 import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
-// import { BiMessageSquareDetail } from "react-icons/bi";
+import nonprecip from '../assets/icons/nonPrecipitation.svg';
+import precip from '../assets/icons/precipitation.svg';
+// import sunsetIcon from "../assets/icons/sunset.svg";
+// import sunriseIcon from "../assets/icons/sunrise.svg";
+
+//import composant Ant Design et React Icons
+import { Carousel, Radio} from 'antd';
 import { TbCloudQuestion } from "react-icons/tb";
-import HeaderNav from '../components/HeaderNav';
-import DetailCard from '../components/DetailCard';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { formatTime } from '../utils/dateUtils';
+
+//import des composants
+import WeatherSkeleton from '../components/WeatherSkeleton.js';
+import Week from '../components/Week.js';
+import Day from '../components/Day.js';
+import HeaderNav from '../components/HeaderNav.js';
+import DetailCard from '../components/DetailCard.js';
+import Precipitation from '../components/Precipitation.js';
+
+//import des feuilles de styles
+import '../main.css';
 import "../stylesheet/Root.scss";
+import '../stylesheet/carrousel.scss';
+
+const contentStyle = {
+  height: '300px',
+  lineHeight: '300px',
+  textAlign: 'center',
+};
 
 
 const App = () => {
-
+    
   //météo a l'instant T
   const [currentWeather, setCurrentWeather] = useState({});
   //météo prévisions 24h (pluie et heure par heure)
@@ -29,12 +51,17 @@ const App = () => {
   const [showNavBar, setShowNavBar] = useState(false);
   //menu input pour saisie de la ville
   const [weatherInput, setWeatherInput] = useState('');
-
   //div Détails Météo qui n'apparait qu'au clik sur mobile, et qui est en display sur tablette et desktop
   const [showMobileDetails, setShowMobileDetails] = useState(false);
 
-   //fetch current data weather
-    useEffect(() => {
+  const [loadingCity, setLoadingCity] = useState(false);
+   const [dotPosition, setDotPosition] = useState('right');
+  const handlePositionChange = ({ target: { value } }) => {
+    setDotPosition(value);
+  };
+  
+ /*fetch current weather condittionné (si saisie input sinon default => Lille */
+  useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
@@ -49,7 +76,8 @@ const App = () => {
   
     weatherData();
   }, [weatherInput]);
-    //fetch forecast 24h
+
+  /*fetch forecast 24h*/
   useEffect(() => {
     const weatherDataForecast = async () => {
       let apiUrl;
@@ -65,7 +93,7 @@ const App = () => {
     weatherDataForecast();
   }, [weatherInput]);
 
-    //fetch forecast 5jrs
+    /*fetch forecast 5jrs*/
   useEffect(() => {
     const weatherForecast7 = async () => {
       let apiUrl;
@@ -82,7 +110,7 @@ const App = () => {
   }, [weatherInput]);
 
 
-//Navbar qui apparait au clik avec l'input pour la saisie d'une ville
+/*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
 const handleCityClick = () => {
   console.log("déclenché");
   setShowNavBar(true);
@@ -101,20 +129,90 @@ const handleWeatherInput = async (city) => {
     }
   };
 
+  /*icone pour details Météo (mobile => on clik ; tablette/desktop => display)*/
   const handleMobileIconClick = () => {
     setShowMobileDetails(!showMobileDetails);
   };
 
 
-//récup du tableau astro pour lever et couher de soleil - à voir
-// const astro = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday && 
-//   forecastWeather.forecast.forecastday;
-//   console.log(astro);
-  // console.log(astro[0].astro.sunrise);
+/* geolocalisation */
+function handleCurrentLocation() {
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async(position)=>{
+      const { latitude, longitude } = position.coords;
+       setLoadingCity(true);
+       setWeatherInput('');
+      try {
+          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes&lang=fr`).then(response => response.json()); 
+          setTimeout(() => {
+            const data = response;
+            setCurrentWeather(data);
+            setLoadingCity(false);
+          }, 500);
+      } catch(error) {
+        setLoadingCity(false);
+      }
+    });
+  }
+}
   
+    // const onChange = (currentSlide) => {
+  //   console.log(currentSlide);
+  // };
 
+  ///// Carrousel page 1 pour la météo des 5 prochains jours /////
+  const days = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday.map((day, index) =>
+  (
+    <div className="week">
+      <Week
+        key={index}
+        name={format(new Date(day.date), 'EEEE', { locale: fr })}
+        weather={day.day.condition.icon}
+        temperature={day.day.avgtemp_c}
+      />
+    </div>
+  ))
+
+  ///// Carrousel page 2 pour la météo des 24 prochaines heures /////
+  const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
+  (
+    <div className="MiniCards" key={index}>
+      {day.hour.map((hour, index) => (
+        <Day
+          key={index}
+          time={formatTime(hour.time)}
+          weather={`http:${hour.condition.icon}`}
+          temperature={hour.temp_c}
+        />
+      ))}
+    </div>
+  ))
+  
+   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
+  const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
+    forecastWeather.forecast.forecastday.map((day, index) =>
+    (
+      <div className="precip" key={index}>
+        {day.hour.map((hour, idx) => (
+          <Precipitation
+            key={idx}
+            minutes={formatTime(hour.time)}
+            rain={hour.chance_of_rain > 0 ? (
+              <img src={precip} alt="Precipitating" />) :
+              (<img src={nonprecip} alt="Not Precipitating" />)}
+          />
+        ))}
+      </div>
+      )
+    )
+
+// Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
+if (loadingCity) {
+  return <WeatherSkeleton />;
+} else {
   return (
     <div className="container">
+
       {/* composant Navbar qui n'apparait que si on clik sur la ville */}
       {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
       <div className='city'>
@@ -129,6 +227,7 @@ const handleWeatherInput = async (city) => {
             <img src={currentWeather?.current?.condition?.icon} alt="" />
             <p>{currentWeather?.current?.condition?.text}</p>
       </div>
+
       {/* Div des détails de la météo */}
       <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
         {/* Contenu des détails de la météo */}
@@ -142,26 +241,50 @@ const handleWeatherInput = async (city) => {
           </div>
         </div>
       </div>
+
       <div className="weather-meme">
 
       </div>
-      
-      {/* <div className='sun-display'>
-            <div className="sun-infos">
-              <div className='sun-couple'>
-                  <img src={sunriseIcon} className="sun-icons" alt="" />
-                  <p className='sun-hours'>{astro[0].astro.sunrise}</p>
-              </div>
-              <div className='sun-couple'>
-                  <img src={sunsetIcon} className="sun-icons"alt="" />
-                  <p className='sun-hours'>{astro[0].astro.sunset}</p>
-              </div> 
-            </div>
-      </div> */}
 
+      <div>
+        <Radio.Group
+          onChange={handlePositionChange}
+          value={dotPosition}
+          style={{
+            marginBottom: 8,
+          }}
+        >
+
+        </Radio.Group>
+
+        <Carousel dotPosition={dotPosition}>
+          <div>
+            <p>Temps sur 7 jours</p>
+            <div className="week">
+              {days}
+            </div>
+          </div>
+
+
+          <div>
+            <p>Temps sur 24h</p>
+            <div  className="MiniCards">
+              {hours}
+            </div>
+          </div>
+
+          <div>
+            <p>Précipitations dans l'heure</p>
+            <div  className="precip">
+              {minutes}
+            </div>
+            </div>
+
+
+        </Carousel>
+      </div>
     </div>
 
   )
-}
-
+}}
 export default App
