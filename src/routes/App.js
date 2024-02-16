@@ -100,6 +100,7 @@ const App = () => {
       const response = await fetch(apiUrl);
       const data = await response.json();
       setForecastWeather(data);
+      console.log("Nouvelles données de prévisions 24h :", data);
     };
     weatherDataForecast();
   }, [weatherInput]);
@@ -116,6 +117,7 @@ const App = () => {
       const response = await fetch(apiUrl);
       const data = await response.json();
       setForecastWeather7(data);
+      console.log("Nouvelles données de prévisions 7 jours :", data);
     };
     weatherForecast7();
   }, [weatherInput]);
@@ -130,6 +132,7 @@ const handleCityClick = () => {
 //saisie input et à la soumission la Navbar disparait
 const handleWeatherInput = async (city) => {
     // Appel de l'API avec la city soumise dans la nav
+    setWeatherInput(city);
     try {
       const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes`);
       const data = await response.json();

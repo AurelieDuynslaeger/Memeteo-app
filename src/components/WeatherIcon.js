@@ -4,6 +4,7 @@ import { GiSnowing } from "react-icons/gi";
 import { MdSevereCold } from "react-icons/md";
 import { LiaCloudMoonRainSolid, LiaCloudRainSolid, LiaCloudShowersHeavySolid } from "react-icons/lia";
 import { BsCloudRainHeavyFill, BsCloudRainHeavy, BsCloudSleetFill, BsCloudSleet } from "react-icons/bs";
+import lightRain from "../assets/icons/lightRain.png"
 
 
 const weatherIcons = [
@@ -125,6 +126,8 @@ const weatherIcons = [
     {
       "code": 1183,
       "day": "Light rain",
+      // "icon" : "./src/assets/icons/lightRain.png",
+      // src\assets\icons\lightRain.png
       "icon": <LiaCloudRainSolid />,
       "nightIcon" : <LiaCloudRainSolid />
     },
@@ -310,6 +313,7 @@ const weatherIcons = [
       const selectedIcon = isDay ? icon.icon : icon.nightIcon;
   
       return <div className="icon-display">{selectedIcon}</div>;
+  
   };
   
 
