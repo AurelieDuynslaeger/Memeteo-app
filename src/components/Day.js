@@ -5,7 +5,7 @@ import '../main.css';
 const Day = ({time, weather, temperature}) => {
   return (
     <div className="hour">
-        <p>{time} </p>
+        <p>{time}</p>
         <img src={weather} alt="" />
         <p>{temperature}°C</p>
     </div>

@@ -8,12 +8,17 @@ import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
 import nonprecip from '../assets/icons/nonPrecipitation.svg';
 import precip from '../assets/icons/precipitation.svg';
+import windAnim from '../assets/icons/windAnim.svg';
+import temp_min from '../assets/icons/temp_min.svg';
+import temp_max from '../assets/icons/temp_max.svg';
+import rain from '../assets/icons/rain_mm.svg';
 // import sunsetIcon from "../assets/icons/sunset.svg";
 // import sunriseIcon from "../assets/icons/sunrise.svg";
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio} from 'antd';
 import { TbCloudQuestion } from "react-icons/tb";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime } from '../utils/dateUtils';
@@ -25,11 +30,14 @@ import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
 import DetailCard from '../components/DetailCard.js';
 import Precipitation from '../components/Precipitation.js';
+import WeatherIcon from "../components/WeatherIcon.js"
+
 
 //import des feuilles de styles
 import '../main.css';
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
+
 
 const contentStyle = {
   height: '300px',
@@ -54,6 +62,9 @@ const App = () => {
   //div Détails Météo qui n'apparait qu'au clik sur mobile, et qui est en display sur tablette et desktop
   const [showMobileDetails, setShowMobileDetails] = useState(false);
 
+  //modal détails du jour
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [loadingCity, setLoadingCity] = useState(false);
    const [dotPosition, setDotPosition] = useState('right');
   const handlePositionChange = ({ target: { value } }) => {
@@ -65,9 +76,9 @@ const App = () => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes`;
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -82,9 +93,9 @@ const App = () => {
     const weatherDataForecast = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=1&aqi=yes&alerts=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=1&aqi=yes&alerts=yes`;
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -98,9 +109,9 @@ const App = () => {
     const weatherForecast7 = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=7&aqi=no&alerts=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=7&aqi=no&alerts=yes`;
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -119,7 +130,7 @@ const handleCityClick = () => {
 const handleWeatherInput = async (city) => {
     // Appel de l'API avec la city soumise dans la nav
     try {
-      const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes&lang=fr`);
+      const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes`);
       const data = await response.json();
       setCurrentWeather(data);
       setShowNavBar(false);
@@ -142,7 +153,7 @@ function handleCurrentLocation() {
        setLoadingCity(true);
        setWeatherInput('');
       try {
-          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes&lang=fr`).then(response => response.json()); 
+          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes`).then(response => response.json()); 
           setTimeout(() => {
             const data = response;
             setCurrentWeather(data);
@@ -159,6 +170,10 @@ function handleCurrentLocation() {
   //   console.log(currentSlide);
   // };
 
+ 
+  const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
+  console.log(infosModal);
+
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
   const days = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday.map((day, index) =>
   (
@@ -168,6 +183,7 @@ function handleCurrentLocation() {
         name={format(new Date(day.date), 'EEEE', { locale: fr })}
         weather={day.day.condition.icon}
         temperature={day.day.avgtemp_c}
+        onClick={() => setIsModalOpen(true)}
       />
     </div>
   ))
@@ -223,8 +239,9 @@ if (loadingCity) {
             <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
             {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
 
-            <img src={currentWeather?.current?.condition?.icon} alt="" />
-            <p>{currentWeather?.current?.condition?.text}</p>
+            {currentWeather && <WeatherIcon currentWeather={currentWeather}/>}
+            {/* <img src={currentWeather?.current?.condition?.icon} alt="" /> */}
+            {/* <p>{currentWeather?.current?.condition?.text}</p> */}
       </div>
 
       {/* Div des détails de la météo */}
@@ -253,16 +270,29 @@ if (loadingCity) {
             marginBottom: 8,
           }}
         >
-
         </Radio.Group>
 
-      <Carousel dotPosition={dotPosition}>
-        <div>
-          <p>Temps sur 7 jours</p>
-          <div className="week">
-            {days}
+        <Carousel dotPosition={dotPosition}>
+          <div>
+            <p>Temps sur 7 jours</p>
+            <>
+              <div className="week clipping-container">
+                {days}
+                {/* modale qui s'ouvre pour le condensé d'infos sur tel jour à venir */}
+                {isModalOpen && (
+                  <div className="modal forecast">
+                    <div className='forecast-details'>
+                    <DetailCard iconSrc={windAnim} description="Vent : " value={`${infosModal.map((day) => day.day.avgvis_km)} km/h`} />
+                    <DetailCard iconSrc={rain} description="Pluie :" value={`${infosModal.map((day) => day.day.totalprecip_mm)} mm`} />
+                    <DetailCard iconSrc={temp_min} description="Min :" value={`${infosModal.map((day, index) => day.day.mintemp_c)} °C`} />
+                    <DetailCard iconSrc={temp_max} description="Max :" value={`${infosModal.map((day, index) => day.day.maxtemp_c)} °C`} />
+                    </div>
+                    <button onClick={() => setIsModalOpen(false)}><IoIosCloseCircleOutline /></button>
+                  </div>
+                )}
+              </div>
+            </>
           </div>
-        </div>
 
 
         <div>
