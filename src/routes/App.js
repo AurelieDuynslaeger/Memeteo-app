@@ -114,7 +114,6 @@ const App = () => {
 const handleCityClick = () => {
   console.log("déclenché");
   setShowNavBar(true);
-};
 
 //saisie input et à la soumission la Navbar disparait
 const handleWeatherInput = async (city) => {
@@ -257,28 +256,28 @@ if (loadingCity) {
 
         </Radio.Group>
 
-        <Carousel dotPosition={dotPosition}>
-          <div>
-            <p>Temps sur 7 jours</p>
-            <div className="week">
-              {days}
-            </div>
+      <Carousel dotPosition={dotPosition}>
+        <div>
+          <p>Temps sur 7 jours</p>
+          <div className="week">
+            {days}
           </div>
+        </div>
 
 
-          <div>
-            <p>Temps sur 24h</p>
-            <div  className="MiniCards">
-              {hours}
-            </div>
+        <div>
+          <p>Temps sur 24h</p>
+          <div  className="MiniCards">
+            {hours}
           </div>
+        </div>
 
-          <div>
-            <p>Précipitations dans l'heure</p>
-            <div  className="precip">
-              {minutes}
-            </div>
-            </div>
+        <div>
+          <p>Précipitations dans l'heure</p>
+          <div  className="precip">
+            {minutes}
+          </div>
+          </div>
 
 
         </Carousel>
@@ -287,4 +286,5 @@ if (loadingCity) {
 
   )
 }}
+}
 export default App
