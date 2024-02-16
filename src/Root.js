@@ -1,7 +1,6 @@
 
 import './stylesheet/Root.scss';
 import App from "./routes/App";
-import NotFound from './routes/NotFound';
 import SplashScreen from './routes/SplashScreen';
 
 import {
@@ -17,7 +16,6 @@ const Root = () => (
           <Routes>
             <Route path='/' element={<SplashScreen/>} />
               <Route path='/home' element={<App/>} />
-              <Route path="*" element={<NotFound/>} />
           </Routes>
       </Router>
   );
