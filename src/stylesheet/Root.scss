@@ -36,7 +36,6 @@ margin: auto;
 //détail météo masqués sur mobile et déclenchés au clik
 .weather-details {
   display: none;
-  /* Ajoutez vos styles pour les détails de la météo ici */
 
   &.show-mobile {
     display: block;
@@ -55,23 +54,24 @@ margin: auto;
   }
 }
 
-.sun-infos{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  .sun-icons{
-    width: 2rem;
-  }
-  .sun-hours {
-    font-size: 0.7rem;
-  }
-  .sun-couple{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-}
+//à voir si on affiche les levés et couchés de soleil
+// .sun-infos{
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: space-around;
+//   .sun-icons{
+//     width: 2rem;
+//   }
+//   .sun-hours {
+//     font-size: 0.7rem;
+//   }
+//   .sun-couple{
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+//   }
+// }
 
 .forecast{
   display: flex;

@@ -17,7 +17,7 @@ import rain from '../assets/icons/rain_mm.svg';
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio} from 'antd';
-import { TbCloudQuestion } from "react-icons/tb";
+
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -30,7 +30,8 @@ import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
 import DetailCard from '../components/DetailCard.js';
 import Precipitation from '../components/Precipitation.js';
-import WeatherIcon from "../components/WeatherIcon.js"
+// import WeatherIcon from "../components/WeatherIcon.js"
+import CurrentCity from '../components/CurrentCity.js'
 
 
 //import des feuilles de styles
@@ -39,11 +40,11 @@ import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
 
 
-const contentStyle = {
-  height: '300px',
-  lineHeight: '300px',
-  textAlign: 'center',
-};
+// const contentStyle = {
+//   height: '300px',
+//   lineHeight: '300px',
+//   textAlign: 'center',
+// };
 
 
 const App = () => {
@@ -232,23 +233,13 @@ if (loadingCity) {
   return (
     <div className="container">
 
-      {/* composant Navbar qui n'apparait que si on clik sur la ville */}
+      {/* Composant Navbar qui n'apparait que si on clik sur la ville */}
       {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
-      <div className='city'>
 
-            <h3 className='city-name'  onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
-            <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
-
-            {/* Icône mobile visible uniquement sur les appareils mobiles */}
-            <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
-            {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
-
-            {currentWeather && <WeatherIcon currentWeather={currentWeather}/>}
-            {/* <img src={currentWeather?.current?.condition?.icon} alt="" /> */}
-            {/* <p>{currentWeather?.current?.condition?.text}</p> */}
-      </div>
-
-      {/* Div des détails de la météo */}
+      {/* Composant qui reprend le display de la ville actuelle */}
+      <CurrentCity currentWeather={currentWeather}  handleCityClick={handleCityClick} handleMobileIconClick ={handleMobileIconClick}/>
+    
+      {/* Div des détails de la météo en display si tablette et desktop, OU apparait au clik sur l'icone pour les teléphones*/}
       <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
         {/* Contenu des détails de la météo */}
         <div className="forecast">

@@ -4,9 +4,10 @@ import { GiSnowing } from "react-icons/gi";
 import { MdSevereCold } from "react-icons/md";
 import { LiaCloudMoonRainSolid, LiaCloudRainSolid, LiaCloudShowersHeavySolid } from "react-icons/lia";
 import { BsCloudRainHeavyFill, BsCloudRainHeavy, BsCloudSleetFill, BsCloudSleet } from "react-icons/bs";
-import lightRain from "../assets/icons/lightRain.png"
+// import lightRain from "../assets/icons/lightRain.png"
 
 
+//récup des données json pour les icones météo (reconstruction du tableau en gardant les codes de l'api, afin de dispather notre propre set dd'icones)
 const weatherIcons = [
     {
       "code": 1000,
@@ -304,14 +305,19 @@ const weatherIcons = [
 
   
     const WeatherIcon = ({ currentWeather }) => {
+      //on stocke le code des conditions météo
       const currentCode = currentWeather?.current?.condition?.code;
+      // on stocke dans isDay si la localité choisie est en jour ou nuit
       const isDay = currentWeather?.current?.is_day === 1;
 
+      // on cherche dans nos icones sur le meme code, celui qui correspond au code des conditions météo actuelles pour la ville choisie
       const icon = weatherIcons.find(icon => icon.code === currentCode);
       if (!icon) return null;
 
+      // on selectionne l'icone des conditions en fonction du jour ou de la nuit 
+      // si isDay = true, alors icon.icon == icone jour, sinon icone nuit
       const selectedIcon = isDay ? icon.icon : icon.nightIcon;
-  
+      //on retourne ca sur app dans une div qui afficherait cette selection
       return <div className="icon-display">{selectedIcon}</div>;
   
   };
