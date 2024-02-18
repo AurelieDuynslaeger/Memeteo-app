@@ -12,13 +12,12 @@ import {
 
 
 const Root = () => (
-      <Router>
-          <Routes>
-            <Route path='/' element={<SplashScreen/>} />
-              <Route path='/home' element={<App/>} />
-              {/* <Route path="*" element={<NotFound/>} /> */}
-          </Routes>
-      </Router>
-  );
+  <Router>
+    <Routes>
+      <Route path='/' element={<SplashScreen />} />
+      <Route path='/home' element={<App />} />
+    </Routes>
+  </Router>
+);
 
 export default Root;

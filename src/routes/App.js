@@ -245,7 +245,7 @@ if (loadingCity) {
           onChange={handlePositionChange}
           value={dotPosition}
           style={{
-            marginBottom: 8,
+            marginBottom: 8,  
           }}
         >
 
