@@ -1,17 +1,16 @@
-import React from 'react'
+import React from 'react';
 import '../main.css';
 import '../stylesheet/carrousel.scss';
+import WeatherIcon from './WeatherIcon';
 
-const Week = ({name, weather, temperature}) => {
+const Week = ({ name, weather, temperature, onClick }) => {
     return (
-      
-          <div className="days">
-              <h3>{name}</h3>
-              <img src={weather} alt="" />
-              {/* {weather &&<WeatherIcon dataSource="forecastWeather7" weatherData={weather} />} */}
-              <h3>{temperature}°C</h3>
-          </div>
-    )
-  }
+        <div className="days" onClick={onClick}>
+            <h3>{name}</h3>
+            {weather && <WeatherIcon code={weather} isDay={true} />}
+            <h3>{temperature}°C</h3>
+        </div>
+    );
+};
 
-export default Week
+export default Week;

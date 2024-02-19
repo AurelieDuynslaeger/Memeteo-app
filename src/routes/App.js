@@ -31,6 +31,7 @@ import DetailCard from '../components/DetailCard.js';
 import Precipitation from '../components/Precipitation.js';
 // import WeatherIcon from "../components/WeatherIcon.js"
 import CurrentCity from '../components/CurrentCity.js'
+import Modal from '../components/Modal.js'
 
 
 //import des feuilles de styles
@@ -61,13 +62,15 @@ const App = () => {
   const [weatherInput, setWeatherInput] = useState('');
   //div Détails Météo qui n'apparait qu'au clik sur mobile, et qui est en display sur tablette et desktop
   const [showMobileDetails, setShowMobileDetails] = useState(false);
-
+  //modal Infos Prévisions
+  const [selectedDayInfo, setSelectedDayInfo] = useState(null);
 
   const [loadingCity, setLoadingCity] = useState(false);
   const [dotPosition, setDotPosition] = useState('right');
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
+
   //Recupération du Meme
   const [memes, setMemes] = useState([]);
   //Récupération du son
@@ -340,6 +343,20 @@ const App = () => {
     }
   }
 
+  const handleDayClick = (day) => {
+    // Ici, vous pouvez extraire les informations supplémentaires sur le jour sélectionné
+    const maxTemp = day.day.maxtemp_c;
+    const minTemp = day.day.mintemp_c;
+    const rain = day.day.totalprecip_mm;
+    const wind = day.day.maxwind_kph;
+
+    setSelectedDayInfo({ name: day.name, maxTemp, minTemp, rain, wind });
+};
+
+const handleCloseModal = () => {
+    setSelectedDayInfo(null);
+};
+
   // const onChange = (currentSlide) => {
   //   console.log(currentSlide);
   // };
@@ -348,18 +365,16 @@ const App = () => {
   // console.log(infosModal);
 
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
-  const days = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday.map((day, index) =>
-  (
-    <div className="week">
-      <Week
-        key={index}
-        name={format(new Date(day.date), 'EEEE', { locale: fr })}
-        weather={day.day.condition.icon}
-        temperature={day.day.avgtemp_c}
-        // onClick={() => setIsModalOpen(true)}
-      />
+  const days = forecastWeather7.forecast?.forecastday?.map((day, index) => (
+    <div className="week" key={index}>
+        <Week
+            name={format(new Date(day.date), 'EEEE', { locale: fr })}
+            weather={day.day.condition.code}
+            temperature={day.day.avgtemp_c}
+            onClick={() => handleDayClick(day)}
+        />
     </div>
-  ))
+));
 
   ///// Carrousel page 2 pour la météo des 24 prochaines heures /////
   const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
@@ -406,7 +421,7 @@ const App = () => {
 
         {/* Composant qui reprend le display de la ville actuelle */}
         <CurrentCity 
-        currentWeather={currentWeather}  
+        currentWeather={forecastWeather}  
         handleCityClick={handleCityClick} 
         handleMobileIconClick={handleMobileIconClick}
         />
@@ -438,7 +453,7 @@ const App = () => {
           )}
         </div>
 
-        <div>
+        <div className='carousel-container'>
           <Radio.Group
             onChange={handlePositionChange}
             value={dotPosition}
@@ -447,7 +462,7 @@ const App = () => {
             }}
           >
           </Radio.Group>
-
+            
           <Carousel dotPosition={dotPosition}>
             <div>
               <p>Temps sur 7 jours</p>
@@ -474,6 +489,9 @@ const App = () => {
 
           </Carousel>
         </div>
+        <>
+        {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
+        </>
       </div>
 
     )

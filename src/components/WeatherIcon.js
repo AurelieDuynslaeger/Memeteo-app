@@ -304,23 +304,18 @@ const weatherIcons = [
 
 
   
-    const WeatherIcon = ({ currentWeather }) => {
-      
-      //on stocke le code des conditions météo
-      const currentCode = currentWeather?.current?.condition?.code;
-      // on stocke dans isDay si la localité choisie est en jour ou nuit
-      const isDay = currentWeather?.current?.is_day === 1;
-
-      // on cherche dans nos icones sur le meme code, celui qui correspond au code des conditions météo actuelles pour la ville choisie
-      const icon = weatherIcons.find(icon => icon.code === currentCode);
-      if (!icon) return null;
-
-      // on selectionne l'icone des conditions en fonction du jour ou de la nuit 
-      // si isDay = true, alors icon.icon == icone jour, sinon icone nuit
-      const selectedIcon = isDay ? icon.icon : icon.nightIcon;
-      //on retourne ca sur app dans une div qui afficherait cette selection
-      return <div className="icon-display">{selectedIcon}</div>;
+  const WeatherIcon = ({ code, isDay }) => {
+    // Recherche l'icône correspondant au code de condition météo dans weatherIcons ci dessus
+    const iconData = weatherIcons.find(icon => icon.code === code);
   
+    //on s'assure que l'icone est trouvée
+    if (!iconData) return null;
+  
+    //selection de l'icone en fonction de Day ou Night
+    const selectedIcon = isDay ? iconData.icon : iconData.nightIcon;
+  
+    //on retourne l'icone selectionnée selon le code des conditions météo de l'api
+    return <div className="icon-display">{selectedIcon}</div>;
   };
   
 
