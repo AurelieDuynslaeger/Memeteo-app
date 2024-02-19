@@ -305,6 +305,7 @@ const weatherIcons = [
 
   
     const WeatherIcon = ({ currentWeather }) => {
+      
       //on stocke le code des conditions météo
       const currentCode = currentWeather?.current?.condition?.code;
       // on stocke dans isDay si la localité choisie est en jour ou nuit

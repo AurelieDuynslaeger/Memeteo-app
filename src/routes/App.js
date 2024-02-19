@@ -17,7 +17,6 @@ import rain from '../assets/icons/rain_mm.svg';
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
-import { TbCloudQuestion } from "react-icons/tb";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -63,8 +62,6 @@ const App = () => {
   //div Détails Météo qui n'apparait qu'au clik sur mobile, et qui est en display sur tablette et desktop
   const [showMobileDetails, setShowMobileDetails] = useState(false);
 
-  //modal détails du jour
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [loadingCity, setLoadingCity] = useState(false);
   const [dotPosition, setDotPosition] = useState('right');
@@ -245,20 +242,20 @@ const App = () => {
     }
   }, [currentWeatherText, musiques]);
 
-  useEffect(() => {
+   //fetch current data weather
+   useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes`;
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes`;
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`;
       } else {
-        apiUrl = 'http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes';
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes&lang=fr`;
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
       setCurrentWeather(data);
     };
-
+  
     weatherData();
   }, [weatherInput]);
 
@@ -267,7 +264,6 @@ const App = () => {
     const weatherDataForecast = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes`;
         apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes`;
       } else {
         apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=1&aqi=yes&alerts=yes';
@@ -285,7 +281,6 @@ const App = () => {
     const weatherForecast7 = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes`;
         apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes`;
       } else {
         apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=7&aqi=no&alerts=yes';
@@ -349,9 +344,8 @@ const App = () => {
   //   console.log(currentSlide);
   // };
 
-
-  const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
-  console.log(infosModal);
+  // const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
+  // console.log(infosModal);
 
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
   const days = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday.map((day, index) =>
@@ -362,7 +356,7 @@ const App = () => {
         name={format(new Date(day.date), 'EEEE', { locale: fr })}
         weather={day.day.condition.icon}
         temperature={day.day.avgtemp_c}
-        onClick={() => setIsModalOpen(true)}
+        // onClick={() => setIsModalOpen(true)}
       />
     </div>
   ))
@@ -407,31 +401,34 @@ const App = () => {
     return (
       <div className="container">
 
-      {/* Composant Navbar qui n'apparait que si on clik sur la ville */}
-      {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
+        {/* Composant Navbar qui n'apparait que si on clik sur la ville */}
+        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
 
-      {/* Composant qui reprend le display de la ville actuelle */}
-      <CurrentCity currentWeather={currentWeather}  handleCityClick={handleCityClick} handleMobileIconClick ={handleMobileIconClick}/>
+        {/* Composant qui reprend le display de la ville actuelle */}
+        <CurrentCity 
+        currentWeather={currentWeather}  
+        handleCityClick={handleCityClick} 
+        handleMobileIconClick={handleMobileIconClick}
+        />
     
-      {/* Div des détails de la météo en display si tablette et desktop, OU apparait au clik sur l'icone pour les teléphones*/}
-      <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
-        {/* Contenu des détails de la météo */}
-        <div className="forecast">
-          <div className='forecast-details'>
-            <DetailCard iconSrc={windIcon} description="Vitesse du vent" value={`${currentWeather?.current?.wind_kph} km/h`} />
-            <DetailCard iconSrc={humidityIcon} description="Humidité" value={`${currentWeather?.current?.humidity} %`} />
-            <DetailCard iconSrc={uvIcon} description="Indice UV" value={currentWeather?.current?.uv} />
-            <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${currentWeather?.current?.feelslike_c} °C`} />
-            <DetailCard iconSrc={airQualityIcon} description="Qualité de l'air" value={`indice ${currentWeather?.current?.air_quality['gb-defra-index']}`} />
+        {/* Div des détails de la météo en display si tablette et desktop, OU apparait au clik sur l'icone pour les teléphones*/}
+        <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
+          {/* Contenu des détails de la météo */}
+          <div className="forecast">
+            <div className='forecast-details'>
+              <DetailCard iconSrc={windIcon} description="Vitesse du vent" value={`${currentWeather?.current?.wind_kph} km/h`} />
+              <DetailCard iconSrc={humidityIcon} description="Humidité" value={`${currentWeather?.current?.humidity} %`} />
+              <DetailCard iconSrc={uvIcon} description="Indice UV" value={currentWeather?.current?.uv} />
+              <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${currentWeather?.current?.feelslike_c} °C`} />
+              <DetailCard iconSrc={airQualityIcon} description="Qualité de l'air" value={`indice ${currentWeather?.current?.air_quality['gb-defra-index']}`} />
+            </div>
           </div>
         </div>
-      </div>
 
         <div className="weather-meme">
           {selectedMeme && (
             <div>
               <img src={selectedMeme.image} alt={selectedMeme.name} class="meme-display"/>
-
             </div>
           )}
           {selectedMusique && (
