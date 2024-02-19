@@ -110,6 +110,7 @@ const App = () => {
 
     fetchMusiques();
   }, []);
+  
   //Conditionnement pour que la description de la condition météo soit le meme que le nom du meme. 
   useEffect(() => {
     const weatherMemeMap = {
@@ -429,7 +430,7 @@ const App = () => {
         <div className="weather-meme">
           {selectedMeme && (
             <div>
-              <img src={selectedMeme.image} alt={selectedMeme.name} style={{ width: '200px', height: '200px' }} />
+              <img src={selectedMeme.image} alt={selectedMeme.name} class="meme-display"/>
 
             </div>
           )}
