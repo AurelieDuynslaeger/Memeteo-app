@@ -7,7 +7,18 @@ body {
   font-family: "Poppins", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: v.$color-green;
+  .sun-background{
+    background-color: v.$color-blue;
+  }
+  .cloudy-background {
+    background-color: v.$color-peach;
+}
+.rain-background {
+  background-color: v.$color-blue; 
+}
+.default-background {
+  background-color: v.$color-default;
+}
 }
 
 code {

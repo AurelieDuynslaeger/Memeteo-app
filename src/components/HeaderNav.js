@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button } from 'antd';
 import { FaCheck } from "react-icons/fa";
-import Logo from "../assets/logoMemteo.png"
+import Logo from "../assets/memteo-logo-base.png"
 import "../stylesheet/HeaderNav.scss"
 
 export const HeaderNav = ({ onWeatherInput }) => {
