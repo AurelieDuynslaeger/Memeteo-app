@@ -3,6 +3,8 @@ import '../main.css';
 import '../stylesheet/carrousel.scss';
 import WeatherIcon from './WeatherIcon';
 
+
+//onClick = open Modal pour détails
 const Week = ({ name, weather, temperature, onClick }) => {
     return (
         <div className="days" onClick={onClick}>

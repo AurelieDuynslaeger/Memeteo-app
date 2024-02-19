@@ -13,7 +13,7 @@
   text-align: center;
 }
 
-
+// CurrentCity Component style
 .city {
   display: flex;
   flex-direction: column;
@@ -43,7 +43,6 @@
 //détail météo masqués sur mobile et déclenchés au clik
 .weather-details {
   display: none;
-
   &.show-mobile {
     display: block;
     background-color: transparent;
@@ -84,7 +83,7 @@
 //   }
 // }
 
-
+//div du détail au moment T
 .forecast {
   display: flex;
   flex-direction: column;
@@ -100,7 +99,7 @@
   .details-card {
     flex-basis: 30%;
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
 }
 
@@ -118,6 +117,7 @@
   }
 }
 
+//taille de l'icone affiché à l'acceuil
 .icon-display svg {
   // z-index: -10;
   // position: absolute;
@@ -127,13 +127,14 @@
   height: 6rem;
 }
 
+//position et taille du meme
 .weather-meme {
   width: 50%;
   margin: auto;
-    .meme-display{
-    border-radius: 1.5rem;
-    width:15rem;
-    height: 15rem;
+  .meme-display{
+  border-radius: 1.5rem;
+  width:15rem;
+  height: 15rem;
   }
   &.show-mobile {
     display: block;
@@ -141,18 +142,41 @@
   }
 }
 
+//position relative afin de position la modale en absolute en fonction
 .carousel-container {
   position: relative;
+  .days{
+    .icon-display svg{
+    width: 3rem;
+    height: 3rem;
+  }
+}
 }
 
+
+//modal pour le détail d'un jour à venir au clik sur le composant week
 .modal {
   position: absolute;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.5);
   padding: 2rem;
-  border-radius: 5rem;
+  border-radius: 4rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
+  backdrop-filter: blur(20px);
+  width: 80%; 
+  height: 20%; 
+  max-width: 35rem;
+  max-height: 25rem; 
+  .modal-content{
+    display: flex;
+    justify-content: center;
+    .details-card {
+      flex-basis: 30%;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+  }
 }
 

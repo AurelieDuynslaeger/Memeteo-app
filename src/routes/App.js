@@ -8,16 +8,12 @@ import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
 import nonprecip from '../assets/icons/nonPrecipitation.svg';
 import precip from '../assets/icons/precipitation.svg';
-import windAnim from '../assets/icons/windAnim.svg';
-import temp_min from '../assets/icons/temp_min.svg';
-import temp_max from '../assets/icons/temp_max.svg';
-import rain from '../assets/icons/rain_mm.svg';
+
 // import sunsetIcon from "../assets/icons/sunset.svg";
 // import sunriseIcon from "../assets/icons/sunrise.svg";
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
-import { IoIosCloseCircleOutline } from "react-icons/io";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime } from '../utils/dateUtils';
@@ -29,7 +25,6 @@ import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
 import DetailCard from '../components/DetailCard.js';
 import Precipitation from '../components/Precipitation.js';
-// import WeatherIcon from "../components/WeatherIcon.js"
 import CurrentCity from '../components/CurrentCity.js'
 import Modal from '../components/Modal.js'
 
@@ -343,14 +338,14 @@ const App = () => {
     }
   }
 
+  // Au clik sur la div week dans le Carousel, la modal apparait avec les previsions du jour Selected
   const handleDayClick = (day) => {
-    // Ici, vous pouvez extraire les informations supplémentaires sur le jour sélectionné
     const maxTemp = day.day.maxtemp_c;
     const minTemp = day.day.mintemp_c;
     const rain = day.day.totalprecip_mm;
     const wind = day.day.maxwind_kph;
 
-    setSelectedDayInfo({ name: day.name, maxTemp, minTemp, rain, wind });
+    setSelectedDayInfo({ maxTemp, minTemp, rain, wind });
 };
 
 const handleCloseModal = () => {
@@ -360,9 +355,6 @@ const handleCloseModal = () => {
   // const onChange = (currentSlide) => {
   //   console.log(currentSlide);
   // };
-
-  // const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
-  // console.log(infosModal);
 
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
   const days = forecastWeather7.forecast?.forecastday?.map((day, index) => (
@@ -419,7 +411,7 @@ const handleCloseModal = () => {
         {/* Composant Navbar qui n'apparait que si on clik sur la ville */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
 
-        {/* Composant qui reprend le display de la ville actuelle */}
+        {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
         <CurrentCity 
         currentWeather={forecastWeather}  
         handleCityClick={handleCityClick} 

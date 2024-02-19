@@ -6,7 +6,7 @@ const CurrentCity = ({ currentWeather, handleCityClick, handleMobileIconClick })
   // Vérifie si currentWeather est défini
   if (!currentWeather) return null;
 
-  // Extrait le code de condition et l'indicateur de jour/nuit
+  // Extrait le code de condition météo et l'indicateur de jour/nuit
   const code = currentWeather.current?.condition?.code;
   const isDay = currentWeather.current?.is_day === 1;
 
@@ -20,7 +20,7 @@ const CurrentCity = ({ currentWeather, handleCityClick, handleMobileIconClick })
       {/* Icône mobile visible uniquement sur les appareils mobiles */}
       <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
 
-      {/* Composant qui prend le code de condition météo et l'indicateur de jour/nuit pour display la bonne icone */}
+      {/* Composant qui prend le code de condition météo et l'indicateur de jour/nuit pour display de la bonne icone */}
       <WeatherIcon code={code} isDay={isDay} />
     </div>
   );
