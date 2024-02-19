@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
 import { FaCheck } from "react-icons/fa";
 import Logo from "../assets/memteo-logo-base.png";
+import { MdMyLocation } from "react-icons/md";
 
 
 //import des feuilles de styles
 import "../stylesheet/HeaderNav.scss";
 import "../stylesheet/_suggestionBox.scss";
 
-export const HeaderNav = ({ onWeatherInput }) => {
+//import des composants
+import SuggestionBox from "./SuggestionBox.js";
+
+
+export const HeaderNav = ({ onWeatherInput, setLoadingCity }) => {
   const [city, setCity] = useState("");
 
 
@@ -53,52 +58,44 @@ export const HeaderNav = ({ onWeatherInput }) => {
     if(error) {
       setError("Location not found");
     } else {
-    setError("");
-    // Appel de la fonction de gestion de la ville dans l'app component
-    onWeatherInput(city);
-    // Effacer l'input après la soumission
-    setCity("");
-    setShowSuggestions(false);
+      setError("");
+      // Appel de la fonction de gestion de la ville dans l'app component
+      onWeatherInput(city);
+      // Effacer l'input après la soumission
+      setCity("");
+      setShowSuggestions(false);
     }
   };
 
-  function SuggestionBox({
-    showSuggestions,
-    suggestions,
-    handleSuggestionClick,
-    error
-  }) {
-    return (
-    <> 
-    { ((showSuggestions && suggestions.length > 1) || error) && (
-      <ul className="suggestions">
-        {error && suggestions.length<1 &&  (
-           <li className="error">{error}</li>
-        )}
-        {suggestions.map((item, index) => (
-          <li
-            key={index}
-            onClick={() => handleSuggestionClick(item)}
-            className="suggestion">
-              {item} {/* Here = location name / place name */}
-          </li>
-        ))}
-      </ul>
-      )}
-    </>
-  )}
 
   function handleSuggestionClick(value) {
     setCity(value);
     setShowSuggestions(false);
   }
 
+  /* geolocalisation */
+  const handleGeolocation = (e) => {
+    setLoadingCity(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        onWeatherInput(`${latitude},${longitude}`);
+      });
+    }
+  };
 
   return (
     <div className="navbar">
       <img src={Logo} alt="Logo Memetéo" className="logo" />
 
       <Form layout="inline">
+        <Form.Item>
+          <MdMyLocation
+            title="Votre position actuelle" // when you hover, you can see this title
+            onClick={handleGeolocation}
+            className='geolocalisationIcon'
+          />
+        </Form.Item>
         <Form.Item>
           <Input
             placeholder="Tapez votre recherche ici..."
@@ -110,7 +107,7 @@ export const HeaderNav = ({ onWeatherInput }) => {
               suggestions,
               handleSuggestionClick,
               error}}
-              />
+          />
         </Form.Item>
         <Form.Item>
           <Button htmlType="submit" onClick={(e) => handleFormSubmit(e)}>

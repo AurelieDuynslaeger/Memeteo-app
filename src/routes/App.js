@@ -12,7 +12,6 @@ import windAnim from '../assets/icons/windAnim.svg';
 import temp_min from '../assets/icons/temp_min.svg';
 import temp_max from '../assets/icons/temp_max.svg';
 import rain from '../assets/icons/rain_mm.svg';
-import { MdMyLocation } from "react-icons/md";
 // import sunsetIcon from "../assets/icons/sunset.svg";
 // import sunriseIcon from "../assets/icons/sunrise.svg";
 
@@ -366,28 +365,14 @@ const App = () => {
       const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes`);
       const data = await response.json();
 
-        setCurrentWeather(data);
-        setShowNavBar(false);
-        setLoadingCity(false);
-   
-      
+      setCurrentWeather(data);
+      setShowNavBar(false);
+      setLoadingCity(false);
     } catch (error) {
       console.error('Erreur lors de la récupération des données météo:', error);
       setLoadingCity(false);
     }
   }
-
-    /* geolocalisation */
-    const handleGeolocation = (e) => {
-      setLoadingCity(true);
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const { latitude, longitude } = position.coords;
-          handleWeatherInput(`${latitude},${longitude}`);
-        });
-      }
-    };
-
 
   /*icone pour details Météo (mobile => on clik ; tablette/desktop => display)*/
   const handleMobileIconClick = () => {
@@ -453,15 +438,11 @@ const App = () => {
       <div className={`container ${getWeatherBackgroundClass()}`}>
 
         {/* composant Navbar qui n'apparait que si on clik sur la ville */}
-        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
+        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
         <div className='city'>
 
           <h3 className='city-name' onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
-          <MdMyLocation
-            title="Votre position actuelle" // when you hover, you can see this title
-            onClick={handleGeolocation}
-            className='geolocalisationIcon'
-          />
+          
           <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
 
           {/* Icône mobile visible uniquement sur les appareils mobiles */}
