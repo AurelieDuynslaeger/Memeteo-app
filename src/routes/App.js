@@ -47,7 +47,7 @@ const contentStyle = {
 
 
 const App = () => {
-    
+
   //météo a l'instant T
   const [currentWeather, setCurrentWeather] = useState({});
   //météo prévisions 24h (pluie et heure par heure)
@@ -66,25 +66,197 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [loadingCity, setLoadingCity] = useState(false);
-   const [dotPosition, setDotPosition] = useState('right');
+  const [dotPosition, setDotPosition] = useState('right');
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
-  
- /*fetch current weather condittionné (si saisie input sinon default => Lille */
+  //Recupération du Meme
+  const [memes, setMemes] = useState([]);
+  //Récupération du son
+  const [musiques, setMusiques] = useState([]);
+  //Constante pour filtrer les sons
+  const [selectedMusique, setSelectedMusique] = useState(null);
+  //Constante pour filtrer les memes
+  const [selectedMeme, setSelectedMeme] = useState(null);
+  // Constante pour stocker le texte des conditions météos actuelles
+  const currentWeatherText = currentWeather?.current?.condition?.text;
+  console.log(currentWeatherText);
+  //Fetch pour aller chercher les memes sur notre API
+  useEffect(() => {
+    const fetchMemes = async () => {
+      try {
+        const response = await fetch('http://localhost:7000/memes');
+        const data = await response.json();
+        setMemes(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des memes:', error);
+      }
+    };
+
+    fetchMemes();
+  }, []);
+//Fetch pour aller chercher les sons sur notre API
+  useEffect(() => {
+    const fetchMusiques = async () => {
+      try {
+        const response = await fetch('http://localhost:7000/musiques');
+        const data = await response.json();
+        setMusiques(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des musiques:', error);
+      }
+    };
+
+    fetchMusiques();
+  }, []);
+  //Conditionnement pour que la description de la condition météo soit le meme que le nom du meme. 
+  useEffect(() => {
+    const weatherMemeMap = {
+      'Sunny': 'sun',
+      'Partly cloudy': 'cloudy',
+      'Cloudy': 'cloudy',
+      'Overcast': 'cloudy',
+      'Patchy rain possible': 'rain',
+      'Moderate or heavy freezing rain': 'rain',
+      'Light freezing rain': 'rain',
+      'Heavy rain': 'rain',
+      'Heavy rain at times': 'rain',
+      'Moderate rain': 'rain',
+      'Moderate rain at times': 'rain',
+      'Light rain': 'rain',
+      'Light rain shower': 'rain',
+      'Moderate or heavy rain shower': 'rain',
+      'Patchy light rain': 'rain',
+      'Torrential rain shower': 'rain',
+      'Wind': 'wind',
+      'Blowing snow': 'snow',
+      'Patchy snow possible': 'snow',
+      'Patchy sleet possible': 'snow',
+      'Blizzard': 'snow',
+      'Light snow showers': 'snow',
+      'Moderate or heavy snow showers': 'snow',
+      'Patchy light snow with thunder': 'snow',
+      'Moderate or heavy snow with thunder': 'snow',
+      'Moderate or heavy sleet': 'snow',
+      'Patchy light snow': 'snow',
+      'Light snow': 'snow',
+      'Patchy moderate snow': 'snow',
+      'Moderate snow': 'snow',
+      'Patchy heavy snow': 'snow',
+      'Heavy snow': 'snow',
+      'Patchy freezing drizzle possible': 'freezing',
+      'Freezing drizzle': 'freezing',
+      'Light sleet': 'freezing',
+      'Light sleet showers': 'freezing',
+      'Moderate or heavy sleet showers': 'freezing',
+      'Light showers of ice pellets': 'freezing',
+      'Ice pellets': 'verglas',
+      'Thundery outbreaks possible': 'thunderstorm',
+      'Patchy light rain with thunder': 'thunderstorm',
+      'Moderate or heavy rain with thunder': 'thunderstorm',
+      'Heatwave': 'heatwave',
+      'Fog': 'fog',
+      'Mist': 'fog',
+      'Freezing fog': 'fog',
+      'Patchy light drizzle': 'fog',
+      'Light drizzle': 'fog',
+    };
+
+    if (currentWeatherText && memes.length > 0) {
+      const filteredMemes = memes.filter(meme => {
+        const memeName = weatherMemeMap[currentWeatherText];
+        return memeName && meme.name.toLowerCase() === memeName;
+      });
+
+      if (filteredMemes.length > 0) {
+        const randomIndex = Math.floor(Math.random() * filteredMemes.length);
+        const randomMeme = filteredMemes[randomIndex];
+        setSelectedMeme(randomMeme);
+      } else {
+        setSelectedMeme(null);
+      }
+    } else {
+      setSelectedMeme(null);
+    }
+  }, [currentWeatherText, memes]);
+
+//Conditionnement pour que la description de la condition météo soit le meme que le nom du son.
+useEffect(() => {
+  const weatherSoundMap = {
+    'Sunny': 'sun',
+    'Partly cloudy': 'cloudy',
+    'Cloudy': 'cloudy',
+    'Overcast': 'cloudy',
+    'Patchy rain possible': 'rain',
+    'Moderate or heavy freezing rain': 'rain',
+    'Light freezing rain': 'rain',
+    'Heavy rain': 'rain',
+    'Heavy rain at times': 'rain',
+    'Moderate rain': 'rain',
+    'Moderate rain at times': 'rain',
+    'Light rain': 'rain',
+    'Light rain shower': 'rain',
+    'Moderate or heavy rain shower': 'rain',
+    'Patchy light rain': 'rain',
+    'Torrential rain shower': 'rain',
+    'Wind': 'wind',
+    'Blowing snow': 'snow',
+    'Patchy snow possible': 'snow',
+    'Patchy sleet possible': 'snow',
+    'Blizzard': 'snow',
+    'Light snow showers': 'snow',
+    'Moderate or heavy snow showers': 'snow',
+    'Patchy light snow with thunder': 'snow',
+    'Moderate or heavy snow with thunder': 'snow',
+    'Moderate or heavy sleet': 'snow',
+    'Patchy light snow': 'snow',
+    'Light snow': 'snow',
+    'Patchy moderate snow': 'snow',
+    'Moderate snow': 'snow',
+    'Patchy heavy snow': 'snow',
+    'Heavy snow': 'snow',
+    'Patchy freezing drizzle possible': 'freezing',
+    'Freezing drizzle': 'freezing',
+    'Light sleet': 'freezing',
+    'Light sleet showers': 'freezing',
+    'Moderate or heavy sleet showers': 'freezing',
+    'Light showers of ice pellets': 'freezing',
+    'Ice pellets': 'verglas',
+    'Thundery outbreaks possible': 'thunderstorm',
+    'Patchy light rain with thunder': 'thunderstorm',
+    'Moderate or heavy rain with thunder': 'thunderstorm',
+    'Heatwave': 'heatwave',
+    'Fog': 'fog',
+    'Mist': 'fog',
+    'Freezing fog': 'fog',
+    'Patchy light drizzle': 'fog',
+    'Light drizzle': 'fog',
+  };
+
+  if (currentWeatherText && musiques.length > 0) {
+    const musiqueName = weatherSoundMap[currentWeatherText];
+    const selectedMusique = musiques.find(musiques => musiques.name.toLowerCase() === musiqueName);
+
+    setSelectedMusique(selectedMusique || null);
+  } else {
+    setSelectedMusique(null);
+  }
+}, [currentWeatherText, musiques]);
+
   useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
         apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes`;
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes`;
+        apiUrl = 'http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes';
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
       setCurrentWeather(data);
     };
-  
+
     weatherData();
   }, [weatherInput]);
 
@@ -94,8 +266,9 @@ const App = () => {
       let apiUrl;
       if (weatherInput) {
         apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=1&aqi=yes&alerts=yes`;
+        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=1&aqi=yes&alerts=yes';
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -110,8 +283,9 @@ const App = () => {
       let apiUrl;
       if (weatherInput) {
         apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=7&aqi=no&alerts=yes`;
+        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=7&aqi=no&alerts=yes';
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -159,14 +333,14 @@ function handleCurrentLocation() {
             setCurrentWeather(data);
             setLoadingCity(false);
           }, 500);
-      } catch(error) {
-        setLoadingCity(false);
-      }
-    });
+        } catch (error) {
+          setLoadingCity(false);
+        }
+      });
+    }
   }
-}
-  
-    // const onChange = (currentSlide) => {
+
+  // const onChange = (currentSlide) => {
   //   console.log(currentSlide);
   // };
 
@@ -202,8 +376,8 @@ function handleCurrentLocation() {
       ))}
     </div>
   ))
-  
-   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
+
+  ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
   const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
     forecastWeather.forecast.forecastday.map((day, index) =>
     (
@@ -272,49 +446,37 @@ if (loadingCity) {
         >
         </Radio.Group>
 
-        <Carousel dotPosition={dotPosition}>
-          <div>
-            <p>Temps sur 7 jours</p>
-            <>
-              <div className="week clipping-container">
+          <Carousel dotPosition={dotPosition}>
+            <div>
+              <p>Temps sur 7 jours</p>
+              <div className="week">
                 {days}
-                {/* modale qui s'ouvre pour le condensé d'infos sur tel jour à venir */}
-                {isModalOpen && (
-                  <div className="modal forecast">
-                    <div className='forecast-details'>
-                    <DetailCard iconSrc={windAnim} description="Vent : " value={`${infosModal.map((day) => day.day.avgvis_km)} km/h`} />
-                    <DetailCard iconSrc={rain} description="Pluie :" value={`${infosModal.map((day) => day.day.totalprecip_mm)} mm`} />
-                    <DetailCard iconSrc={temp_min} description="Min :" value={`${infosModal.map((day, index) => day.day.mintemp_c)} °C`} />
-                    <DetailCard iconSrc={temp_max} description="Max :" value={`${infosModal.map((day, index) => day.day.maxtemp_c)} °C`} />
-                    </div>
-                    <button onClick={() => setIsModalOpen(false)}><IoIosCloseCircleOutline /></button>
-                  </div>
-                )}
               </div>
-            </>
-          </div>
+            </div>
 
 
-        <div>
-          <p>Temps sur 24h</p>
-          <div  className="MiniCards">
-            {hours}
-          </div>
-        </div>
+            <div>
+              <p>Temps sur 24h</p>
+              <div className="MiniCards">
+                {hours}
+              </div>
+            </div>
 
-        <div>
-          <p>Précipitations dans l'heure</p>
-          <div  className="precip">
-            {minutes}
-          </div>
-          </div>
+            <div>
+              <p>Précipitations dans l'heure</p>
+              <div className="precip">
+                {minutes}
+              </div>
+            </div>
 
 
         </Carousel>
       </div>
     </div>
 
-  )
-}}
+    )
+  }
+}
+
 
 export default App

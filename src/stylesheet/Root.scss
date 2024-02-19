@@ -5,6 +5,16 @@
 .container {
   width: 100%;
   margin: auto;
+<<<<<<< HEAD
+  font-family: "Poppins", sans-serif;
+}
+
+.container h3 {
+  text-align: center;
+}
+
+.city {
+=======
 }
 
 .city {
@@ -74,15 +84,48 @@ margin: auto;
 }
 
 .forecast{
+>>>>>>> develop
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  font-size: 1.5rem;
+  margin: auto;
+}
+
+.forecast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
   .forecast-details {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+<<<<<<< HEAD
+  }
+
+  .details-card {
+    flex-basis: 50%;
+    text-align: center;
+  }
+
+  .SplashScreen-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #BBCDD3;
+
+    .LogoMemeteo {
+      max-width: 60%;
+    }
+  }
+}
+=======
     .details-card{
       flex-basis: 50%;
       text-align: center;
@@ -111,3 +154,4 @@ background-color: #BBCDD3;
   height: 5rem;
 }
 
+>>>>>>> develop
