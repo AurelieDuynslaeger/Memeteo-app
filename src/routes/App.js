@@ -65,8 +65,10 @@ const App = () => {
   //modal détails du jour
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [loadingCity, setLoadingCity] = useState(false);
   const [dotPosition, setDotPosition] = useState('right');
+
+  const [loadingCity, setLoadingCity] = useState(false);
+
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
@@ -317,32 +319,6 @@ const App = () => {
   const handleMobileIconClick = () => {
     setShowMobileDetails(!showMobileDetails);
   };
-
-
-  /* geolocalisation */
-  function handleCurrentLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        setLoadingCity(true);
-        setWeatherInput('');
-        try {
-          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes`).then(response => response.json());
-          setTimeout(() => {
-            const data = response;
-            setCurrentWeather(data);
-            setLoadingCity(false);
-          }, 500);
-        } catch (error) {
-          setLoadingCity(false);
-        }
-      });
-    }
-  }
-
-  // const onChange = (currentSlide) => {
-  //   console.log(currentSlide);
-  // };
 
 
   const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
