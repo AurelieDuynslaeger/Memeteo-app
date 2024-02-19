@@ -16,7 +16,7 @@ import rain from '../assets/icons/rain_mm.svg';
 // import sunriseIcon from "../assets/icons/sunrise.svg";
 
 //import composant Ant Design et React Icons
-import { Carousel, Radio} from 'antd';
+import { Carousel, Radio } from 'antd';
 import { TbCloudQuestion } from "react-icons/tb";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { format } from 'date-fns';
@@ -95,7 +95,7 @@ const App = () => {
 
     fetchMemes();
   }, []);
-//Fetch pour aller chercher les sons sur notre API
+  //Fetch pour aller chercher les sons sur notre API
   useEffect(() => {
     const fetchMusiques = async () => {
       try {
@@ -180,68 +180,68 @@ const App = () => {
     }
   }, [currentWeatherText, memes]);
 
-//Conditionnement pour que la description de la condition météo soit le meme que le nom du son.
-useEffect(() => {
-  const weatherSoundMap = {
-    'Sunny': 'sun',
-    'Partly cloudy': 'cloudy',
-    'Cloudy': 'cloudy',
-    'Overcast': 'cloudy',
-    'Patchy rain possible': 'rain',
-    'Moderate or heavy freezing rain': 'rain',
-    'Light freezing rain': 'rain',
-    'Heavy rain': 'rain',
-    'Heavy rain at times': 'rain',
-    'Moderate rain': 'rain',
-    'Moderate rain at times': 'rain',
-    'Light rain': 'rain',
-    'Light rain shower': 'rain',
-    'Moderate or heavy rain shower': 'rain',
-    'Patchy light rain': 'rain',
-    'Torrential rain shower': 'rain',
-    'Wind': 'wind',
-    'Blowing snow': 'snow',
-    'Patchy snow possible': 'snow',
-    'Patchy sleet possible': 'snow',
-    'Blizzard': 'snow',
-    'Light snow showers': 'snow',
-    'Moderate or heavy snow showers': 'snow',
-    'Patchy light snow with thunder': 'snow',
-    'Moderate or heavy snow with thunder': 'snow',
-    'Moderate or heavy sleet': 'snow',
-    'Patchy light snow': 'snow',
-    'Light snow': 'snow',
-    'Patchy moderate snow': 'snow',
-    'Moderate snow': 'snow',
-    'Patchy heavy snow': 'snow',
-    'Heavy snow': 'snow',
-    'Patchy freezing drizzle possible': 'freezing',
-    'Freezing drizzle': 'freezing',
-    'Light sleet': 'freezing',
-    'Light sleet showers': 'freezing',
-    'Moderate or heavy sleet showers': 'freezing',
-    'Light showers of ice pellets': 'freezing',
-    'Ice pellets': 'verglas',
-    'Thundery outbreaks possible': 'thunderstorm',
-    'Patchy light rain with thunder': 'thunderstorm',
-    'Moderate or heavy rain with thunder': 'thunderstorm',
-    'Heatwave': 'heatwave',
-    'Fog': 'fog',
-    'Mist': 'fog',
-    'Freezing fog': 'fog',
-    'Patchy light drizzle': 'fog',
-    'Light drizzle': 'fog',
-  };
+  //Conditionnement pour que la description de la condition météo soit le meme que le nom du son.
+  useEffect(() => {
+    const weatherSoundMap = {
+      'Sunny': 'sun',
+      'Partly cloudy': 'cloudy',
+      'Cloudy': 'cloudy',
+      'Overcast': 'cloudy',
+      'Patchy rain possible': 'rain',
+      'Moderate or heavy freezing rain': 'rain',
+      'Light freezing rain': 'rain',
+      'Heavy rain': 'rain',
+      'Heavy rain at times': 'rain',
+      'Moderate rain': 'rain',
+      'Moderate rain at times': 'rain',
+      'Light rain': 'rain',
+      'Light rain shower': 'rain',
+      'Moderate or heavy rain shower': 'rain',
+      'Patchy light rain': 'rain',
+      'Torrential rain shower': 'rain',
+      'Wind': 'wind',
+      'Blowing snow': 'snow',
+      'Patchy snow possible': 'snow',
+      'Patchy sleet possible': 'snow',
+      'Blizzard': 'snow',
+      'Light snow showers': 'snow',
+      'Moderate or heavy snow showers': 'snow',
+      'Patchy light snow with thunder': 'snow',
+      'Moderate or heavy snow with thunder': 'snow',
+      'Moderate or heavy sleet': 'snow',
+      'Patchy light snow': 'snow',
+      'Light snow': 'snow',
+      'Patchy moderate snow': 'snow',
+      'Moderate snow': 'snow',
+      'Patchy heavy snow': 'snow',
+      'Heavy snow': 'snow',
+      'Patchy freezing drizzle possible': 'freezing',
+      'Freezing drizzle': 'freezing',
+      'Light sleet': 'freezing',
+      'Light sleet showers': 'freezing',
+      'Moderate or heavy sleet showers': 'freezing',
+      'Light showers of ice pellets': 'freezing',
+      'Ice pellets': 'verglas',
+      'Thundery outbreaks possible': 'thunderstorm',
+      'Patchy light rain with thunder': 'thunderstorm',
+      'Moderate or heavy rain with thunder': 'thunderstorm',
+      'Heatwave': 'heatwave',
+      'Fog': 'fog',
+      'Mist': 'fog',
+      'Freezing fog': 'fog',
+      'Patchy light drizzle': 'fog',
+      'Light drizzle': 'fog',
+    };
 
-  if (currentWeatherText && musiques.length > 0) {
-    const musiqueName = weatherSoundMap[currentWeatherText];
-    const selectedMusique = musiques.find(musiques => musiques.name.toLowerCase() === musiqueName);
+    if (currentWeatherText && musiques.length > 0) {
+      const musiqueName = weatherSoundMap[currentWeatherText];
+      const selectedMusique = musiques.find(musiques => musiques.name.toLowerCase() === musiqueName);
 
-    setSelectedMusique(selectedMusique || null);
-  } else {
-    setSelectedMusique(null);
-  }
-}, [currentWeatherText, musiques]);
+      setSelectedMusique(selectedMusique || null);
+    } else {
+      setSelectedMusique(null);
+    }
+  }, [currentWeatherText, musiques]);
 
   useEffect(() => {
     const weatherData = async () => {
@@ -277,7 +277,7 @@ useEffect(() => {
     weatherDataForecast();
   }, [weatherInput]);
 
-    /*fetch forecast 5jrs*/
+  /*fetch forecast 5jrs*/
   useEffect(() => {
     const weatherForecast7 = async () => {
       let apiUrl;
@@ -295,13 +295,13 @@ useEffect(() => {
   }, [weatherInput]);
 
 
-/*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
-const handleCityClick = () => {
-  console.log("déclenché");
-  setShowNavBar(true);
-}
-//saisie input et à la soumission la Navbar disparait
-const handleWeatherInput = async (city) => {
+  /*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
+  const handleCityClick = () => {
+    console.log("déclenché");
+    setShowNavBar(true);
+  }
+  //saisie input et à la soumission la Navbar disparait
+  const handleWeatherInput = async (city) => {
     // Appel de l'API avec la city soumise dans la nav
     try {
       const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes`);
@@ -319,15 +319,15 @@ const handleWeatherInput = async (city) => {
   };
 
 
-/* geolocalisation */
-function handleCurrentLocation() {
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(async(position)=>{
-      const { latitude, longitude } = position.coords;
-       setLoadingCity(true);
-       setWeatherInput('');
-      try {
-          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes`).then(response => response.json()); 
+  /* geolocalisation */
+  function handleCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+        setLoadingCity(true);
+        setWeatherInput('');
+        try {
+          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes`).then(response => response.json());
           setTimeout(() => {
             const data = response;
             setCurrentWeather(data);
@@ -344,7 +344,7 @@ function handleCurrentLocation() {
   //   console.log(currentSlide);
   // };
 
- 
+
   const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
   console.log(infosModal);
 
@@ -392,59 +392,69 @@ function handleCurrentLocation() {
           />
         ))}
       </div>
-      )
+    )
     )
 
-// Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
-if (loadingCity) {
-  return <WeatherSkeleton />;
-} else {
-  return (
-    <div className="container">
+  // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
+  if (loadingCity) {
+    return <WeatherSkeleton />;
+  } else {
+    return (
+      <div className="container">
 
-      {/* composant Navbar qui n'apparait que si on clik sur la ville */}
-      {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
-      <div className='city'>
+        {/* composant Navbar qui n'apparait que si on clik sur la ville */}
+        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
+        <div className='city'>
 
-            <h3 className='city-name'  onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
-            <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
+          <h3 className='city-name' onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
+          <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
 
-            {/* Icône mobile visible uniquement sur les appareils mobiles */}
-            <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
-            {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
+          {/* Icône mobile visible uniquement sur les appareils mobiles */}
+          <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
+          {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
 
-            {currentWeather && <WeatherIcon currentWeather={currentWeather}/>}
-            {/* <img src={currentWeather?.current?.condition?.icon} alt="" /> */}
-            {/* <p>{currentWeather?.current?.condition?.text}</p> */}
-      </div>
+          {currentWeather && <WeatherIcon currentWeather={currentWeather} />}
+          {/* <img src={currentWeather?.current?.condition?.icon} alt="" /> */}
+          {/* <p>{currentWeather?.current?.condition?.text}</p> */}
+        </div>
 
-      {/* Div des détails de la météo */}
-      <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
-        {/* Contenu des détails de la météo */}
-        <div className="forecast">
-          <div className='forecast-details'>
-            <DetailCard iconSrc={windIcon} description="Vitesse du vent" value={`${currentWeather?.current?.wind_kph} km/h`} />
-            <DetailCard iconSrc={humidityIcon} description="Humidité" value={`${currentWeather?.current?.humidity} %`} />
-            <DetailCard iconSrc={uvIcon} description="Indice UV" value={currentWeather?.current?.uv} />
-            <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${currentWeather?.current?.feelslike_c} °C`} />
-            <DetailCard iconSrc={airQualityIcon} description="Qualité de l'air" value={`indice ${currentWeather?.current?.air_quality['gb-defra-index']}`} />
+        {/* Div des détails de la météo */}
+        <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
+          {/* Contenu des détails de la météo */}
+          <div className="forecast">
+            <div className='forecast-details'>
+              <DetailCard iconSrc={windIcon} description="Vitesse du vent" value={`${currentWeather?.current?.wind_kph} km/h`} />
+              <DetailCard iconSrc={humidityIcon} description="Humidité" value={`${currentWeather?.current?.humidity} %`} />
+              <DetailCard iconSrc={uvIcon} description="Indice UV" value={currentWeather?.current?.uv} />
+              <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${currentWeather?.current?.feelslike_c} °C`} />
+              <DetailCard iconSrc={airQualityIcon} description="Qualité de l'air" value={`indice ${currentWeather?.current?.air_quality['gb-defra-index']}`} />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="weather-meme">
+        <div className="weather-meme">
+          {selectedMeme && (
+            <div>
+              <img src={selectedMeme.image} alt={selectedMeme.name} style={{ width: '200px', height: '200px' }} />
 
-      </div>
+            </div>
+          )}
+          {selectedMusique && (
+            <div>
+              <audio src={selectedMusique.musique} autoPlay />
+            </div>
+          )}
+        </div>
 
-      <div>
-        <Radio.Group
-          onChange={handlePositionChange}
-          value={dotPosition}
-          style={{
-            marginBottom: 8,
-          }}
-        >
-        </Radio.Group>
+        <div>
+          <Radio.Group
+            onChange={handlePositionChange}
+            value={dotPosition}
+            style={{
+              marginBottom: 8,
+            }}
+          >
+          </Radio.Group>
 
           <Carousel dotPosition={dotPosition}>
             <div>
@@ -470,9 +480,9 @@ if (loadingCity) {
             </div>
 
 
-        </Carousel>
+          </Carousel>
+        </div>
       </div>
-    </div>
 
     )
   }
