@@ -84,10 +84,6 @@ const App = () => {
   const [selectedMeme, setSelectedMeme] = useState(null);
   // Constante pour stocker le texte des conditions météos actuelles
   const currentWeatherText = currentWeather?.current?.condition?.text;
-  console.log(currentWeatherText);
-
-
-
   //Fetch pour aller chercher les memes sur notre API
   useEffect(() => {
     const fetchMemes = async () => {
@@ -249,6 +245,59 @@ const App = () => {
       setSelectedMusique(null);
     }
   }, [currentWeatherText, musiques]);
+  const weatherBackgrounds = {
+    'Sunny': 'sun-background',
+    'Partly cloudy': 'cloudy-background',
+    'Cloudy': 'cloudy-background',
+    'Overcast': 'cloudy-background',
+    'Patchy rain possible': 'rain-background',
+    'Moderate or heavy freezing rain': 'rain-background',
+    'Light freezing rain': 'rain-background',
+    'Heavy rain': 'rain-background',
+    'Heavy rain at times': 'rain-background',
+    'Moderate rain': 'rain-background',
+    'Moderate rain at times': 'rain-background',
+    'Light rain': 'rain-background',
+    'Light rain shower': 'rain-background',
+    'Moderate or heavy rain shower': 'rain-background',
+    'Patchy light rain': 'rain-background',
+    'Torrential rain shower': 'rain-background',
+    'Wind': 'wind-background',
+    'Blowing snow': 'snow-background',
+    'Patchy snow possible': 'snow-background',
+    'Patchy sleet possible': 'snow-background',
+    'Blizzard': 'snow-background',
+    'Light snow showers': 'snow-background',
+    'Moderate or heavy snow showers': 'snow-background',
+    'Patchy light snow with thunder': 'snow-background',
+    'Moderate or heavy snow with thunder': 'snow-background',
+    'Moderate or heavy sleet': 'snow-background',
+    'Patchy light snow': 'snow-background',
+    'Light snow': 'snow-background',
+    'Patchy moderate snow': 'snow-background',
+    'Moderate snow': 'snow-background',
+    'Patchy heavy snow': 'snow-background',
+    'Heavy snow': 'snow-background',
+    'Patchy freezing drizzle possible': 'freezing-background',
+    'Freezing drizzle': 'freezing-background',
+    'Light sleet': 'freezing-background',
+    'Light sleet showers': 'freezing-background',
+    'Moderate or heavy sleet showers': 'freezing-background',
+    'Light showers of ice pellets': 'freezing-background',
+    'Ice pellets': 'verglas-background',
+    'Thundery outbreaks possible': 'thunderstorm-background',
+    'Patchy light rain with thunder': 'thunderstorm-background',
+    'Moderate or heavy rain with thunder': 'thunderstorm-background',
+    'Heatwave': 'heatwave-background',
+    'Fog': 'fog-background',
+    'Mist': 'fog-background',
+    'Freezing fog': 'fog-background',
+    'Patchy light drizzle': 'fog-background',
+    'Light drizzle': 'fog-background',
+  };
+  const getWeatherBackgroundClass = () => {
+    return weatherBackgrounds[currentWeatherText] || 'default-background';
+  };
 
   useEffect(() => {
     const weatherData = async () => {
@@ -401,7 +450,7 @@ const App = () => {
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className="container">
+      <div className={`container ${getWeatherBackgroundClass()}`}>
 
         {/* composant Navbar qui n'apparait que si on clik sur la ville */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}

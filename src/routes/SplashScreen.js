@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logo_memeteo.png';
+import logo from '../assets/memteo-logo-base.png';
 import '../stylesheet/Root.scss';
 
 function SplashScreen() {
