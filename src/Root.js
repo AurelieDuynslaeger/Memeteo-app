@@ -1,8 +1,8 @@
 
 import './stylesheet/Root.scss';
 import App from "./routes/App";
-import ForecastDetails from './routes/ForecastDetails';
-import NotFound from './routes/NotFound';
+import SplashScreen from './routes/SplashScreen';
+
 
 import {
   BrowserRouter as Router,
@@ -11,12 +11,12 @@ import {
 } from 'react-router-dom';
 
 
+
 const Root = () => (
       <Router>
           <Routes>
+            <Route path='/' element={<SplashScreen/>} />
               <Route path='/home' element={<App/>} />
-              <Route path='/forecast-details' element={<ForecastDetails/>} />
-              <Route path="*" element={<NotFound/>} />
           </Routes>
       </Router>
   );

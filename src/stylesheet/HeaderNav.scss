@@ -1,0 +1,30 @@
+@use "../stylesheet/variables" as v;
+
+.navbar {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: space-around;
+   background-color: v.$color-green;
+   .logo {
+        width: 10rem;
+   }
+   input {
+    width: 20rem;
+    border: none;
+   }
+   button {
+    border: none;
+   }
+}
+
+@media (max-width: 768px) {
+   .navbar {
+      .logo {
+           width: 6rem;
+      }
+      input {
+       width: 10rem;
+      }
+   }
+ }
