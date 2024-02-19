@@ -65,8 +65,11 @@ const App = () => {
   //modal détails du jour
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [loadingCity, setLoadingCity] = useState(false);
   const [dotPosition, setDotPosition] = useState('right');
+
+  //permet l'affichage ou non du weather skeletton
+  const [loadingCity, setLoadingCity] = useState(false);
+
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
@@ -352,49 +355,29 @@ const App = () => {
     console.log("déclenché");
     setShowNavBar(true);
   }
+
   //saisie input et à la soumission la Navbar disparait
   const handleWeatherInput = async (city) => {
+  setLoadingCity(true);
+  setWeatherInput(city);
     // Appel de l'API avec la city soumise dans la nav
     try {
       const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes`);
       const data = await response.json();
+
       setCurrentWeather(data);
       setShowNavBar(false);
+      setLoadingCity(false);
     } catch (error) {
       console.error('Erreur lors de la récupération des données météo:', error);
+      setLoadingCity(false);
     }
-  };
+  }
 
   /*icone pour details Météo (mobile => on clik ; tablette/desktop => display)*/
   const handleMobileIconClick = () => {
     setShowMobileDetails(!showMobileDetails);
   };
-
-
-  /* geolocalisation */
-  function handleCurrentLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        setLoadingCity(true);
-        setWeatherInput('');
-        try {
-          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes`).then(response => response.json());
-          setTimeout(() => {
-            const data = response;
-            setCurrentWeather(data);
-            setLoadingCity(false);
-          }, 500);
-        } catch (error) {
-          setLoadingCity(false);
-        }
-      });
-    }
-  }
-
-  // const onChange = (currentSlide) => {
-  //   console.log(currentSlide);
-  // };
 
 
   const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
@@ -455,10 +438,11 @@ const App = () => {
       <div className={`container ${getWeatherBackgroundClass()}`}>
 
         {/* composant Navbar qui n'apparait que si on clik sur la ville */}
-        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
+        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
         <div className='city'>
 
           <h3 className='city-name' onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
+          
           <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
 
           {/* Icône mobile visible uniquement sur les appareils mobiles */}

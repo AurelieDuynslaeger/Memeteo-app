@@ -8,13 +8,19 @@
    .logo {
         width: 10rem;
    }
+   
    input {
-    width: 20rem;
+    width: 15rem;
     border: none;
    }
    button {
     border: none;
    }
+}
+
+.geolocalisationIcon {
+   font-size:1.5rem;
+   padding-top:5px;
 }
 
 @media (max-width: 768px) {
