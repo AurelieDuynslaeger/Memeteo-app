@@ -2,50 +2,97 @@ import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
 import { FaCheck } from "react-icons/fa";
 import Logo from "../assets/logoMemteo.png";
+
+
+//import des feuilles de styles
 import "../stylesheet/HeaderNav.scss";
-import { MdMyLocation } from "react-icons/md";
+import "../stylesheet/_suggestionBox.scss";
 
 export const HeaderNav = ({ onWeatherInput }) => {
   const [city, setCity] = useState("");
-  //const [loadingCity, setLoadingCity] = useState(false);
 
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    console.log("Input value :", value);
+
+  // Suggestions de villes
+  const [error, setError] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+
+  async function handleInputChange(value) {
     setCity(value);
+    //console.log("Input value after :", value);
+    if(value.length >= 3) {
+      try {
+        const response = await fetch(`http://api.weatherapi.com/v1/search.json?key=5929e663f6c74ae192890247240802&q=${value}`);
+        if (!response.ok) {
+          throw new Error('Ville non trouvée');
+        }
+
+        const data = await response.json();
+
+        const suggestions = data.map((item) => `${item.name}, ${item.country}`);
+        console.log(suggestions);
+        setSuggestions(suggestions || []);
+        setError("");
+        setShowSuggestions(true);
+
+      } catch (error) {
+        setSuggestions([]);
+        setShowSuggestions(false);
+      }
+    }
+    else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log("Formulaire soumis", city);
+    if(error) {
+      setError("Location not found");
+    } else {
+    setError("");
     // Appel de la fonction de gestion de la ville dans l'app component
     onWeatherInput(city);
     // Effacer l'input après la soumission
     setCity("");
+    setShowSuggestions(false);
+    }
   };
 
-  /* geolocalisation */
-  function handleCurrentLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        //setLoadingCity(true);
-        setCity(`${latitude}, ${longitude}`);
-        try {
-          const response = await fetch(
-            `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes`
-          ).then((response) => response.json());
-          setTimeout(() => {
-            const data = response;
-            onWeatherInput(city);
-            //setLoadingCity(false);
-          }, 500);
-        } catch (error) {
-          //setLoadingCity(false);
-        }
-      });
-    }
+  function SuggestionBox({
+    showSuggestions,
+    suggestions,
+    handleSuggestionClick,
+    error
+  }) {
+    return (
+    <> 
+    { ((showSuggestions && suggestions.length > 1) || error) && (
+      <ul className="suggestions">
+        {error && suggestions.length<1 &&  (
+           <li className="error">{error}</li>
+        )}
+        {suggestions.map((item, index) => (
+          <li
+            key={index}
+            onClick={() => handleSuggestionClick(item)}
+            className="suggestion">
+              {item} {/* Here = location name / place name */}
+          </li>
+        ))}
+      </ul>
+      )}
+    </>
+  )}
+
+  function handleSuggestionClick(value) {
+    setCity(value);
+    setShowSuggestions(false);
   }
+
 
   return (
     <div className="navbar">
@@ -53,21 +100,20 @@ export const HeaderNav = ({ onWeatherInput }) => {
 
       <Form layout="inline">
         <Form.Item>
-            <MdMyLocation
-            title="Votre position actuelle" // when you hover, you can see this title
-            onClick={handleCurrentLocation}
-            className='geolocalisationIcon'
-          />
-        </Form.Item>
-        <Form.Item>
           <Input
             placeholder="Tapez votre recherche ici..."
             value={city}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange(e.target.value)}
           />
+          <SuggestionBox
+            {...{showSuggestions,
+              suggestions,
+              handleSuggestionClick,
+              error}}
+              />
         </Form.Item>
         <Form.Item>
-          <Button htmlType="submit" onClick={handleFormSubmit}>
+          <Button htmlType="submit" onClick={(e) => handleFormSubmit(e)}>
             <FaCheck color="#51ADCE" />
           </Button>
         </Form.Item>
