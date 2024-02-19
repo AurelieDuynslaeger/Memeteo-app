@@ -12,7 +12,7 @@ import { TiInfoLarge } from "react-icons/ti";
 import "../stylesheet/Root.scss";
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
 import Week from '../components/Week.js';
-import { Carousel, Radio} from 'antd';
+import { Carousel, Radio } from 'antd';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import '../main.css';
@@ -31,7 +31,7 @@ const contentStyle = {
 
 
 const App = () => {
-    
+
   //météo a l'instant T
   const [currentWeather, setCurrentWeather] = useState({});
   //météo prévisions 24h (pluie et heure par heure)
@@ -47,27 +47,196 @@ const App = () => {
   const [weatherInput, setWeatherInput] = useState('');
 
   const [loadingCity, setLoadingCity] = useState(false);
-   const [dotPosition, setDotPosition] = useState('right');
+  const [dotPosition, setDotPosition] = useState('right');
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
-  
-  
- 
+  //Recupération du Meme
+  const [memes, setMemes] = useState([]);
+  //Récupération du son
+  const [musiques, setMusiques] = useState([]);
+  //Constante pour filtrer les sons
+  const [selectedMusique, setSelectedMusique] = useState(null);
+  //Constante pour filtrer les memes
+  const [selectedMeme, setSelectedMeme] = useState(null);
+  // Constante pour stocker le texte des conditions météos actuelles
+  const currentWeatherText = currentWeather?.current?.condition?.text;
+  console.log(currentWeatherText);
+  //Fetch pour aller chercher les memes sur notre API
+  useEffect(() => {
+    const fetchMemes = async () => {
+      try {
+        const response = await fetch('http://localhost:7000/memes');
+        const data = await response.json();
+        setMemes(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des memes:', error);
+      }
+    };
+
+    fetchMemes();
+  }, []);
+//Fetch pour aller chercher les sons sur notre API
+  useEffect(() => {
+    const fetchMusiques = async () => {
+      try {
+        const response = await fetch('http://localhost:7000/musiques');
+        const data = await response.json();
+        setMusiques(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des musiques:', error);
+      }
+    };
+
+    fetchMusiques();
+  }, []);
+  //Conditionnement pour que la description de la condition météo soit le meme que le nom du meme. 
+  useEffect(() => {
+    const weatherMemeMap = {
+      'Sunny': 'sun',
+      'Partly cloudy': 'cloudy',
+      'Cloudy': 'cloudy',
+      'Overcast': 'cloudy',
+      'Patchy rain possible': 'rain',
+      'Moderate or heavy freezing rain': 'rain',
+      'Light freezing rain': 'rain',
+      'Heavy rain': 'rain',
+      'Heavy rain at times': 'rain',
+      'Moderate rain': 'rain',
+      'Moderate rain at times': 'rain',
+      'Light rain': 'rain',
+      'Light rain shower': 'rain',
+      'Moderate or heavy rain shower': 'rain',
+      'Patchy light rain': 'rain',
+      'Torrential rain shower': 'rain',
+      'Wind': 'wind',
+      'Blowing snow': 'snow',
+      'Patchy snow possible': 'snow',
+      'Patchy sleet possible': 'snow',
+      'Blizzard': 'snow',
+      'Light snow showers': 'snow',
+      'Moderate or heavy snow showers': 'snow',
+      'Patchy light snow with thunder': 'snow',
+      'Moderate or heavy snow with thunder': 'snow',
+      'Moderate or heavy sleet': 'snow',
+      'Patchy light snow': 'snow',
+      'Light snow': 'snow',
+      'Patchy moderate snow': 'snow',
+      'Moderate snow': 'snow',
+      'Patchy heavy snow': 'snow',
+      'Heavy snow': 'snow',
+      'Patchy freezing drizzle possible': 'freezing',
+      'Freezing drizzle': 'freezing',
+      'Light sleet': 'freezing',
+      'Light sleet showers': 'freezing',
+      'Moderate or heavy sleet showers': 'freezing',
+      'Light showers of ice pellets': 'freezing',
+      'Ice pellets': 'verglas',
+      'Thundery outbreaks possible': 'thunderstorm',
+      'Patchy light rain with thunder': 'thunderstorm',
+      'Moderate or heavy rain with thunder': 'thunderstorm',
+      'Heatwave': 'heatwave',
+      'Fog': 'fog',
+      'Mist': 'fog',
+      'Freezing fog': 'fog',
+      'Patchy light drizzle': 'fog',
+      'Light drizzle': 'fog',
+    };
+
+    if (currentWeatherText && memes.length > 0) {
+      const filteredMemes = memes.filter(meme => {
+        const memeName = weatherMemeMap[currentWeatherText];
+        return memeName && meme.name.toLowerCase() === memeName;
+      });
+
+      if (filteredMemes.length > 0) {
+        const randomIndex = Math.floor(Math.random() * filteredMemes.length);
+        const randomMeme = filteredMemes[randomIndex];
+        setSelectedMeme(randomMeme);
+      } else {
+        setSelectedMeme(null);
+      }
+    } else {
+      setSelectedMeme(null);
+    }
+  }, [currentWeatherText, memes]);
+
+//Conditionnement pour que la description de la condition météo soit le meme que le nom du son.
+useEffect(() => {
+  const weatherSoundMap = {
+    'Sunny': 'sun',
+    'Partly cloudy': 'cloudy',
+    'Cloudy': 'cloudy',
+    'Overcast': 'cloudy',
+    'Patchy rain possible': 'rain',
+    'Moderate or heavy freezing rain': 'rain',
+    'Light freezing rain': 'rain',
+    'Heavy rain': 'rain',
+    'Heavy rain at times': 'rain',
+    'Moderate rain': 'rain',
+    'Moderate rain at times': 'rain',
+    'Light rain': 'rain',
+    'Light rain shower': 'rain',
+    'Moderate or heavy rain shower': 'rain',
+    'Patchy light rain': 'rain',
+    'Torrential rain shower': 'rain',
+    'Wind': 'wind',
+    'Blowing snow': 'snow',
+    'Patchy snow possible': 'snow',
+    'Patchy sleet possible': 'snow',
+    'Blizzard': 'snow',
+    'Light snow showers': 'snow',
+    'Moderate or heavy snow showers': 'snow',
+    'Patchy light snow with thunder': 'snow',
+    'Moderate or heavy snow with thunder': 'snow',
+    'Moderate or heavy sleet': 'snow',
+    'Patchy light snow': 'snow',
+    'Light snow': 'snow',
+    'Patchy moderate snow': 'snow',
+    'Moderate snow': 'snow',
+    'Patchy heavy snow': 'snow',
+    'Heavy snow': 'snow',
+    'Patchy freezing drizzle possible': 'freezing',
+    'Freezing drizzle': 'freezing',
+    'Light sleet': 'freezing',
+    'Light sleet showers': 'freezing',
+    'Moderate or heavy sleet showers': 'freezing',
+    'Light showers of ice pellets': 'freezing',
+    'Ice pellets': 'verglas',
+    'Thundery outbreaks possible': 'thunderstorm',
+    'Patchy light rain with thunder': 'thunderstorm',
+    'Moderate or heavy rain with thunder': 'thunderstorm',
+    'Heatwave': 'heatwave',
+    'Fog': 'fog',
+    'Mist': 'fog',
+    'Freezing fog': 'fog',
+    'Patchy light drizzle': 'fog',
+    'Light drizzle': 'fog',
+  };
+
+  if (currentWeatherText && musiques.length > 0) {
+    const musiqueName = weatherSoundMap[currentWeatherText];
+    const selectedMusique = musiques.find(musiques => musiques.name.toLowerCase() === musiqueName);
+
+    setSelectedMusique(selectedMusique || null);
+  } else {
+    setSelectedMusique(null);
+  }
+}, [currentWeatherText, musiques]);
 
   useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes&lang=fr`;
+        apiUrl = 'http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes';
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
       setCurrentWeather(data);
     };
-  
+
     weatherData();
   }, [weatherInput]);
 
@@ -75,9 +244,9 @@ const App = () => {
     const weatherDataForecast = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=1&aqi=yes&alerts=yes&lang=fr`;
+        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=1&aqi=yes&alerts=yes';
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -90,9 +259,9 @@ const App = () => {
     const weatherForecast7 = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=7&aqi=no&alerts=yes&lang=fr`;
+        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=7&aqi=no&alerts=yes';
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -111,63 +280,63 @@ const App = () => {
   // });
 
   //modal open et fermeture
-const showModal = () => {
-  setIsModalOpen(true);
-}
-const handleOk = () => {
-  setIsModalOpen(false);
-};
-
-//menu open sur input ville
-const showDrawer = () => {
-  setOpen(true);
-};
-const onClose = () => {
-  setOpen(false);
-};
-
-//fetch pour la saisie d'une nouvelle localité
-const submitCity = () => {
-  const weatherData = async () => {
-    const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`).then(response => response.json());
-    const data = response;
-    setCurrentWeather(data);
+  const showModal = () => {
+    setIsModalOpen(true);
+  }
+  const handleOk = () => {
+    setIsModalOpen(false);
   };
-  weatherData();
-}
 
-const handleInputChange = (e) => {
-setWeatherInput(e.target.value);
-};
+  //menu open sur input ville
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
 
-const handleFormSubmit = (e) => {
-e.preventDefault();
-submitCity();
-};
+  //fetch pour la saisie d'une nouvelle localité
+  const submitCity = () => {
+    const weatherData = async () => {
+      const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes`).then(response => response.json());
+      const data = response;
+      setCurrentWeather(data);
+    };
+    weatherData();
+  }
 
-/* geolocalisation */
-function handleCurrentLocation() {
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(async(position)=>{
-      const { latitude, longitude } = position.coords;
-       setLoadingCity(true);
-       setWeatherInput('');
-       setOpen(false);
-      try {
-          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes&lang=fr`).then(response => response.json()); 
+  const handleInputChange = (e) => {
+    setWeatherInput(e.target.value);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    submitCity();
+  };
+
+  /* geolocalisation */
+  function handleCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+        setLoadingCity(true);
+        setWeatherInput('');
+        setOpen(false);
+        try {
+          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes`).then(response => response.json());
           setTimeout(() => {
             const data = response;
             setCurrentWeather(data);
             setLoadingCity(false);
           }, 500);
-      } catch(error) {
-        setLoadingCity(false);
-      }
-    });
+        } catch (error) {
+          setLoadingCity(false);
+        }
+      });
+    }
   }
-}
-  
-    // const onChange = (currentSlide) => {
+
+  // const onChange = (currentSlide) => {
   //   console.log(currentSlide);
   // };
 
@@ -199,8 +368,8 @@ function handleCurrentLocation() {
       ))}
     </div>
   ))
-  
-   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
+
+  ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
   const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
     forecastWeather.forecast.forecastday.map((day, index) =>
     (
@@ -219,138 +388,154 @@ function handleCurrentLocation() {
     )
     )
 
-// Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
-if (loadingCity) {
-  return <WeatherSkeleton />;
-} else {
-  return (
-    <div className="container">
+  // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
+  if (loadingCity) {
+    return <WeatherSkeleton />;
+  } else {
+    return (
+      <div className="container">
         <>
-      <Drawer
-        title="Saisir une autre ville"
-        width={450}
-        onClose={onClose}
-        open={open}
-        styles={{
-          body: {
-            paddingBottom: 80,
-            height:30,
-          },
-        }}
-      >
-        <MdMyLocation 
-          title="Votre position actuelle" // when you hover, you can see this title
-          onClick={handleCurrentLocation}
-         />
-        <Form layout="vertical" onSubmit={handleFormSubmit}>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="city"
-                label=""
-                rules={[
-                  {
-                    //required: !!weatherInput,
-                    message: 'Tapez votre recherche',
-                  },
-                ]}
-              >
-                <Input placeholder="Tapez votre recherche ici..." value={weatherInput} onChange={handleInputChange}/>
-                {/* <Space>
+          <Drawer
+            title="Saisir une autre ville"
+            width={450}
+            onClose={onClose}
+            open={open}
+            styles={{
+              body: {
+                paddingBottom: 80,
+                height: 30,
+              },
+            }}
+          >
+            <MdMyLocation
+              title="Votre position actuelle" // when you hover, you can see this title
+              onClick={handleCurrentLocation}
+            />
+            <Form layout="vertical" onSubmit={handleFormSubmit}>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    name="city"
+                    label=""
+                    rules={[
+                      {
+                        //required: !!weatherInput,
+                        message: 'Tapez votre recherche',
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Tapez votre recherche ici..." value={weatherInput} onChange={handleInputChange} />
+                    {/* <Space>
                   <Button type="primary" htmlType='submit'>
                   <FaSearchLocation/>
                   </Button>
                 </Space> */}
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Drawer>
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+          </Drawer>
         </>
-      <div className='city'>
-            {/* <CiSettings/> */}
-            {/* onClick = navigation vers les paramètres */}
-            {/* <h4>{format(parseISO(dataWeather?.location?.localtime))}</h4> */}
-            <h3 className='city-name' onClick={showDrawer}>{currentWeather?.location?.name}</h3>
-            <h3 className='current-temp' onClick={showModal}>{currentWeather?.current?.temp_c}°C <TiInfoLarge width={3} height={3}/></h3>
-            
-            <img src={currentWeather?.current?.condition?.icon} alt="current weather condition icon" className='icon-weather-display'/>
-            <p>{currentWeather?.current?.condition?.text}</p>
-      </div>
-      <Modal open={isModalOpen} onOk={handleOk}>
-            <div className="forecast">
-              <h4>Détails Temps Actuel</h4>
-              <div className='forecast-details'>
-                <div className='details-card'>
-                  {/* créer un composant DetailWeatherCard */}
-                  {/* props : src width height data  */}
-                  <img src={windIcon} alt="" width={40} height={40} /> 
-                  <p>{currentWeather?.current?.wind_kph} km/h</p>
-                  {/* {currentWeather?.current?.wind_dir} = Ouest (condtionnement à venir) */}
-                </div>
-                <div className='details-card'>
-                  <img src={humidityIcon} alt="" width={40} height={40} />
-                  <p>Humidité : {currentWeather?.current?.humidity} %</p>
-                </div>
-                <div className='details-card'>
-                  <img src={uvIcon} alt="" width={40} height={40} />
-                  <p>Indice : {currentWeather?.current?.uv}</p> 
-                </div>
-                <div className='details-card'>
-                  <img src={feelsLikeIcon} alt="" width={40} height={40} /> <p>Ressenti : {currentWeather?.current?.feelslike_c} °C </p>
-                </div>
-                <div className='details-card'>
-                  <img src={airQualityIcon} alt="" width={40} height={40} /> <p> Qualité de l'air : indice {currentWeather?.current?.air_quality['gb-defra-index']} </p>
-                </div>
+        <div className='city'>
+          {/* <CiSettings/> */}
+          {/* onClick = navigation vers les paramètres */}
+          {/* <h4>{format(parseISO(dataWeather?.location?.localtime))}</h4> */}
+          <h3 className='city-name' onClick={showDrawer}>{currentWeather?.location?.name}</h3>
+          <h3 className='current-temp' onClick={showModal}>{currentWeather?.current?.temp_c}°C <TiInfoLarge width={3} height={3} /></h3>
+
+          <img src={currentWeather?.current?.condition?.icon} alt="current weather condition icon" className='icon-weather-display' />
+          <p>{currentWeather?.current?.condition?.text}</p>
+        </div>
+        <Modal open={isModalOpen} onOk={handleOk}>
+          <div className="forecast">
+            <h4>Détails Temps Actuel</h4>
+            <div className='forecast-details'>
+              <div className='details-card'>
+                {/* créer un composant DetailWeatherCard */}
+                {/* props : src width height data  */}
+                <img src={windIcon} alt="" width={40} height={40} />
+                <p>{currentWeather?.current?.wind_kph} km/h</p>
+                {/* {currentWeather?.current?.wind_dir} = Ouest (condtionnement à venir) */}
+              </div>
+              <div className='details-card'>
+                <img src={humidityIcon} alt="" width={40} height={40} />
+                <p>Humidité : {currentWeather?.current?.humidity} %</p>
+              </div>
+              <div className='details-card'>
+                <img src={uvIcon} alt="" width={40} height={40} />
+                <p>Indice : {currentWeather?.current?.uv}</p>
+              </div>
+              <div className='details-card'>
+                <img src={feelsLikeIcon} alt="" width={40} height={40} /> <p>Ressenti : {currentWeather?.current?.feelslike_c} °C </p>
+              </div>
+              <div className='details-card'>
+                <img src={airQualityIcon} alt="" width={40} height={40} /> <p> Qualité de l'air : indice {currentWeather?.current?.air_quality['gb-defra-index']} </p>
               </div>
             </div>
-      </Modal>
-      <div className="weather-meme">
+          </div>
+        </Modal>
+        <div className="weather-meme">
+          <div>
+            <h1>Memes</h1>
+
+            {selectedMeme && (
+              <div>
+                <img src={selectedMeme.image} alt={selectedMeme.name} style={{ width: '200px', height: '200px' }} />
+
+              </div>
+            )}
+             {selectedMusique && (
+                <div>
+                    <audio src={selectedMusique.musique} autoPlay />
+                </div>
+            )}
+
+          </div>
+        </div>
+        <div>
+          <Radio.Group
+            onChange={handlePositionChange}
+            value={dotPosition}
+            style={{
+              marginBottom: 8,
+            }}
+          >
+
+          </Radio.Group>
+
+          <Carousel dotPosition={dotPosition}>
+            <div>
+              <p>Temps sur 7 jours</p>
+              <div className="week">
+                {days}
+              </div>
+            </div>
+
+
+            <div>
+              <p>Temps sur 24h</p>
+              <div className="MiniCards">
+                {hours}
+              </div>
+            </div>
+
+            <div>
+              <p>Précipitations dans l'heure</p>
+              <div className="precip">
+                {minutes}
+              </div>
+            </div>
+
+
+          </Carousel>
+
+        </div>
 
       </div>
-       <div>
-      <Radio.Group
-        onChange={handlePositionChange}
-        value={dotPosition}
-        style={{
-          marginBottom: 8,
-        }}
-      >
 
-      </Radio.Group>
-
-      <Carousel dotPosition={dotPosition}>
-        <div>
-          <p>Temps sur 7 jours</p>
-          <div className="week">
-            {days}
-          </div>
-        </div>
-
-
-        <div>
-          <p>Temps sur 24h</p>
-          <div  className="MiniCards">
-            {hours}
-          </div>
-        </div>
-
-        <div>
-          <p>Précipitations dans l'heure</p>
-          <div  className="precip">
-            {minutes}
-          </div>
-          </div>
-
-
-      </Carousel>
-
-    </div>
-
-    </div>
-
-  )
-}}
+    )
+  }
+}
 
 
 export default App
