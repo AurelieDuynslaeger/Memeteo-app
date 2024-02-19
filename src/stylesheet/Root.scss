@@ -5,20 +5,29 @@
 .container {
   width: 100%;
   margin: auto;
+
+  font-family: "Poppins", sans-serif;
 }
 
+.container h3 {
+  text-align: center;
+}
+
+
 .city {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: space-between;
-margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin: auto;
+
   .city-name {
     font-size: 5rem;
     margin: 0 1rem;
     font-weight: 200;
   }
-  .current-temp{
+
+  .current-temp {
     font-size: 3rem;
     margin-top: 2rem;
     margin-bottom: -1rem;
@@ -28,9 +37,9 @@ margin: auto;
 
 //l'icone détail n'apparait que sur les écrans mobiles
 .mobile-icon {
-  display: block; 
+  display: block;
   margin-bottom: 2rem;
-   width: 6rem;
+  width: 6rem;
 }
 
 //détail météo masqués sur mobile et déclenchés au clik
@@ -45,12 +54,12 @@ margin: auto;
 @media (min-width: 768px) {
   .mobile-icon {
     //l'icone détail est masquée sur les tablettes et desktop
-    display: none; 
+    display: none;
   }
 
   .weather-details {
     //la div weather details apparait sur tablette et desktop
-    display: block; 
+    display: block;
   }
 }
 
@@ -73,25 +82,52 @@ margin: auto;
 //   }
 // }
 
-.forecast{
+.forecast {
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  font-size: 1.5rem;
+  margin: auto;
+}
+
+.forecast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
   .forecast-details {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    .details-card{
-      flex-basis: 50%;
-      text-align: center;
-      font-size: 0.7rem;
-    }
+
+  }
+
+  .details-card {
+    flex-basis: 50%;
+    text-align: center;
+    font-size: 0.7rem;
   }
 }
 
-.icon-display svg{
+
+.SplashScreen-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #BBCDD3;
+
+  .LogoMemeteo {
+    max-width: 60%;
+  }
+}
+
+.icon-display svg {
   // z-index: -10;
   // position: absolute;
   // top:-2rem;
@@ -99,3 +135,4 @@ margin: auto;
   width: 8rem;
   height: 8rem;
 }
+

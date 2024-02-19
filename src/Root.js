@@ -1,6 +1,7 @@
 
 import './stylesheet/Root.scss';
 import App from "./routes/App";
+import SplashScreen from './routes/SplashScreen';
 
 
 import {
@@ -10,9 +11,11 @@ import {
 } from 'react-router-dom';
 
 
+
 const Root = () => (
       <Router>
           <Routes>
+            <Route path='/' element={<SplashScreen/>} />
               <Route path='/home' element={<App/>} />
           </Routes>
       </Router>
