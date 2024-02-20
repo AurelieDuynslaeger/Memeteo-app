@@ -7,7 +7,7 @@ import precip from '../assets/icons/precipitation.svg';
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
-import { format, isToday } from 'date-fns';
+import { format, isToday, min } from 'date-fns';
 import { da, fr } from 'date-fns/locale';
 import { formatTime } from '../utils/dateUtils';
 
@@ -354,12 +354,26 @@ const App = () => {
     }
   }
 
+
+  //fonction de formattage des am-pm en heures
+  const hourConvert = (hour)=> {
+    const [time, update] = hour.split(' ');
+    let [hours, minutes] = time.split(':');
+    if (hours === '12') {
+      hours = '00';
+    }
+    if (update === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+    return `${hours}h${minutes}`;
+  }
   // Au clik sur la div week dans le Carousel, la modal apparait avec le résumé des prévisions du jour  
   const handleDayClick = (day) => {
     const date = format(day.date, 'eeee dd LLLL', { locale: fr });
     console.log(date);
-    const sunrise = day.astro.sunrise;
-    const sunset = day.astro.sunset;
+    const sunrise = hourConvert(day.astro.sunrise);
+    console.log(day.astro.sunset); //06:16 PM
+    const sunset = hourConvert(day.astro.sunset);
     const maxTemp = day.day.maxtemp_c;
     const minTemp = day.day.mintemp_c;
     const rain = day.day.totalprecip_mm;
@@ -450,7 +464,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
           />
         ))}
       </div>
-    )
+      )
     )
 
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
