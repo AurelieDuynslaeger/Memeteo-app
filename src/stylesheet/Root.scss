@@ -98,13 +98,19 @@
   z-index: 9999;
   backdrop-filter: blur(40px);
   width: 80%; 
-  height: 35%; 
+  height: 45%; 
   max-width: 40rem;
   max-height: 25rem; 
   .modal-content{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    h5 {
+      text-align: center;
+      text-decoration: underline;
+      margin-bottom: 1rem;
+      margin-top: 0;
+    }
     .modal-part {
       display: flex;
       padding:0.3rem;

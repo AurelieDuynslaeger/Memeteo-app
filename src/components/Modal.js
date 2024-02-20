@@ -15,12 +15,13 @@ import sunsetIcon from "../assets/icons/sunset.svg";
 import sunriseIcon from "../assets/icons/sunrise.svg";
 
 const Modal = ({ onClose, dayInfo }) => {
-    const { maxTemp, minTemp, rain, wind, avgtemp_c, avghumidity, uv, sunrise, sunset } = dayInfo;
+    const { date, maxTemp, minTemp, rain, wind, avgtemp_c, avghumidity, uv, sunrise, sunset } = dayInfo;
 
     return (
         <div className="modal">
             <div className="modal-content">
                 <span className="close" onClick={onClose}><IoIosCloseCircle /></span>
+                <h5>{date}</h5>
                 <div className='modal-part'>
                     <DetailCard iconSrc={sunriseIcon} description="" value={`${sunrise}`}/>
                     <DetailCard iconSrc={sunsetIcon} description="" value={`${sunset}`}/>

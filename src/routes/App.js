@@ -8,7 +8,7 @@ import precip from '../assets/icons/precipitation.svg';
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
 import { format, isToday } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { da, fr } from 'date-fns/locale';
 import { formatTime } from '../utils/dateUtils';
 
 //import des composants
@@ -356,6 +356,8 @@ const App = () => {
 
   // Au clik sur la div week dans le Carousel, la modal apparait avec le résumé des prévisions du jour  
   const handleDayClick = (day) => {
+    const date = format(day.date, 'eeee dd LLLL', { locale: fr });
+    console.log(date);
     const sunrise = day.astro.sunrise;
     const sunset = day.astro.sunset;
     const maxTemp = day.day.maxtemp_c;
@@ -365,7 +367,7 @@ const App = () => {
     const avgtemp_c = day.day.avgtemp_c;
     const avghumidity = day.day.avghumidity;
     const uv = day.day.uv;
-    setSelectedDayInfo({ sunrise, sunset, maxTemp, minTemp, rain, wind, avgtemp_c, avghumidity, uv });
+    setSelectedDayInfo({ date, sunrise, sunset, maxTemp, minTemp, rain, wind, avgtemp_c, avghumidity, uv });
 };
 const handleCloseModal = () => {
     setSelectedDayInfo(null);
