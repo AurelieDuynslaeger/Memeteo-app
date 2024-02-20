@@ -29,16 +29,8 @@ import Modal from '../components/Modal.js'
 
 
 //import des feuilles de styles
-import '../main.css';
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
-
-
-// const contentStyle = {
-//   height: '300px',
-//   lineHeight: '300px',
-//   textAlign: 'center',
-// };
 
 
 const App = () => {
@@ -63,7 +55,7 @@ const App = () => {
 
   //permet l'affichage ou non du weather skeletton
   const [loadingCity, setLoadingCity] = useState(false);
-
+  const [dotPosition, setDotPosition] = useState('right');
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
@@ -307,7 +299,7 @@ const App = () => {
       const data = await response.json();
       setCurrentWeather(data);
     };
-  
+
     weatherData();
   }, [weatherInput]);
 
@@ -350,6 +342,8 @@ const App = () => {
   const handleCityClick = () => {
     console.log("déclenché");
     setShowNavBar(true);
+
+
   }
 
   //saisie input et à la soumission la Navbar disparait
@@ -475,42 +469,29 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
     )
     )
 
-
-    const sunDisplay = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
-    forecastWeather.forecast.forecastday.map((day) => 
-       (
-        <div className='sun-display'>
-          <div className='sun-group'>
-            <img src={sunriseIcon} alt="" className='sun-icons'/>
-            <p>{day.astro["sunrise"]}</p>
-          </div>
-          <div className='sun-group'>
-            <img src={sunsetIcon} alt="" className='sun-icons'/>
-            <p>{day.astro["sunset"]}</p>
-          </div>
-        </div>
-      )
-    );
-
-
-
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className={`container ${getWeatherBackgroundClass()}`}>
-        {/* composant Navbar qui n'apparait que si on clik sur la ville */}
-        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
+      <div className="container">
 
-        {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
-        <CurrentCity 
-        currentWeather={forecastWeather}  
-        handleCityClick={handleCityClick} 
-        handleMobileIconClick={handleMobileIconClick}
-        />
-    
-        {/* Div des détails de la météo en display si tablette et desktop, OU apparait au clik sur l'icone pour les teléphones*/}
+        {/* composant Navbar qui n'apparait que si on clik sur la ville */}
+        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
+        <div className='city'>
+
+          <h3 className='city-name' onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
+          <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
+
+          {/* Icône mobile visible uniquement sur les appareils mobiles */}
+          <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
+          {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
+
+          <img src={currentWeather?.current?.condition?.icon} alt="" />
+          <p>{currentWeather?.current?.condition?.text}</p>
+        </div>
+
+        {/* Div des détails de la météo */}
         <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
           {/* Contenu des détails de la météo */}
           <div className="forecast">
@@ -549,7 +530,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
             
           <Carousel dotPosition={dotPosition}>
             <div>
-              <p>Temps sur 7 jours</p>
+              
               <div className="week">
                 {days}
               </div>
@@ -557,18 +538,14 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
 
 
             <div>
-              <p>Temps sur 24h</p>
-              {/* Mini composant display sun set et sun rise */}
-              {/* forecastWeather.forecast.forecastday.map((astro), index => { 
-                <div> <p>astro.sunrise</p> <p>astro.sunset</p> }) */}
-                {sunDisplay}
+              {/* <p>Temps sur 24h</p> */}
               <div className="MiniCards">
-                {filteredHours}
+                {hours}
               </div>
             </div>
 
             <div>
-              <p>Précipitations dans l'heure</p>
+              
               <div className="precip">
                 {minutes}
               </div>
