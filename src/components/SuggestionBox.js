@@ -36,7 +36,7 @@ export default function SuggestionBox({ showSuggestions, suggestions, handleSugg
         key={index}
         onClick={() => handleSuggestionClick(item)}
         className="suggestion"> 
-        {index+1}. {item}<span className="fav" onClick={() => removeFromFavs(index)}><FaStar /></span> </li>
+        {index+1}. {item}<span className="fav" onClick={() => removeFromFavs(index)}><FaStar /></span></li>
     )
 })
 
