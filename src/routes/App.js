@@ -21,14 +21,12 @@ import { formatTime } from '../utils/dateUtils';
 //import des composants
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
 import Week from '../components/Week.js';
-import '../main.css';
 import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
 import DetailCard from '../components/DetailCard.js';
 import Precipitation from '../components/Precipitation.js';
 
 //import des feuilles de styles
-import '../main.css';
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
 
@@ -152,10 +150,6 @@ const App = () => {
       });
     }
   }
-
-  // const onChange = (currentSlide) => {
-  //   console.log(currentSlide);
-  // };
 
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
   const days = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday.map((day, index) =>

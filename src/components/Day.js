@@ -1,6 +1,5 @@
 import React from 'react'
 import '../stylesheet/carrousel.scss';
-import '../main.css';
 
 const Day = ({time, weather, temperature}) => {
   return (

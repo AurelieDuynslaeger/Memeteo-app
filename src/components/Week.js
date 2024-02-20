@@ -1,5 +1,4 @@
 import React from 'react'
-import '../main.css';
 import '../stylesheet/carrousel.scss';
 
 const Week = ({name,weather, temperature}) => {
