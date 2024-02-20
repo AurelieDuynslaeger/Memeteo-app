@@ -8,9 +8,8 @@ import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
 import nonprecip from '../assets/icons/nonPrecipitation.svg';
 import precip from '../assets/icons/precipitation.svg';
-
-// import sunsetIcon from "../assets/icons/sunset.svg";
-// import sunriseIcon from "../assets/icons/sunrise.svg";
+import sunsetIcon from "../assets/icons/sunset.svg";
+import sunriseIcon from "../assets/icons/sunrise.svg";
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
@@ -338,7 +337,7 @@ const App = () => {
     }
   }
 
-  // Au clik sur la div week dans le Carousel, la modal apparait avec les previsions du jour Selected
+  // Au clik sur la div week dans le Carousel, la modal apparait avec les previsions du jour Selected (température max et min, précipitations, vent)
   const handleDayClick = (day) => {
     const maxTemp = day.day.maxtemp_c;
     const minTemp = day.day.mintemp_c;
@@ -400,6 +399,25 @@ const handleCloseModal = () => {
       </div>
     )
     )
+
+
+    const sunDisplay = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
+    forecastWeather.forecast.forecastday.map((day) => 
+       (
+        <div className='sun-display'>
+          <div className='sun-group'>
+            <img src={sunriseIcon} alt="" className='sun-icons'/>
+            <p>{day.astro["sunrise"]}</p>
+          </div>
+          <div className='sun-group'>
+            <img src={sunsetIcon} alt="" className='sun-icons'/>
+            <p>{day.astro["sunset"]}</p>
+          </div>
+        </div>
+      )
+    );
+
+
 
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
@@ -466,6 +484,10 @@ const handleCloseModal = () => {
 
             <div>
               <p>Temps sur 24h</p>
+              {/* Mini composant display sun set et sun rise */}
+              {/* forecastWeather.forecast.forecastday.map((astro), index => { 
+                <div> <p>astro.sunrise</p> <p>astro.sunset</p> }) */}
+                {sunDisplay}
               <div className="MiniCards">
                 {hours}
               </div>

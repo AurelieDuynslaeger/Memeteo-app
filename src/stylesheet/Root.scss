@@ -64,24 +64,23 @@
   }
 }
 
-//à voir si on affiche les levés et couchés de soleil
-// .sun-infos{
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: space-around;
-//   .sun-icons{
-//     width: 2rem;
-//   }
-//   .sun-hours {
-//     font-size: 0.7rem;
-//   }
-//   .sun-couple{
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: center;
-//   }
-// }
+
+.sun-display{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  padding: 0 1rem;
+  .sun-group{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .sun-icons{
+      width: 1rem;
+    }
+  }
+}
 
 //div du détail au moment T
 .forecast {
@@ -157,7 +156,7 @@
 //modal pour le détail d'un jour à venir au clik sur le composant week
 .modal {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.4);
   padding: 2rem;
   border-radius: 4rem;
   top: 50%;
@@ -175,7 +174,7 @@
     .details-card {
       flex-basis: 30%;
       text-align: center;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
   }
 }
