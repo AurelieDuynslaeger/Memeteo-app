@@ -59,8 +59,11 @@ const App = () => {
   const [selectedDayInfo, setSelectedDayInfo] = useState(null);
   const [selectedCurrentInfo, setSelectedCurrentInfo] = useState(null);
 
-  const [loadingCity, setLoadingCity] = useState(false);
   const [dotPosition, setDotPosition] = useState('right');
+
+  //permet l'affichage ou non du weather skeletton
+  const [loadingCity, setLoadingCity] = useState(false);
+
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
@@ -75,7 +78,6 @@ const App = () => {
   const [selectedMeme, setSelectedMeme] = useState(null);
   // Constante pour stocker le texte des conditions météos actuelles
   const currentWeatherText = currentWeather?.current?.condition?.text;
-  console.log(currentWeatherText);
   //Fetch pour aller chercher les memes sur notre API
   useEffect(() => {
     const fetchMemes = async () => {
@@ -238,6 +240,59 @@ const App = () => {
       setSelectedMusique(null);
     }
   }, [currentWeatherText, musiques]);
+  const weatherBackgrounds = {
+    'Sunny': 'sun-background',
+    'Partly cloudy': 'cloudy-background',
+    'Cloudy': 'cloudy-background',
+    'Overcast': 'cloudy-background',
+    'Patchy rain possible': 'rain-background',
+    'Moderate or heavy freezing rain': 'rain-background',
+    'Light freezing rain': 'rain-background',
+    'Heavy rain': 'rain-background',
+    'Heavy rain at times': 'rain-background',
+    'Moderate rain': 'rain-background',
+    'Moderate rain at times': 'rain-background',
+    'Light rain': 'rain-background',
+    'Light rain shower': 'rain-background',
+    'Moderate or heavy rain shower': 'rain-background',
+    'Patchy light rain': 'rain-background',
+    'Torrential rain shower': 'rain-background',
+    'Wind': 'wind-background',
+    'Blowing snow': 'snow-background',
+    'Patchy snow possible': 'snow-background',
+    'Patchy sleet possible': 'snow-background',
+    'Blizzard': 'snow-background',
+    'Light snow showers': 'snow-background',
+    'Moderate or heavy snow showers': 'snow-background',
+    'Patchy light snow with thunder': 'snow-background',
+    'Moderate or heavy snow with thunder': 'snow-background',
+    'Moderate or heavy sleet': 'snow-background',
+    'Patchy light snow': 'snow-background',
+    'Light snow': 'snow-background',
+    'Patchy moderate snow': 'snow-background',
+    'Moderate snow': 'snow-background',
+    'Patchy heavy snow': 'snow-background',
+    'Heavy snow': 'snow-background',
+    'Patchy freezing drizzle possible': 'freezing-background',
+    'Freezing drizzle': 'freezing-background',
+    'Light sleet': 'freezing-background',
+    'Light sleet showers': 'freezing-background',
+    'Moderate or heavy sleet showers': 'freezing-background',
+    'Light showers of ice pellets': 'freezing-background',
+    'Ice pellets': 'verglas-background',
+    'Thundery outbreaks possible': 'thunderstorm-background',
+    'Patchy light rain with thunder': 'thunderstorm-background',
+    'Moderate or heavy rain with thunder': 'thunderstorm-background',
+    'Heatwave': 'heatwave-background',
+    'Fog': 'fog-background',
+    'Mist': 'fog-background',
+    'Freezing fog': 'fog-background',
+    'Patchy light drizzle': 'fog-background',
+    'Light drizzle': 'fog-background',
+  };
+  const getWeatherBackgroundClass = () => {
+    return weatherBackgrounds[currentWeatherText] || 'default-background';
+  };
 
    //fetch current data weather
    useEffect(() => {
@@ -296,46 +351,31 @@ const App = () => {
     console.log("déclenché");
     setShowNavBar(true);
   }
+
   //saisie input et à la soumission la Navbar disparait
   const handleWeatherInput = async (city) => {
+  setLoadingCity(true);
+  setWeatherInput(city);
     // Appel de l'API avec la city soumise dans la nav
     setWeatherInput(city);
     try {
       const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes`);
       const data = await response.json();
+
       setCurrentWeather(data);
       setShowNavBar(false);
+      setLoadingCity(false);
     } catch (error) {
       console.error('Erreur lors de la récupération des données météo:', error);
+      setLoadingCity(false);
     }
-  };
+  }
 
   /*icone pour details Météo (mobile => on clik ; tablette/desktop => display)*/
   const handleMobileIconClick = () => {
     setShowMobileDetails(!showMobileDetails);
   };
 
-
-  /* geolocalisation */
-  function handleCurrentLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        setLoadingCity(true);
-        setWeatherInput('');
-        try {
-          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes`).then(response => response.json());
-          setTimeout(() => {
-            const data = response;
-            setCurrentWeather(data);
-            setLoadingCity(false);
-          }, 500);
-        } catch (error) {
-          setLoadingCity(false);
-        }
-      });
-    }
-  }
 
   // Au clik sur la div week dans le Carousel, la modal apparait avec les previsions du jour Selected (température max et min, précipitations, vent)
   const handleDayClick = (day) => {
@@ -358,9 +398,10 @@ const handleCloseModal = () => {
     setSelectedCurrentInfo(null);
 };
 
-  // const onChange = (currentSlide) => {
-  //   console.log(currentSlide);
-  // };
+
+  const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
+  console.log(infosModal);
+
 
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
   //formattage du jour (date-fns) isToday
@@ -465,10 +506,9 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className="container">
-
-        {/* Composant Navbar qui n'apparait que si on clik sur la ville */}
-        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
+      <div className={`container ${getWeatherBackgroundClass()}`}>
+        {/* composant Navbar qui n'apparait que si on clik sur la ville */}
+        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
 
         {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
         <CurrentCity 
