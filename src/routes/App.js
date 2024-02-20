@@ -12,7 +12,7 @@ import precip from '../assets/icons/precipitation.svg';
 // import sunriseIcon from "../assets/icons/sunrise.svg";
 
 //import composant Ant Design et React Icons
-import { Carousel, Radio} from 'antd';
+import { Carousel, Radio } from 'antd';
 import { TbCloudQuestion } from "react-icons/tb";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -34,7 +34,7 @@ import '../stylesheet/carrousel.scss';
 
 
 const App = () => {
-    
+
   //météo a l'instant T
   const [currentWeather, setCurrentWeather] = useState({});
   //météo prévisions 24h (pluie et heure par heure)
@@ -50,12 +50,12 @@ const App = () => {
   const [showMobileDetails, setShowMobileDetails] = useState(false);
 
   const [loadingCity, setLoadingCity] = useState(false);
-   const [dotPosition, setDotPosition] = useState('right');
+  const [dotPosition, setDotPosition] = useState('right');
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
-  
- /*fetch current weather condittionné (si saisie input sinon default => Lille */
+
+  /*fetch current weather condittionné (si saisie input sinon default => Lille */
   useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
@@ -68,7 +68,7 @@ const App = () => {
       const data = await response.json();
       setCurrentWeather(data);
     };
-  
+
     weatherData();
   }, [weatherInput]);
 
@@ -88,7 +88,7 @@ const App = () => {
     weatherDataForecast();
   }, [weatherInput]);
 
-    /*fetch forecast 5jrs*/
+  /*fetch forecast 5jrs*/
   useEffect(() => {
     const weatherForecast7 = async () => {
       let apiUrl;
@@ -105,13 +105,16 @@ const App = () => {
   }, [weatherInput]);
 
 
-/*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
-const handleCityClick = () => {
-  console.log("déclenché");
-  setShowNavBar(true);
+  /*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
+  const handleCityClick = () => {
+    console.log("déclenché");
+    setShowNavBar(true);
 
-//saisie input et à la soumission la Navbar disparait
-const handleWeatherInput = async (city) => {
+
+  }
+
+  //saisie input et à la soumission la Navbar disparait
+  const handleWeatherInput = async (city) => {
     // Appel de l'API avec la city soumise dans la nav
     try {
       const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes&lang=fr`);
@@ -129,28 +132,28 @@ const handleWeatherInput = async (city) => {
   };
 
 
-/* geolocalisation */
-function handleCurrentLocation() {
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(async(position)=>{
-      const { latitude, longitude } = position.coords;
-       setLoadingCity(true);
-       setWeatherInput('');
-      try {
-          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes&lang=fr`).then(response => response.json()); 
+  /* geolocalisation */
+  function handleCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+        setLoadingCity(true);
+        setWeatherInput('');
+        try {
+          const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${latitude},${longitude}&aqi=yes&lang=fr`).then(response => response.json());
           setTimeout(() => {
             const data = response;
             setCurrentWeather(data);
             setLoadingCity(false);
           }, 500);
-      } catch(error) {
-        setLoadingCity(false);
-      }
-    });
+        } catch (error) {
+          setLoadingCity(false);
+        }
+      });
+    }
   }
-}
-  
-    // const onChange = (currentSlide) => {
+
+  // const onChange = (currentSlide) => {
   //   console.log(currentSlide);
   // };
 
@@ -181,8 +184,8 @@ function handleCurrentLocation() {
       ))}
     </div>
   ))
-  
-   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
+
+  ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
   const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
     forecastWeather.forecast.forecastday.map((day, index) =>
     (
@@ -197,89 +200,89 @@ function handleCurrentLocation() {
           />
         ))}
       </div>
-      )
+    )
     )
 
-// Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
-if (loadingCity) {
-  return <WeatherSkeleton />;
-} else {
-  return (
-    <div className="container">
+  // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
+  if (loadingCity) {
+    return <WeatherSkeleton />;
+  } else {
+    return (
+      <div className="container">
 
-      {/* composant Navbar qui n'apparait que si on clik sur la ville */}
-      {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
-      <div className='city'>
+        {/* composant Navbar qui n'apparait que si on clik sur la ville */}
+        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
+        <div className='city'>
 
-            <h3 className='city-name'  onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
-            <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
+          <h3 className='city-name' onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
+          <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
 
-            {/* Icône mobile visible uniquement sur les appareils mobiles */}
-            <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
-            {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
+          {/* Icône mobile visible uniquement sur les appareils mobiles */}
+          <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
+          {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
 
-            <img src={currentWeather?.current?.condition?.icon} alt="" />
-            <p>{currentWeather?.current?.condition?.text}</p>
-      </div>
-
-      {/* Div des détails de la météo */}
-      <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
-        {/* Contenu des détails de la météo */}
-        <div className="forecast">
-          <div className='forecast-details'>
-            <DetailCard iconSrc={windIcon} description="Vitesse du vent" value={`${currentWeather?.current?.wind_kph} km/h`} />
-            <DetailCard iconSrc={humidityIcon} description="Humidité" value={`${currentWeather?.current?.humidity} %`} />
-            <DetailCard iconSrc={uvIcon} description="Indice UV" value={currentWeather?.current?.uv} />
-            <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${currentWeather?.current?.feelslike_c} °C`} />
-            <DetailCard iconSrc={airQualityIcon} description="Qualité de l'air" value={`indice ${currentWeather?.current?.air_quality['gb-defra-index']}`} />
-          </div>
+          <img src={currentWeather?.current?.condition?.icon} alt="" />
+          <p>{currentWeather?.current?.condition?.text}</p>
         </div>
-      </div>
 
-      <div className="weather-meme">
-
-      </div>
-
-      <div>
-        <Radio.Group
-          onChange={handlePositionChange}
-          value={dotPosition}
-          style={{
-            marginBottom: 8,  
-          }}
-        >
-
-        </Radio.Group>
-
-      <Carousel dotPosition={dotPosition}>
-        <div>
-          {/* <p>Temps sur 7 jours</p> */}
-          <div className="week">
-            {days}
+        {/* Div des détails de la météo */}
+        <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
+          {/* Contenu des détails de la météo */}
+          <div className="forecast">
+            <div className='forecast-details'>
+              <DetailCard iconSrc={windIcon} description="Vitesse du vent" value={`${currentWeather?.current?.wind_kph} km/h`} />
+              <DetailCard iconSrc={humidityIcon} description="Humidité" value={`${currentWeather?.current?.humidity} %`} />
+              <DetailCard iconSrc={uvIcon} description="Indice UV" value={currentWeather?.current?.uv} />
+              <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${currentWeather?.current?.feelslike_c} °C`} />
+              <DetailCard iconSrc={airQualityIcon} description="Qualité de l'air" value={`indice ${currentWeather?.current?.air_quality['gb-defra-index']}`} />
+            </div>
           </div>
         </div>
 
+        <div className="weather-meme">
 
-        <div>
-          {/* <p>Temps sur 24h</p> */}
-          <div  className="MiniCards">
-            {hours}
-          </div>
         </div>
 
         <div>
-          {/* <p>Précipitations dans l'heure</p> */}
-          <div  className="precip">
-            {minutes}
-          </div>
-          </div>
+          <Radio.Group
+            onChange={handlePositionChange}
+            value={dotPosition}
+            style={{
+              marginBottom: 8,
+            }}
+          >
+
+          </Radio.Group>
+
+          <Carousel dotPosition={dotPosition}>
+            <div>
+              {/* <p>Temps sur 7 jours</p> */}
+              <div className="week">
+                {days}
+              </div>
+            </div>
 
 
-        </Carousel>
+            <div>
+              {/* <p>Temps sur 24h</p> */}
+              <div className="MiniCards">
+                {hours}
+              </div>
+            </div>
+
+            <div>
+              {/* <p>Précipitations dans l'heure</p> */}
+              <div className="precip">
+                {minutes}
+              </div>
+            </div>
+
+
+          </Carousel>
+        </div>
       </div>
-    </div>
 
-  )
-}}
+    )
+  }
 }
 export default App
