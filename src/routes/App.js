@@ -7,8 +7,8 @@ import precip from '../assets/icons/precipitation.svg';
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
-import { format, isToday, min } from 'date-fns';
-import { da, fr } from 'date-fns/locale';
+import { format, isToday } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import { formatTime } from '../utils/dateUtils';
 
 //import des composants
@@ -19,6 +19,7 @@ import HeaderNav from '../components/HeaderNav.js';
 import Precipitation from '../components/Precipitation.js';
 import CurrentCity from '../components/CurrentCity.js'
 import Modal from '../components/Modal.js'
+// import WeatherMeme from '../components/WeatherMeme.js';
 
 //import des feuilles de styles
 import '../main.css';
@@ -26,7 +27,9 @@ import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
 
 
+
 const App = () => {
+
 
   //météo a l'instant T
   const [currentWeather, setCurrentWeather] = useState({});
@@ -34,13 +37,14 @@ const App = () => {
   const [forecastWeather, setForecastWeather] = useState({});
   //météo prévisions 7 (jour-temps-icon)
   const [forecastWeather7, setForecastWeather7] = useState({});
-
   //état de la navBar à false, passe à true au clik sur la ville
   const [showNavBar, setShowNavBar] = useState(false);
   //menu input pour saisie de la ville
   const [weatherInput, setWeatherInput] = useState('');
   //modal Infos Prévisions / Current
   const [selectedDayInfo, setSelectedDayInfo] = useState(null);
+
+
 
   const [dotPosition, setDotPosition] = useState('right');
 
@@ -55,6 +59,9 @@ const App = () => {
   const [memes, setMemes] = useState([]);
   //Récupération du son
   const [musiques, setMusiques] = useState([]);
+  //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
+  const [autoplayEnabled, setAutoplayEnabled] = useState(false);
+
   //Constante pour filtrer les sons
   const [selectedMusique, setSelectedMusique] = useState(null);
   //Constante pour filtrer les memes
@@ -92,7 +99,7 @@ const App = () => {
   
   //Conditionnement pour que la description de la condition météo soit le meme que le nom du meme. 
   useEffect(() => {
-    const weatherMemeMap = {
+    const  weatherMemeMap  = {
       'Sunny': 'sun',
       'Partly cloudy': 'cloudy',
       'Cloudy': 'cloudy',
@@ -223,6 +230,7 @@ const App = () => {
       setSelectedMusique(null);
     }
   }, [currentWeatherText, musiques]);
+
   const weatherBackgrounds = {
     'Sunny': 'sun-background',
     'Partly cloudy': 'cloudy-background',
@@ -277,14 +285,15 @@ const App = () => {
     return weatherBackgrounds[currentWeatherText] || 'default-background';
   };
 
+
    //fetch current data weather
    useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&alerts=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes&alerts=yes`;
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -355,7 +364,7 @@ const App = () => {
   }
 
 
-  //fonction de formattage des am-pm en heures
+  // fonction de formattage des am-pm en heures : on récup une chaine de caractères de l'api '06:16 PM'
   const hourConvert = (hour)=> {
     const [time, update] = hour.split(' ');
     let [hours, minutes] = time.split(':');
@@ -368,7 +377,7 @@ const App = () => {
     return `${hours}h${minutes}`;
   }
 
-  // Au clik sur la div week dans le Carousel, la modal apparait avec le résumé des prévisions du jour  
+  // Au clik sur un des jours de prévisions dans le Carousel, la modal apparait avec le résumé des prévisions pour ce jour  
   const handleDayClick = (day) => {
     const date = format(day.date, 'eeee dd LLLL', { locale: fr });
     console.log(date);
@@ -389,7 +398,7 @@ const handleCloseModal = () => {
 };
 
 
-  ///// Carrousel page 1 pour la météo des 5 prochains jours /////
+
   //formattage du jour (date-fns) isToday
   const formatDay = (date) => {
     //si la date récupéré est Today alors on affiche 'auj.' au lieu de l'abbraviation du jour
@@ -400,6 +409,7 @@ const handleCloseModal = () => {
     }
   }
 
+  ///// Carrousel page 1 pour la météo des 5 prochains jours /////
   const days = forecastWeather7.forecast?.forecastday?.map((day, index) => {
     const dayDate = new Date(day.date);
     return (
@@ -415,9 +425,9 @@ const handleCloseModal = () => {
     );
   });
 
+
 //on récupre l'heure actuelle
 const currentTime = new Date().getHours();
-
 //on filtre les prévisions par heure à PARTIR de l'heure actuelle
 const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
   (
@@ -453,21 +463,35 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
       )
     )
 
+
+
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
     return <WeatherSkeleton />;
   } else {
     return (
       <div className={`container ${getWeatherBackgroundClass()}`}>
-        {/* composant Navbar qui n'apparait que si on clik sur la ville */}
+        {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
+
+       {/* test pour activer le son, désactivé par défaut */}
+        <label>
+            Lecture automatique :
+            <input
+              type="checkbox"
+              checked={autoplayEnabled}
+              onChange={(e) => setAutoplayEnabled(e.target.checked)}
+            />
+        </label>
+
 
         {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
         <CurrentCity 
         currentWeather={forecastWeather}  
         handleCityClick={handleCityClick} 
         />
-
+ 
+        {/* <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} /> */}
         <div className="weather-meme">
           {selectedMeme && (
             <div>
@@ -476,10 +500,11 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
           )}
           {selectedMusique && (
             <div>
-              <audio src={selectedMusique.musique} autoPlay />
+              <audio src={selectedMusique.musique} autoPlay={autoplayEnabled} />
             </div>
           )}
         </div>
+  
 
         <div className='carousel-container'>
           <Radio.Group

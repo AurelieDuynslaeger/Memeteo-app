@@ -1,6 +1,5 @@
 import React from 'react';
 import { IoIosCloseCircle } from "react-icons/io";
-
 import DetailCard from './DetailCard';
 
 //import des icones
@@ -15,6 +14,7 @@ import sunsetIcon from "../assets/icons/sunset.svg";
 import sunriseIcon from "../assets/icons/sunrise.svg";
 
 const Modal = ({ onClose, dayInfo }) => {
+    //choix des infos que l'on veut mettre dans la modale (dayInfo étant la récup api sur app)
     const { date, maxTemp, minTemp, rain, wind, avgtemp_c, avghumidity, uv, sunrise, sunset } = dayInfo;
 
     return (
