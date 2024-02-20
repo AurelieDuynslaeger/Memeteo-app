@@ -8,23 +8,20 @@ export default function SuggestionBox({ showSuggestions, suggestions, handleSugg
   const [favs, setFavs] = useState(JSON.parse(localStorage.getItem("memeteo-favourites-cities")) || []);
   const [isFav, setIsFav] = useState(false);
 
-  //add a fav into localstorage
+  // add a fav into localstorage
     const addToFavs = (item) => {
-        const newFavouriteList = [...favs, item];
-        setFavs(newFavouriteList);
-        localStorage.setItem("memeteo-favourites-cities", JSON.stringify([...favs, item]));
-        //setIsFav(true);
+        // if city is not already in favs
+        if (!favs.includes(item)) {
+            const newFavouriteList = [...favs, item];
+            setFavs(newFavouriteList);
+            localStorage.setItem("memeteo-favourites-cities", JSON.stringify([...favs, item]));
+        // else (city is already in favs)
+        } else {
+            alert("L'élément existe déjà dans la liste des favoris.");
+        }
   } 
 
- /*  const addToFavs = (item) => {
-    setFavs(prevFavs => {
-      const updatedFavs = [...prevFavs, item];
-      localStorage.setItem("memeteo-favourites-cities", JSON.stringify(updatedFavs));
-      return updatedFavs;
-    });
-  } */
-
-  //remove a fav from localstorage
+  // remove a fav from localstorage
   const removeFromFavs = (index) => {
     const copyFavs = [...favs]; // Copie du tableau
     copyFavs.splice(index, 1); // On supprime un élément du tableau copyFav à l'indice spécifié par index
@@ -32,9 +29,13 @@ export default function SuggestionBox({ showSuggestions, suggestions, handleSugg
     localStorage.setItem("memeteo-favourites-cities", JSON.stringify(copyFavs)); // On met à jour la valeur stockée dans le localStorage
   }
 
+  // display all the favs
   const listFavs = favs.map((item, index) => {
-    return (
-        <li key={index}>{index} : {item}</li>
+        return (
+        <li 
+        key={index}
+        onClick={() => handleSuggestionClick(item)}
+        >{index+1} : {item} <span className="fav" onClick={() => removeFromFavs(index)}><FaStar /></span></li>
     )
 })
 
@@ -73,9 +74,13 @@ export default function SuggestionBox({ showSuggestions, suggestions, handleSugg
         </ul>
       )}
       { (suggestions.length < 1) && (
+        console.log(favs.length),
         <ul className="suggestions">
           {listFavs}
         </ul>
+      )}
+      { (suggestions.length < 1 && favs.length === 0) && (
+        <p className="suggestions">Aucun favori.</p>
       )}
     </>
   )
