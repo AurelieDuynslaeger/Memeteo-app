@@ -367,6 +367,7 @@ const App = () => {
     }
     return `${hours}h${minutes}`;
   }
+
   // Au clik sur la div week dans le Carousel, la modal apparait avec le résumé des prévisions du jour  
   const handleDayClick = (day) => {
     const date = format(day.date, 'eeee dd LLLL', { locale: fr });
@@ -414,21 +415,6 @@ const handleCloseModal = () => {
     );
   });
 
-  ///// Carrousel page 2 pour la météo des 24 prochaines heures /////
-  // const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
-  // (
-  //   <div className="MiniCards" key={index}>
-  //     {day.hour.map((hour, index) => (
-  //       <Day
-  //         key={index}
-  //         time={formatTime(hour.time)}
-  //         weather={`http:${hour.condition.icon}`}
-  //         temperature={hour.temp_c}
-  //       />
-  //     ))}
-  //   </div>
-  // ))
-
 //on récupre l'heure actuelle
 const currentTime = new Date().getHours();
 
@@ -454,9 +440,9 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
     forecastWeather.forecast.forecastday.map((day, index) =>
     (
       <div className="precip" key={index}>
-        {day.hour.map((hour, idx) => (
+       {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
           <Precipitation
-            key={idx}
+            key={index}
             minutes={formatTime(hour.time)}
             rain={hour.chance_of_rain > 0 ? (
               <img src={precip} alt="Precipitating" />) :
@@ -507,7 +493,6 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
             
           <Carousel dotPosition={dotPosition}>
             <div>
-              <p>Temps sur 7 jours</p>
               <div className="week">
                 {days}
               </div>
@@ -515,14 +500,12 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
 
 
             <div>
-              <p>Temps sur 24h</p>
               <div className="MiniCards">
                 {filteredHours}
               </div>
             </div>
 
             <div>
-              <p>Précipitations dans l'heure</p>
               <div className="precip">
                 {minutes}
               </div>

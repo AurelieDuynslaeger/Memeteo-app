@@ -20,32 +20,36 @@
   align-items: center;
   justify-content: space-between;
   margin: auto;
-  .city-name {
-    font-size: 1.2rem;
-    margin: 0 1rem;
-    font-weight: 800;
-    .search-icon {
-      width: 0.7rem;
-      margin-left:0.3rem;
-    }
-  }
   .current-temp {
     font-size: 6.5rem;
     margin-top: 1rem;
     margin-bottom: -1rem;
     font-weight: 300;
   }
-  //taille de l'icone affiché à l'acceuil
-  .icon-display svg {
-    // z-index: -10;
-    // position: absolute;
-    // top:-2rem;
-    // right:-3rem;
-    margin-top: 1rem;
-    width: 7rem;
-    height: 7rem;
-  }
+  .city-search {
+    display: flex;
+    align-items: center;
+    .city-name {
+      font-size: 1.3rem;
+      margin: 0 1rem;
+      font-weight: 800;
+    }
+    .search-icon {
+      width: 0.8rem;
+      }
+    }
+    //taille de l'icone affiché à l'acceuil
+    .icon-display svg {
+      // z-index: -10;
+      // position: absolute;
+      // top:-2rem;
+      // right:-3rem;
+      margin-top: 1rem;
+      width: 7rem;
+      height: 7rem;
+    }
 }
+
 
 
 .SplashScreen-page {
@@ -97,7 +101,7 @@
   background-color: rgba(255, 255, 255, 0.3);
   padding: 2rem;
   border-radius: 2rem;
-  top: 50%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
