@@ -4,11 +4,6 @@ import React, { useEffect, useState } from 'react'
 import nonprecip from '../assets/icons/nonPrecipitation.svg';
 import precip from '../assets/icons/precipitation.svg';
 
-// import airQualityIcon from "../assets/icons/airquality.svg"
-// import feelsLikeIcon from "../assets/icons/feelslike.svg"
-// import humidityIcon from "../assets/icons/humidity.svg"
-// import uvIcon from "../assets/icons/uv.svg"
-// import windIcon from "../assets/icons/wind.svg";
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
@@ -21,23 +16,14 @@ import WeatherSkeleton from '../components/WeatherSkeleton.js';
 import Week from '../components/Week.js';
 import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
-import DetailCard from '../components/DetailCard.js';
 import Precipitation from '../components/Precipitation.js';
 import CurrentCity from '../components/CurrentCity.js'
 import Modal from '../components/Modal.js'
-
 
 //import des feuilles de styles
 import '../main.css';
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
-
-
-// const contentStyle = {
-//   height: '300px',
-//   lineHeight: '300px',
-//   textAlign: 'center',
-// };
 
 
 const App = () => {
@@ -53,11 +39,8 @@ const App = () => {
   const [showNavBar, setShowNavBar] = useState(false);
   //menu input pour saisie de la ville
   const [weatherInput, setWeatherInput] = useState('');
-  //div Détails Météo qui n'apparait qu'au clik sur mobile, et qui est en display sur tablette et desktop
-  const [showMobileDetails, setShowMobileDetails] = useState(false);
   //modal Infos Prévisions / Current
   const [selectedDayInfo, setSelectedDayInfo] = useState(null);
-  const [selectedCurrentInfo, setSelectedCurrentInfo] = useState(null);
 
   const [dotPosition, setDotPosition] = useState('right');
 
@@ -371,13 +354,7 @@ const App = () => {
     }
   }
 
-  /*icone pour details Météo (mobile => on clik ; tablette/desktop => display)*/
-  const handleMobileIconClick = () => {
-    setShowMobileDetails(!showMobileDetails);
-  };
-
-
-  // Au clik sur la div week dans le Carousel, la modal apparait avec les previsions du jour Selected (température max et min, précipitations, vent)
+  // Au clik sur la div week dans le Carousel, la modal apparait avec le résumé des prévisions du jour  
   const handleDayClick = (day) => {
     const sunrise = day.astro.sunrise;
     const sunset = day.astro.sunset;
@@ -388,19 +365,12 @@ const App = () => {
     const feelslike = day.day.avgtemp_c;
     const humidty = day.day.avghumidity;
     const uv = day.day.uv;
-    
     setSelectedDayInfo({ sunrise, sunset,maxTemp, minTemp, rain, wind, feelslike, humidty, uv });
-   
 };
 
 const handleCloseModal = () => {
     setSelectedDayInfo(null);
-    setSelectedCurrentInfo(null);
 };
-
-
-  const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
-  console.log(infosModal);
 
 
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
@@ -482,25 +452,6 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
     )
     )
 
-
-    // const sunDisplay = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
-    // forecastWeather.forecast.forecastday.map((day) => 
-    //    (
-    //     <div className='sun-display'>
-    //       <div className='sun-group'>
-    //         <img src={sunriseIcon} alt="" className='sun-icons'/>
-    //         <p>{day.astro["sunrise"]}</p>
-    //       </div>
-    //       <div className='sun-group'>
-    //         <img src={sunsetIcon} alt="" className='sun-icons'/>
-    //         <p>{day.astro["sunset"]}</p>
-    //       </div>
-    //     </div>
-    //   )
-    // );
-
-
-
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
     return <WeatherSkeleton />;
@@ -514,22 +465,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
         <CurrentCity 
         currentWeather={forecastWeather}  
         handleCityClick={handleCityClick} 
-        handleMobileIconClick={handleMobileIconClick}
         />
-    
-        {/* Div des détails de la météo en display si tablette et desktop, OU apparait au clik sur l'icone pour les teléphones*/}
-        {/* <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}> */}
-          {/* Contenu des détails de la météo */}
-          {/* <div className="forecast">
-            <div className='forecast-details'>
-              <DetailCard iconSrc={windIcon} description="Vitesse du vent" value={`${currentWeather?.current?.wind_kph} km/h`} />
-              <DetailCard iconSrc={humidityIcon} description="Humidité" value={`${currentWeather?.current?.humidity} %`} />
-              <DetailCard iconSrc={uvIcon} description="Indice UV" value={currentWeather?.current?.uv} />
-              <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${currentWeather?.current?.feelslike_c} °C`} />
-              <DetailCard iconSrc={airQualityIcon} description="Qualité de l'air" value={`indice ${currentWeather?.current?.air_quality['gb-defra-index']}`} />
-            </div>
-          </div>
-        </div> */}
 
         <div className="weather-meme">
           {selectedMeme && (
@@ -565,10 +501,6 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
 
             <div>
               <p>Temps sur 24h</p>
-              {/* Mini composant display sun set et sun rise */}
-              {/* forecastWeather.forecast.forecastday.map((astro), index => { 
-                <div> <p>astro.sunrise</p> <p>astro.sunset</p> }) */}
-                {/* {sunDisplay} */}
               <div className="MiniCards">
                 {filteredHours}
               </div>

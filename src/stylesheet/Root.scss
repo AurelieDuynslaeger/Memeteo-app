@@ -31,74 +31,15 @@
     margin-bottom: -1rem;
     font-weight: 300;
   }
-}
-
-//l'icone détail n'apparait que sur les écrans mobiles
-.mobile-icon {
-  display: block;
-  margin-bottom: 1rem;
-  width: 6rem;
-}
-
-//détail météo masqués sur mobile et déclenchés au clik
-.weather-details {
-  display: none;
-  &.show-mobile {
-    display: block;
-    background-color: transparent;
-    z-index:-1;
-  }
-}
-
-
-
-@media (min-width: 768px) {
-  .mobile-icon {
-    //l'icone détail est masquée sur les tablettes et desktop
-    display: none;
-  }
-
-  .weather-details {
-    //la div weather details apparait sur tablette et desktop
-    display: block;
-  }
-}
-
-
-.sun-display{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  font-size: 0.6rem;
-  padding: 0 1rem;
-  .sun-group{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    .sun-icons{
-      width: 1rem;
-    }
-  }
-}
-
-//div du détail au moment T
-.forecast {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  margin: 1rem 0;
-  .forecast-details {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-  }
-  .details-card {
-    flex-basis: 30%;
-    text-align: center;
-    font-size: 0.8rem;
+  //taille de l'icone affiché à l'acceuil
+  .icon-display svg {
+    // z-index: -10;
+    // position: absolute;
+    // top:-2rem;
+    // right:-3rem;
+    margin-top: 1rem;
+    width: 7rem;
+    height: 7rem;
   }
 }
 
@@ -116,15 +57,7 @@
   }
 }
 
-//taille de l'icone affiché à l'acceuil
-.icon-display svg {
-  // z-index: -10;
-  // position: absolute;
-  // top:-2rem;
-  // right:-3rem;
-  width: 6rem;
-  height: 6rem;
-}
+
 
 //position et taille du meme
 .weather-meme {
@@ -146,10 +79,10 @@
   position: relative;
   .days, .hour{
     .icon-display svg{
-    width: 3rem;
-    height: 3rem;
+      width: 3rem;
+      height: 3rem;
+    }
   }
-}
 }
 
 
@@ -163,19 +96,23 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
-  backdrop-filter: blur(20px);
-  width: 85%; 
-  height: 20%; 
+  backdrop-filter: blur(40px);
+  width: 80%; 
+  height: 35%; 
   max-width: 40rem;
   max-height: 25rem; 
   .modal-content{
     display: flex;
-    flex-direction: col;
+    flex-direction: column;
     justify-content: center;
-    .details-card {
-      flex-basis: 30%;
-      text-align: center;
-      font-size: 0.8rem;
+    .modal-part {
+      display: flex;
+      padding:0.3rem;
+      .details-card {
+        flex-basis: 30%;
+        text-align: center;
+        font-size: 0.8rem;
+      }
     }
   }
 }

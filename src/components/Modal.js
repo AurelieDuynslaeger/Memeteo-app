@@ -21,18 +21,19 @@ const Modal = ({ onClose, dayInfo }) => {
         <div className="modal">
             <div className="modal-content">
                 <span className="close" onClick={onClose}><IoIosCloseCircle /></span>
+                <div className='modal-part'>
                     <DetailCard iconSrc={sunriseIcon} description="" value={`${sunrise}`}/>
                     <DetailCard iconSrc={sunsetIcon} description="" value={`${sunset}`}/>
                     <DetailCard iconSrc={temp_max} description="" value={`${maxTemp} °C`}/>
                     <DetailCard iconSrc={temp_min} description="" value={`${minTemp} °C`}/>
                     <DetailCard iconSrc={feelsLikeIcon} description="" value={`${avgtemp_c} °C`}/>
+                </div>
+                <div className='modal-part'>
                     <DetailCard iconSrc={rainIcon} description="" value={`${rain} mm`}/>
                     <DetailCard iconSrc={windAnim} description="" value={`${wind} km/h`}/>
-                    <DetailCard iconSrc={humidityIcon} description="Humidité :" value={`${avghumidity} %`}/>
+                    <DetailCard iconSrc={humidityIcon} description="" value={`${avghumidity} %`}/>
                     <DetailCard iconSrc={uvIcon} description="" value={`Indice ${uv}`}/>
-                {/* <div className='modal-current-resume'>
-                    <p>En ce moment :</p>
-                </div> */}
+                </div>
             </div>
         </div>
     );
