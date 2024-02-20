@@ -32,6 +32,12 @@ export default function SuggestionBox({ showSuggestions, suggestions, handleSugg
     localStorage.setItem("memeteo-favourites-cities", JSON.stringify(copyFavs)); // On met à jour la valeur stockée dans le localStorage
   }
 
+  const listFavs = favs.map((item, index) => {
+    return (
+        <li key={index}>{index} : {item}</li>
+    )
+})
+
   // isFav() => { return city in fav }
 
   // handleFav () => { 
@@ -48,8 +54,7 @@ export default function SuggestionBox({ showSuggestions, suggestions, handleSugg
   // Merge fav + suggestions (sans les fav)
 
   return (
-    <>
-      { ((showSuggestions && suggestions.length > 1) || error) && (
+    <>{ ((showSuggestions && suggestions.length > 1) || error) && (
         <ul className="suggestions">
           {error && suggestions.length<1 &&  (
             <li className="error">{error}</li>
@@ -65,6 +70,11 @@ export default function SuggestionBox({ showSuggestions, suggestions, handleSugg
                 { /* Add a span here for fav + class for fav (isFav) */} 
             </li>
           ))}
+        </ul>
+      )}
+      { (suggestions.length < 1) && (
+        <ul className="suggestions">
+          {listFavs}
         </ul>
       )}
     </>
