@@ -13,7 +13,7 @@ import sunriseIcon from "../assets/icons/sunrise.svg";
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime } from '../utils/dateUtils';
 
@@ -356,16 +356,30 @@ const handleCloseModal = () => {
   // };
 
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
-  const days = forecastWeather7.forecast?.forecastday?.map((day, index) => (
-    <div className="week" key={index}>
+  //formattage du jour (date-fns) isToday
+  const formatDay = (date) => {
+    //si la date récupéré est Today alors on affiche 'auj.' au lieu de l'abbraviation du jour
+    if(isToday(date)) {
+      return 'auj.';
+    } else {
+      return format(date, 'E',{ locale: fr })
+    }
+  }
+
+  const days = forecastWeather7.forecast?.forecastday?.map((day, index) => {
+    const dayDate = new Date(day.date);
+    return (
+      <div className="week" key={index}>
         <Week
-            name={format(new Date(day.date), 'EEEE', { locale: fr })}
-            weather={day.day.condition.code}
-            temperature={day.day.avgtemp_c}
-            onClick={() => handleDayClick(day)}
+          day={formatDay(dayDate)}
+          date={format(day.date, 'dd', { locale: fr })}
+          weather={day.day.condition.code}
+          temperature={day.day.avgtemp_c}
+          onClick={() => handleDayClick(day)}
         />
-    </div>
-));
+      </div>
+    );
+  });
 
   ///// Carrousel page 2 pour la météo des 24 prochaines heures /////
   const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>

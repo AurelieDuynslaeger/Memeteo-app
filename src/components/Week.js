@@ -5,10 +5,10 @@ import WeatherIcon from './WeatherIcon';
 
 
 //onClick = open Modal pour détails
-const Week = ({ name, weather, temperature, onClick }) => {
+const Week = ({ day , date, weather, temperature, onClick }) => {
     return (
         <div className="days" onClick={onClick}>
-            <h3>{name}</h3>
+            <h3>{day} {date}</h3>
             {weather && <WeatherIcon code={weather} isDay={true} />}
             <h3>{temperature}°C</h3>
         </div>
