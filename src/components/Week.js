@@ -1,16 +1,18 @@
 import React from 'react'
 import '../stylesheet/carrousel.scss';
+import WeatherIcon from './WeatherIcon';
 
-const Week = ({name,weather, temperature}) => {
+
+//onClick = open Modal pour détails
+//modif name => day et date pour l'affichage formatté du jour et de la date
+const Week = ({ day , date, weather, temperature, onClick }) => {
     return (
-      
-          <div className="days">
-              <h3>{name}</h3>
-              <img src={weather} alt="" />
-              <h3>{temperature}°C</h3>
-          </div>
-      
-    )
-  }
+        <div className="days" onClick={onClick}>
+            <h3>{day} {date}</h3>
+            {weather && <WeatherIcon code={weather} isDay={true} />}
+            <h3>{temperature}°C</h3>
+        </div>
+    );
+};
 
-export default Week
+export default Week;
