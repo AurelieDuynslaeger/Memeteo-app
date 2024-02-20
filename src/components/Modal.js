@@ -24,13 +24,13 @@ const Modal = ({ onClose, dayInfo }) => {
                 <div className='modal-part'>
                     <DetailCard iconSrc={sunriseIcon} description="" value={`${sunrise}`}/>
                     <DetailCard iconSrc={sunsetIcon} description="" value={`${sunset}`}/>
-                    <DetailCard iconSrc={temp_max} description="" value={`${maxTemp} °C`}/>
-                    <DetailCard iconSrc={temp_min} description="" value={`${minTemp} °C`}/>
-                    <DetailCard iconSrc={feelsLikeIcon} description="" value={`${avgtemp_c} °C`}/>
+                    <DetailCard iconSrc={temp_max} description="Max" value={`${maxTemp} °C`}/>
+                    <DetailCard iconSrc={temp_min} description="Min" value={`${minTemp} °C`}/>
+                    <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${avgtemp_c} °C`}/>
                 </div>
                 <div className='modal-part'>
                     <DetailCard iconSrc={rainIcon} description="" value={`${rain} mm`}/>
-                    <DetailCard iconSrc={windAnim} description="" value={`${wind} km/h`}/>
+                    <DetailCard iconSrc={windAnim} description="Moy" value={`${wind} km/h`}/>
                     <DetailCard iconSrc={humidityIcon} description="" value={`${avghumidity} %`}/>
                     <DetailCard iconSrc={uvIcon} description="" value={`Indice ${uv}`}/>
                 </div>

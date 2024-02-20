@@ -362,12 +362,11 @@ const App = () => {
     const minTemp = day.day.mintemp_c;
     const rain = day.day.totalprecip_mm;
     const wind = day.day.maxwind_kph;
-    const feelslike = day.day.avgtemp_c;
-    const humidty = day.day.avghumidity;
+    const avgtemp_c = day.day.avgtemp_c;
+    const avghumidity = day.day.avghumidity;
     const uv = day.day.uv;
-    setSelectedDayInfo({ sunrise, sunset,maxTemp, minTemp, rain, wind, feelslike, humidty, uv });
+    setSelectedDayInfo({ sunrise, sunset, maxTemp, minTemp, rain, wind, avgtemp_c, avghumidity, uv });
 };
-
 const handleCloseModal = () => {
     setSelectedDayInfo(null);
 };
