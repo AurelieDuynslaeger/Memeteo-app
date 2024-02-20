@@ -35,7 +35,8 @@ export default function SuggestionBox({ showSuggestions, suggestions, handleSugg
         <li 
         key={index}
         onClick={() => handleSuggestionClick(item)}
-        >{index+1} : {item} <span className="fav" onClick={() => removeFromFavs(index)}><FaStar /></span></li>
+        className="suggestion"> 
+        {index+1}. {item}<span className="fav" onClick={() => removeFromFavs(index)}><FaStar /></span> </li>
     )
 })
 
@@ -60,25 +61,30 @@ export default function SuggestionBox({ showSuggestions, suggestions, handleSugg
           {error && suggestions.length<1 &&  (
             <li className="error">{error}</li>
           )}
+          {/* Display suggestions */}
           {suggestions.map((item, index) => (
             <li
               key={index}
               onClick={() => handleSuggestionClick(item)}
               className="suggestion"> 
                 {item} {/* Here = location name / place name */}
-                <span className="fav" onClick={() => addToFavs(item)}><FaRegStar /></span>
-                <span className="fav" onClick={() => removeFromFavs(index)}><FaStar /></span>
+                {/* IF the city is not in fav > the user can add it into the fav */}
+                {(!favs.includes(item)) && (<span className="fav" onClick={() => addToFavs(item)}><FaRegStar /> </span>)}
+                {/* IF the city is already in fav > the user can remove it from the fav */}
+                {(favs.includes(item)) && (<span className="fav" onClick={() => removeFromFavs(index)}><FaStar /> </span>)}
                 { /* Add a span here for fav + class for fav (isFav) */} 
             </li>
           ))}
         </ul>
       )}
+      {/* Display favs list */}
       { (suggestions.length < 1) && (
         console.log(favs.length),
         <ul className="suggestions">
           {listFavs}
         </ul>
       )}
+      {/* Display a msg when no fav */}
       { (suggestions.length < 1 && favs.length === 0) && (
         <p className="suggestions">Aucun favori.</p>
       )}
