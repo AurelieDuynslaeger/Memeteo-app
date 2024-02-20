@@ -382,19 +382,39 @@ const handleCloseModal = () => {
   });
 
   ///// Carrousel page 2 pour la météo des 24 prochaines heures /////
-  const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
+  // const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
+  // (
+  //   <div className="MiniCards" key={index}>
+  //     {day.hour.map((hour, index) => (
+  //       <Day
+  //         key={index}
+  //         time={formatTime(hour.time)}
+  //         weather={`http:${hour.condition.icon}`}
+  //         temperature={hour.temp_c}
+  //       />
+  //     ))}
+  //   </div>
+  // ))
+
+//on récupre l'heure actuelle
+const currentTime = new Date().getHours();
+
+//on filtre les prévisions par heure à PARTIR de l'heure actuelle
+const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
   (
     <div className="MiniCards" key={index}>
-      {day.hour.map((hour, index) => (
+      {/* substr extrait une partie de la chaîne de caractères hour.time. Elle commence à l'index 11 (pour obtenir les deux premiers caractères de l'heure) et extrait 2 caractères (pour obtenir les heures). */}
+      {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
         <Day
           key={index}
           time={formatTime(hour.time)}
-          weather={`http:${hour.condition.icon}`}
+          weather={hour.condition.code}
           temperature={hour.temp_c}
         />
       ))}
     </div>
-  ))
+  ));
+
 
   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
   const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
@@ -503,7 +523,7 @@ const handleCloseModal = () => {
                 <div> <p>astro.sunrise</p> <p>astro.sunset</p> }) */}
                 {sunDisplay}
               <div className="MiniCards">
-                {hours}
+                {filteredHours}
               </div>
             </div>
 

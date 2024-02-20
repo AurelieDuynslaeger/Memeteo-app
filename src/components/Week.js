@@ -5,6 +5,7 @@ import WeatherIcon from './WeatherIcon';
 
 
 //onClick = open Modal pour détails
+//modif name => day et date pour l'affichage formatté du jour et de la date
 const Week = ({ day , date, weather, temperature, onClick }) => {
     return (
         <div className="days" onClick={onClick}>
