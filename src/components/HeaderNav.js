@@ -52,6 +52,7 @@ export const HeaderNav = ({ onWeatherInput, setLoadingCity }) => {
     }
   };
 
+  //soumission du formulaire ou la props reprends le nom de la city pour la véhiculer sur App
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log("Formulaire soumis", city);

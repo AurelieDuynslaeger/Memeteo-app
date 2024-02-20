@@ -8,18 +8,12 @@ import uvIcon from "../assets/icons/uv.svg"
 import windIcon from "../assets/icons/wind.svg";
 import nonprecip from '../assets/icons/nonPrecipitation.svg';
 import precip from '../assets/icons/precipitation.svg';
-import windAnim from '../assets/icons/windAnim.svg';
-import temp_min from '../assets/icons/temp_min.svg';
-import temp_max from '../assets/icons/temp_max.svg';
-import rain from '../assets/icons/rain_mm.svg';
-// import sunsetIcon from "../assets/icons/sunset.svg";
-// import sunriseIcon from "../assets/icons/sunrise.svg";
+import sunsetIcon from "../assets/icons/sunset.svg";
+import sunriseIcon from "../assets/icons/sunrise.svg";
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
-import { TbCloudQuestion } from "react-icons/tb";
-import { IoIosCloseCircleOutline } from "react-icons/io";
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime } from '../utils/dateUtils';
 
@@ -30,7 +24,8 @@ import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
 import DetailCard from '../components/DetailCard.js';
 import Precipitation from '../components/Precipitation.js';
-import WeatherIcon from "../components/WeatherIcon.js"
+import CurrentCity from '../components/CurrentCity.js'
+import Modal from '../components/Modal.js'
 
 
 //import des feuilles de styles
@@ -39,11 +34,11 @@ import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
 
 
-const contentStyle = {
-  height: '300px',
-  lineHeight: '300px',
-  textAlign: 'center',
-};
+// const contentStyle = {
+//   height: '300px',
+//   lineHeight: '300px',
+//   textAlign: 'center',
+// };
 
 
 const App = () => {
@@ -61,9 +56,8 @@ const App = () => {
   const [weatherInput, setWeatherInput] = useState('');
   //div Détails Météo qui n'apparait qu'au clik sur mobile, et qui est en display sur tablette et desktop
   const [showMobileDetails, setShowMobileDetails] = useState(false);
-
-  //modal détails du jour
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  //modal Infos Prévisions
+  const [selectedDayInfo, setSelectedDayInfo] = useState(null);
 
   const [dotPosition, setDotPosition] = useState('right');
 
@@ -73,6 +67,7 @@ const App = () => {
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
+
   //Recupération du Meme
   const [memes, setMemes] = useState([]);
   //Récupération du son
@@ -111,6 +106,7 @@ const App = () => {
 
     fetchMusiques();
   }, []);
+  
   //Conditionnement pour que la description de la condition météo soit le meme que le nom du meme. 
   useEffect(() => {
     const weatherMemeMap = {
@@ -298,20 +294,20 @@ const App = () => {
     return weatherBackgrounds[currentWeatherText] || 'default-background';
   };
 
-  useEffect(() => {
+   //fetch current data weather
+   useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes`;
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes`;
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`;
       } else {
-        apiUrl = 'http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes';
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes&lang=fr`;
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
       setCurrentWeather(data);
     };
-
+  
     weatherData();
   }, [weatherInput]);
 
@@ -321,13 +317,13 @@ const App = () => {
       let apiUrl;
       if (weatherInput) {
         apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes`;
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes`;
       } else {
         apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=1&aqi=yes&alerts=yes';
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
       setForecastWeather(data);
+      console.log("Nouvelles données de prévisions 24h :", data);
     };
     weatherDataForecast();
   }, [weatherInput]);
@@ -338,13 +334,13 @@ const App = () => {
       let apiUrl;
       if (weatherInput) {
         apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes`;
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes`;
       } else {
         apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=7&aqi=no&alerts=yes';
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
       setForecastWeather7(data);
+      console.log("Nouvelles données de prévisions 7 jours :", data);
     };
     weatherForecast7();
   }, [weatherInput]);
@@ -361,6 +357,7 @@ const App = () => {
   setLoadingCity(true);
   setWeatherInput(city);
     // Appel de l'API avec la city soumise dans la nav
+    setWeatherInput(city);
     try {
       const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes`);
       const data = await response.json();
@@ -380,37 +377,85 @@ const App = () => {
   };
 
 
+  // Au clik sur la div week dans le Carousel, la modal apparait avec les previsions du jour Selected (température max et min, précipitations, vent)
+  const handleDayClick = (day) => {
+    const maxTemp = day.day.maxtemp_c;
+    const minTemp = day.day.mintemp_c;
+    const rain = day.day.totalprecip_mm;
+    const wind = day.day.maxwind_kph;
+
+    setSelectedDayInfo({ maxTemp, minTemp, rain, wind });
+};
+
+const handleCloseModal = () => {
+    setSelectedDayInfo(null);
+};
+
+
   const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
   console.log(infosModal);
 
+
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
-  const days = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday.map((day, index) =>
-  (
-    <div className="week">
-      <Week
-        key={index}
-        name={format(new Date(day.date), 'EEEE', { locale: fr })}
-        weather={day.day.condition.icon}
-        temperature={day.day.avgtemp_c}
-        onClick={() => setIsModalOpen(true)}
-      />
-    </div>
-  ))
+  //formattage du jour (date-fns) isToday
+  const formatDay = (date) => {
+    //si la date récupéré est Today alors on affiche 'auj.' au lieu de l'abbraviation du jour
+    if(isToday(date)) {
+      return 'auj.';
+    } else {
+      return format(date, 'E',{ locale: fr })
+    }
+  }
+
+  const days = forecastWeather7.forecast?.forecastday?.map((day, index) => {
+    const dayDate = new Date(day.date);
+    return (
+      <div className="week" key={index}>
+        <Week
+          day={formatDay(dayDate)}
+          date={format(day.date, 'dd', { locale: fr })}
+          weather={day.day.condition.code}
+          temperature={day.day.avgtemp_c}
+          onClick={() => handleDayClick(day)}
+        />
+      </div>
+    );
+  });
 
   ///// Carrousel page 2 pour la météo des 24 prochaines heures /////
-  const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
+  // const hours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
+  // (
+  //   <div className="MiniCards" key={index}>
+  //     {day.hour.map((hour, index) => (
+  //       <Day
+  //         key={index}
+  //         time={formatTime(hour.time)}
+  //         weather={`http:${hour.condition.icon}`}
+  //         temperature={hour.temp_c}
+  //       />
+  //     ))}
+  //   </div>
+  // ))
+
+//on récupre l'heure actuelle
+const currentTime = new Date().getHours();
+
+//on filtre les prévisions par heure à PARTIR de l'heure actuelle
+const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
   (
     <div className="MiniCards" key={index}>
-      {day.hour.map((hour, index) => (
+      {/* substr extrait une partie de la chaîne de caractères hour.time. Elle commence à l'index 11 (pour obtenir les deux premiers caractères de l'heure) et extrait 2 caractères (pour obtenir les heures). */}
+      {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
         <Day
           key={index}
           time={formatTime(hour.time)}
-          weather={`http:${hour.condition.icon}`}
+          weather={hour.condition.code}
           temperature={hour.temp_c}
         />
       ))}
     </div>
-  ))
+  ));
+
 
   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
   const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
@@ -430,31 +475,42 @@ const App = () => {
     )
     )
 
+
+    const sunDisplay = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
+    forecastWeather.forecast.forecastday.map((day) => 
+       (
+        <div className='sun-display'>
+          <div className='sun-group'>
+            <img src={sunriseIcon} alt="" className='sun-icons'/>
+            <p>{day.astro["sunrise"]}</p>
+          </div>
+          <div className='sun-group'>
+            <img src={sunsetIcon} alt="" className='sun-icons'/>
+            <p>{day.astro["sunset"]}</p>
+          </div>
+        </div>
+      )
+    );
+
+
+
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
     return <WeatherSkeleton />;
   } else {
     return (
       <div className={`container ${getWeatherBackgroundClass()}`}>
-
         {/* composant Navbar qui n'apparait que si on clik sur la ville */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
-        <div className='city'>
 
-          <h3 className='city-name' onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
-          
-          <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
-
-          {/* Icône mobile visible uniquement sur les appareils mobiles */}
-          <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
-          {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
-
-          {currentWeather && <WeatherIcon currentWeather={currentWeather} />}
-          {/* <img src={currentWeather?.current?.condition?.icon} alt="" /> */}
-          {/* <p>{currentWeather?.current?.condition?.text}</p> */}
-        </div>
-
-        {/* Div des détails de la météo */}
+        {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
+        <CurrentCity 
+        currentWeather={forecastWeather}  
+        handleCityClick={handleCityClick} 
+        handleMobileIconClick={handleMobileIconClick}
+        />
+    
+        {/* Div des détails de la météo en display si tablette et desktop, OU apparait au clik sur l'icone pour les teléphones*/}
         <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
           {/* Contenu des détails de la météo */}
           <div className="forecast">
@@ -471,8 +527,7 @@ const App = () => {
         <div className="weather-meme">
           {selectedMeme && (
             <div>
-              <img src={selectedMeme.image} alt={selectedMeme.name} style={{ width: '200px', height: '200px' }} />
-
+              <img src={selectedMeme.image} alt={selectedMeme.name} class="meme-display"/>
             </div>
           )}
           {selectedMusique && (
@@ -482,7 +537,7 @@ const App = () => {
           )}
         </div>
 
-        <div>
+        <div className='carousel-container'>
           <Radio.Group
             onChange={handlePositionChange}
             value={dotPosition}
@@ -491,7 +546,7 @@ const App = () => {
             }}
           >
           </Radio.Group>
-
+            
           <Carousel dotPosition={dotPosition}>
             <div>
               <p>Temps sur 7 jours</p>
@@ -503,8 +558,12 @@ const App = () => {
 
             <div>
               <p>Temps sur 24h</p>
+              {/* Mini composant display sun set et sun rise */}
+              {/* forecastWeather.forecast.forecastday.map((astro), index => { 
+                <div> <p>astro.sunrise</p> <p>astro.sunset</p> }) */}
+                {sunDisplay}
               <div className="MiniCards">
-                {hours}
+                {filteredHours}
               </div>
             </div>
 
@@ -518,6 +577,9 @@ const App = () => {
 
           </Carousel>
         </div>
+        <>
+        {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
+        </>
       </div>
 
     )

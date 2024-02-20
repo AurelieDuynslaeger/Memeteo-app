@@ -6,29 +6,28 @@
   width: 100%;
   margin: auto;
   font-family: "Poppins", sans-serif;
+  position: relative;
 }
 
 .container h3 {
   text-align: center;
 }
 
-
+// CurrentCity Component style
 .city {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   margin: auto;
-
   .city-name {
-    font-size: 5rem;
+    font-size: 4.5rem;
     margin: 0 1rem;
     font-weight: 200;
   }
-
   .current-temp {
-    font-size: 3rem;
-    margin-top: 2rem;
+    font-size: 2rem;
+    margin-top: 1rem;
     margin-bottom: -1rem;
     font-weight: 300;
   }
@@ -37,19 +36,21 @@
 //l'icone détail n'apparait que sur les écrans mobiles
 .mobile-icon {
   display: block;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   width: 6rem;
 }
 
 //détail météo masqués sur mobile et déclenchés au clik
 .weather-details {
   display: none;
-  /* Ajoutez vos styles pour les détails de la météo ici */
-
   &.show-mobile {
     display: block;
+    background-color: transparent;
+    z-index:-1;
   }
 }
+
+
 
 @media (min-width: 768px) {
   .mobile-icon {
@@ -63,55 +64,41 @@
   }
 }
 
-.sun-infos {
+
+.sun-display{
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-
-  .sun-icons {
-    width: 2rem;
-  }
-
-  .sun-hours {
-    font-size: 0.7rem;
-  }
-
-  .sun-couple {
+  justify-content: space-between;
+  font-size: 0.6rem;
+  padding: 0 1rem;
+  .sun-group{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .sun-icons{
+      width: 1rem;
+    }
   }
 }
 
-.forecast {
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 1.5rem;
-  margin: auto;
-}
-
+//div du détail au moment T
 .forecast {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-
+  margin: 1rem 0;
   .forecast-details {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-
   }
-
   .details-card {
-    flex-basis: 50%;
+    flex-basis: 30%;
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
 }
 
@@ -129,12 +116,66 @@
   }
 }
 
+//taille de l'icone affiché à l'acceuil
 .icon-display svg {
   // z-index: -10;
   // position: absolute;
   // top:-2rem;
   // right:-3rem;
-  width: 5rem;
-  height: 5rem;
+  width: 6rem;
+  height: 6rem;
+}
+
+//position et taille du meme
+.weather-meme {
+  width: 50%;
+  margin: auto;
+  .meme-display{
+  border-radius: 1.5rem;
+  width:15rem;
+  height: 15rem;
+  }
+  &.show-mobile {
+    display: block;
+    z-index: 0;
+  }
+}
+
+//position relative afin de position la modale en absolute en fonction
+.carousel-container {
+  position: relative;
+  .days, .hour{
+    .icon-display svg{
+    width: 3rem;
+    height: 3rem;
+  }
+}
+}
+
+
+//modal pour le détail d'un jour à venir au clik sur le composant week
+.modal {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.4);
+  padding: 2rem;
+  border-radius: 4rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  backdrop-filter: blur(20px);
+  width: 80%; 
+  height: 20%; 
+  max-width: 35rem;
+  max-height: 25rem; 
+  .modal-content{
+    display: flex;
+    justify-content: center;
+    .details-card {
+      flex-basis: 30%;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+  }
 }
 
