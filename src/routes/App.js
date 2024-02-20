@@ -549,7 +549,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
             
           <Carousel dotPosition={dotPosition}>
             <div>
-              <p>Temps sur 7 jours</p>
+              
               <div className="week">
                 {days}
               </div>
@@ -557,7 +557,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
 
 
             <div>
-              <p>Temps sur 24h</p>
+              
               {/* Mini composant display sun set et sun rise */}
               {/* forecastWeather.forecast.forecastday.map((astro), index => { 
                 <div> <p>astro.sunrise</p> <p>astro.sunset</p> }) */}
@@ -568,7 +568,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
             </div>
 
             <div>
-              <p>Précipitations dans l'heure</p>
+              
               <div className="precip">
                 {minutes}
               </div>
