@@ -156,26 +156,28 @@
 //modal pour le détail d'un jour à venir au clik sur le composant week
 .modal {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.3);
   padding: 2rem;
-  border-radius: 4rem;
+  border-radius: 2rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
   backdrop-filter: blur(20px);
-  width: 80%; 
+  width: 85%; 
   height: 20%; 
-  max-width: 35rem;
+  max-width: 40rem;
   max-height: 25rem; 
   .modal-content{
     display: flex;
+    flex-direction: col;
     justify-content: center;
     .details-card {
       flex-basis: 30%;
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 0.8rem;
     }
   }
 }
+
 
