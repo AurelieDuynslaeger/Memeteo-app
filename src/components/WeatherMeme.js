@@ -4,40 +4,46 @@ import WeatherConditionsGroup from '../datas/weatherConditionsGroup'; // Import 
 const WeatherMeme = ({ currentWeatherText, memes, musiques }) => {
   const [selectedMeme, setSelectedMeme] = useState(null);
   const [selectedMusique, setSelectedMusique] = useState(null);
-  const [selectedBackgroundColor, setSelectedBackgroundColor] = useState('default-background'); 
+ 
 
   useEffect(() => {
-    const weatherMemeMap = WeatherConditionsGroup; //WeatherMemeMap => données de WeatherConditionsGroup
+    const weatherConditionsMap = WeatherConditionsGroup; //WeatherMemeMap => données de WeatherConditionsGroup
 
-    if (currentWeatherText && memes.length > 0) {
-      const memeName = weatherMemeMap[currentWeatherText];
-      const filteredMemes = memes.filter(meme => meme.name.toLowerCase() === memeName);
+  if (currentWeatherText && memes.length > 0) {
+    const filteredMemes = memes.filter(meme => {
+      const memeName = weatherConditionsMap[currentWeatherText];
+      return memeName && meme.name.toLowerCase() === memeName.meme;
+    });
+
+    if (filteredMemes.length > 0) {
       const randomIndex = Math.floor(Math.random() * filteredMemes.length);
       const randomMeme = filteredMemes[randomIndex];
       setSelectedMeme(randomMeme);
-
-      // Mise à jour de l'état du fond d'écran en fonction de la condition météorologique actuelle
-      const backgroundColor = weatherMemeMap[currentWeatherText] || 'default-background';
-      setSelectedBackgroundColor(backgroundColor);
     } else {
       setSelectedMeme(null);
-      setSelectedBackgroundColor('default-background');
     }
-  }, [currentWeatherText, memes]);
+  } else {
+    setSelectedMeme(null);
+  }
+}, [currentWeatherText, memes]);
 
   useEffect(() => {
-    const weatherSoundMap = WeatherConditionsGroup; //WeatherSoundMap => données de WeatherConditionsGroup
+    const weatherConditionsMap = WeatherConditionsGroup; //WeatherSoundMap => données de WeatherConditionsGroup
 
     if (currentWeatherText && musiques.length > 0) {
-      const musiqueName = weatherSoundMap[currentWeatherText];
-      const selectedMusique = musiques.find(musique => musique.name.toLowerCase() === musiqueName);
+      const musiqueName = weatherConditionsMap[currentWeatherText];
+      console.log(musiqueName.sound); //cloudy
+      const selectedMusique = musiques.find(musique => musique.name.toLowerCase() === musiqueName.sound);
       setSelectedMusique(selectedMusique || null);
     } else {
       setSelectedMusique(null);
     }
   }, [currentWeatherText, musiques]);
 
-
+  console.log(selectedMeme); // => memeName.name
+  console.log(selectedMusique); // => musiqueName.sound
+  
+ 
   return (
     <div className="weather-meme">
       {selectedMeme && (

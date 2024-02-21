@@ -36,7 +36,7 @@ export const HeaderNav = ({ onWeatherInput, setLoadingCity }) => {
         const data = await response.json();
 
         const suggestions = data.map((item) => `${item.name}, ${item.country}`);
-        console.log(suggestions);
+        // console.log(suggestions);
         setSuggestions(suggestions || []);
         setError("");
         setShowSuggestions(true);
@@ -55,7 +55,7 @@ export const HeaderNav = ({ onWeatherInput, setLoadingCity }) => {
   //soumission du formulaire ou la props reprends le nom de la city pour la véhiculer sur App
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log("Formulaire soumis", city);
+    // console.log("Formulaire soumis", city);
     if(error) {
       setError("Location not found");
     } else {

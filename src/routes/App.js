@@ -5,10 +5,11 @@ import precip from '../assets/icons/precipitation.svg';
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
+import { PiSoundcloudLogo } from "react-icons/pi";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime, hourConvert, formatDay } from '../utils/functions.js';
-import { PiSoundcloudLogo } from "react-icons/pi";
+import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
 
 //import des composants
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
@@ -24,6 +25,7 @@ import Modal from '../components/Modal.js'
 import '../main.css';
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
+import WeatherMeme from '../components/WeatherMeme.js';
 
 
 
@@ -58,15 +60,22 @@ const App = () => {
   const [memes, setMemes] = useState([]);
   //Récupération du son
   const [musiques, setMusiques] = useState([]);
+  //couleur background dynamique
+  // const [selectedBackgroundColor, setSelectedBackgroundColor] = useState('default-background'); 
+
   //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
   const [autoplayEnabled, setAutoplayEnabled] = useState(false);
 
   //Constante pour filtrer les sons
-  const [selectedMusique, setSelectedMusique] = useState(null);
+  // const [selectedMusique, setSelectedMusique] = useState(null);
   //Constante pour filtrer les memes
-  const [selectedMeme, setSelectedMeme] = useState(null);
+  // const [selectedMeme, setSelectedMeme] = useState(null);
+
   // Constante pour stocker le texte des conditions météos actuelles
   const currentWeatherText = currentWeather?.current?.condition?.text;
+
+  console.log(currentWeatherText);
+
   //Fetch pour aller chercher les memes sur notre API
   useEffect(() => {
     const fetchMemes = async () => {
@@ -96,193 +105,12 @@ const App = () => {
     fetchMusiques();
   }, []);
   
-  //Conditionnement pour que la description de la condition météo soit le meme que le nom du meme. 
-  useEffect(() => {
-    const  weatherMemeMap  = {
-      'Sunny': 'sun',
-      'Partly cloudy': 'cloudy',
-      'Cloudy': 'cloudy',
-      'Overcast': 'cloudy',
-      'Patchy rain possible': 'rain',
-      'Moderate or heavy freezing rain': 'rain',
-      'Light freezing rain': 'rain',
-      'Heavy rain': 'rain',
-      'Heavy rain at times': 'rain',
-      'Moderate rain': 'rain',
-      'Moderate rain at times': 'rain',
-      'Light rain': 'rain',
-      'Light rain shower': 'rain',
-      'Moderate or heavy rain shower': 'rain',
-      'Patchy light rain': 'rain',
-      'Torrential rain shower': 'rain',
-      'Wind': 'wind',
-      'Blowing snow': 'snow',
-      'Patchy snow possible': 'snow',
-      'Patchy sleet possible': 'snow',
-      'Blizzard': 'snow',
-      'Light snow showers': 'snow',
-      'Moderate or heavy snow showers': 'snow',
-      'Patchy light snow with thunder': 'snow',
-      'Moderate or heavy snow with thunder': 'snow',
-      'Moderate or heavy sleet': 'snow',
-      'Patchy light snow': 'snow',
-      'Light snow': 'snow',
-      'Patchy moderate snow': 'snow',
-      'Moderate snow': 'snow',
-      'Patchy heavy snow': 'snow',
-      'Heavy snow': 'snow',
-      'Patchy freezing drizzle possible': 'freezing',
-      'Freezing drizzle': 'freezing',
-      'Light sleet': 'freezing',
-      'Light sleet showers': 'freezing',
-      'Moderate or heavy sleet showers': 'freezing',
-      'Light showers of ice pellets': 'freezing',
-      'Ice pellets': 'verglas',
-      'Thundery outbreaks possible': 'thunderstorm',
-      'Patchy light rain with thunder': 'thunderstorm',
-      'Moderate or heavy rain with thunder': 'thunderstorm',
-      'Heatwave': 'heatwave',
-      'Fog': 'fog',
-      'Mist': 'fog',
-      'Freezing fog': 'fog',
-      'Patchy light drizzle': 'fog',
-      'Light drizzle': 'fog',
-    };
 
-    if (currentWeatherText && memes.length > 0) {
-      const filteredMemes = memes.filter(meme => {
-        const memeName = weatherMemeMap[currentWeatherText];
-        return memeName && meme.name.toLowerCase() === memeName;
-      });
-
-      if (filteredMemes.length > 0) {
-        const randomIndex = Math.floor(Math.random() * filteredMemes.length);
-        const randomMeme = filteredMemes[randomIndex];
-        setSelectedMeme(randomMeme);
-      } else {
-        setSelectedMeme(null);
-      }
-    } else {
-      setSelectedMeme(null);
-    }
-  }, [currentWeatherText, memes]);
-
-  //Conditionnement pour que la description de la condition météo soit le meme que le nom du son.
-  useEffect(() => {
-    const weatherSoundMap = {
-      'Sunny': 'sun',
-      'Partly cloudy': 'cloudy',
-      'Cloudy': 'cloudy',
-      'Overcast': 'cloudy',
-      'Patchy rain possible': 'rain',
-      'Moderate or heavy freezing rain': 'rain',
-      'Light freezing rain': 'rain',
-      'Heavy rain': 'rain',
-      'Heavy rain at times': 'rain',
-      'Moderate rain': 'rain',
-      'Moderate rain at times': 'rain',
-      'Light rain': 'rain',
-      'Light rain shower': 'rain',
-      'Moderate or heavy rain shower': 'rain',
-      'Patchy light rain': 'rain',
-      'Torrential rain shower': 'rain',
-      'Wind': 'wind',
-      'Blowing snow': 'snow',
-      'Patchy snow possible': 'snow',
-      'Patchy sleet possible': 'snow',
-      'Blizzard': 'snow',
-      'Light snow showers': 'snow',
-      'Moderate or heavy snow showers': 'snow',
-      'Patchy light snow with thunder': 'snow',
-      'Moderate or heavy snow with thunder': 'snow',
-      'Moderate or heavy sleet': 'snow',
-      'Patchy light snow': 'snow',
-      'Light snow': 'snow',
-      'Patchy moderate snow': 'snow',
-      'Moderate snow': 'snow',
-      'Patchy heavy snow': 'snow',
-      'Heavy snow': 'snow',
-      'Patchy freezing drizzle possible': 'freezing',
-      'Freezing drizzle': 'freezing',
-      'Light sleet': 'freezing',
-      'Light sleet showers': 'freezing',
-      'Moderate or heavy sleet showers': 'freezing',
-      'Light showers of ice pellets': 'freezing',
-      'Ice pellets': 'verglas',
-      'Thundery outbreaks possible': 'thunderstorm',
-      'Patchy light rain with thunder': 'thunderstorm',
-      'Moderate or heavy rain with thunder': 'thunderstorm',
-      'Heatwave': 'heatwave',
-      'Fog': 'fog',
-      'Mist': 'fog',
-      'Freezing fog': 'fog',
-      'Patchy light drizzle': 'fog',
-      'Light drizzle': 'fog',
-    };
-
-    if (currentWeatherText && musiques.length > 0) {
-      const musiqueName = weatherSoundMap[currentWeatherText];
-      const selectedMusique = musiques.find(musiques => musiques.name.toLowerCase() === musiqueName);
-
-      setSelectedMusique(selectedMusique || null);
-    } else {
-      setSelectedMusique(null);
-    }
-  }, [currentWeatherText, musiques]);
-
-  const weatherBackgrounds = {
-    'Sunny': 'sun-background',
-    'Partly cloudy': 'cloudy-background',
-    'Cloudy': 'cloudy-background',
-    'Overcast': 'cloudy-background',
-    'Patchy rain possible': 'rain-background',
-    'Moderate or heavy freezing rain': 'rain-background',
-    'Light freezing rain': 'rain-background',
-    'Heavy rain': 'rain-background',
-    'Heavy rain at times': 'rain-background',
-    'Moderate rain': 'rain-background',
-    'Moderate rain at times': 'rain-background',
-    'Light rain': 'rain-background',
-    'Light rain shower': 'rain-background',
-    'Moderate or heavy rain shower': 'rain-background',
-    'Patchy light rain': 'rain-background',
-    'Torrential rain shower': 'rain-background',
-    'Wind': 'wind-background',
-    'Blowing snow': 'snow-background',
-    'Patchy snow possible': 'snow-background',
-    'Patchy sleet possible': 'snow-background',
-    'Blizzard': 'snow-background',
-    'Light snow showers': 'snow-background',
-    'Moderate or heavy snow showers': 'snow-background',
-    'Patchy light snow with thunder': 'snow-background',
-    'Moderate or heavy snow with thunder': 'snow-background',
-    'Moderate or heavy sleet': 'snow-background',
-    'Patchy light snow': 'snow-background',
-    'Light snow': 'snow-background',
-    'Patchy moderate snow': 'snow-background',
-    'Moderate snow': 'snow-background',
-    'Patchy heavy snow': 'snow-background',
-    'Heavy snow': 'snow-background',
-    'Patchy freezing drizzle possible': 'freezing-background',
-    'Freezing drizzle': 'freezing-background',
-    'Light sleet': 'freezing-background',
-    'Light sleet showers': 'freezing-background',
-    'Moderate or heavy sleet showers': 'freezing-background',
-    'Light showers of ice pellets': 'freezing-background',
-    'Ice pellets': 'verglas-background',
-    'Thundery outbreaks possible': 'thunderstorm-background',
-    'Patchy light rain with thunder': 'thunderstorm-background',
-    'Moderate or heavy rain with thunder': 'thunderstorm-background',
-    'Heatwave': 'heatwave-background',
-    'Fog': 'fog-background',
-    'Mist': 'fog-background',
-    'Freezing fog': 'fog-background',
-    'Patchy light drizzle': 'fog-background',
-    'Light drizzle': 'fog-background',
-  };
   const getWeatherBackgroundClass = () => {
-    return weatherBackgrounds[currentWeatherText] || 'default-background';
+    return weatherConditionsGroup[currentWeatherText] || 'default-background';
   };
+
+
 
 
    //fetch current data weather
@@ -314,7 +142,7 @@ const App = () => {
       const response = await fetch(apiUrl);
       const data = await response.json();
       setForecastWeather(data);
-      console.log("Nouvelles données de prévisions 24h :", data);
+      // console.log("Nouvelles données de prévisions 24h :", data);
     };
     weatherDataForecast();
   }, [weatherInput]);
@@ -331,7 +159,7 @@ const App = () => {
       const response = await fetch(apiUrl);
       const data = await response.json();
       setForecastWeather7(data);
-      console.log("Nouvelles données de prévisions 7 jours :", data);
+      // console.log("Nouvelles données de prévisions 7 jours :", data);
     };
     weatherForecast7();
   }, [weatherInput]);
@@ -468,9 +296,8 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
         currentWeather={forecastWeather}  
         handleCityClick={handleCityClick} 
         />
- 
         {/* <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} /> */}
-        <div className="weather-meme">
+        {/* <div className="weather-meme">
           {selectedMeme && (
             <div>
               <img src={selectedMeme.image} alt={selectedMeme.name} class="meme-display"/>
@@ -481,7 +308,9 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
               <audio src={selectedMusique.musique} autoPlay={autoplayEnabled} />
             </div>
           )}
-        </div>
+        </div> */}
+
+        <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques}/>
   
 
         <div className='carousel-container'>
