@@ -77,38 +77,49 @@ const App = () => {
   console.log(currentWeatherText);
 
 
+  // const fetchData = async (endpoint, days) => {
+  //   const defaultCity = 'Lille';
+  //   const queryCity = weatherInput || defaultCity;
+  //   const apiUrl = `http://api.weatherapi.com/${endpoint}.json?key=5929e663f6c74ae192890247240802&q=${queryCity}&days=${days}&aqi=yes&alerts=yes&lang=fr`;
+  //   const response = await fetch(apiUrl);
+  //   return response.json();
+  // };
 
-  //Fetch pour aller chercher les memes sur notre API
-  useEffect(() => {
-    const fetchMemes = async () => {
-      try {
-        const response = await fetch('http://localhost:7000/memes');
-        const data = await response.json();
-        setMemes(data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des memes:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchWeatherData = async () => {
+  //     const currentWeatherData = await fetchData('v1/current', 1);
+  //     setCurrentWeather(currentWeatherData);
 
-    fetchMemes();
-  }, []);
-  //Fetch pour aller chercher les sons sur notre API
-  useEffect(() => {
-    const fetchMusiques = async () => {
-      try {
-        const response = await fetch('http://localhost:7000/musiques');
-        const data = await response.json();
-        setMusiques(data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des musiques:', error);
-      }
-    };
+  //     const forecastWeatherData24h = await fetchData('v1/forecast', 1);
+  //     setForecastWeather(forecastWeatherData24h);
 
-    fetchMusiques();
-  }, []);
-  
+  //     const forecastWeatherData7days = await fetchData('v1/forecast', 7);
+  //     setForecastWeather7(forecastWeatherData7days);
+  //   };
 
+  //   fetchWeatherData();
+  // }, [weatherInput]);
  
+  //Fetch pour aller chercher les memes et les sons sur notre API
+  const fetchData = async (endpoint) => {
+    const apiUrl = `http://localhost:3500/${endpoint}`;
+    const response = await fetch(apiUrl);
+    return response.json()
+  }
+  useEffect(()=> {
+    const fetchMemeSoundData = async () => {
+      const displayMeme = await fetchData('memes');
+      setMemes(displayMeme);
+
+      const displaySound = await fetchData('musiques');
+      setMusiques(displaySound)
+    };
+
+    fetchMemeSoundData();
+
+  }, []);
+
+  
 
   const getWeatherBackgroundClass = () => {
     const backgroundClass = weatherConditionsGroup[currentWeatherText];
@@ -277,7 +288,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className={`container ${getWeatherBackgroundClass()}`}>
+      <div className='container'>
         {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
 
