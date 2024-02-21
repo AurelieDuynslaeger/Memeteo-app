@@ -287,6 +287,8 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
         handleCityClick={handleCityClick} 
         />
 
+        {currentWeather && <WeatherImage currentWeather={currentWeather} />}
+
          {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
         <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques}/>
 
