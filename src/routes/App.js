@@ -4,7 +4,7 @@ import nonprecip from '../assets/icons/nonPrecipitation.svg';
 import precip from '../assets/icons/precipitation.svg';
 
 //import composant Ant Design et React Icons
-import { Carousel, Radio } from 'antd';
+import { Carousel, Radio, Switch } from 'antd';
 import { PiSoundcloudLogo } from "react-icons/pi";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -26,10 +26,15 @@ import WeatherMeme from '../components/WeatherMeme.js';
 //import des feuilles de styles
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
+import "../stylesheet/darkmode.scss"
 
 
 const App = () => {
-
+  //Darkmode
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
   //météo a l'instant T
   const [currentWeather, setCurrentWeather] = useState({});
   //météo prévisions 24h (pluie et heure par heure)
@@ -94,8 +99,8 @@ const App = () => {
   //  });
 
 
-   //fetch current data weather
-   useEffect(() => {
+  //fetch current data weather
+  useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
@@ -156,8 +161,8 @@ const App = () => {
 
   //saisie input et à la soumission la Navbar disparait
   const handleWeatherInput = async (city) => {
-  setLoadingCity(true);
-  setWeatherInput(city);
+    setLoadingCity(true);
+    setWeatherInput(city);
     // Appel de l'API avec la city soumise dans la nav
     setWeatherInput(city);
     try {
@@ -251,11 +256,17 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className='container'>
-     
+      <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+        <div className="container" >
 
         {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
+
+        <div className='icon'>
+            <p>🔆</p>
+            <Switch onClick={toggleDarkMode} />
+            <p>🌙</p>
+          </div>
 
        {/* test pour activer le son, désactivé par défaut */}
        <div className='sound-display'>
@@ -321,7 +332,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
         {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
         </>
       </div>
-
+      </div>
     )
   }
 }
