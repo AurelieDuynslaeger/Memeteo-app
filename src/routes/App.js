@@ -293,13 +293,13 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
         <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques}/>
 
        
-        <div className='shape'>
+        {/* <div className='shape'>
           <div className='shape-absolute'>
             <p>
               {currentWeather?.current?.precip_mm}
             </p>
           </div>
-        </div>
+        </div> */}
         
 
         <div className='carousel-container'>
