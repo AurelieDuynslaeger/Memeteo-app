@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
-
 import nonprecip from '../assets/icons/nonPrecipitation.svg';
 import precip from '../assets/icons/precipitation.svg';
 
-
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
-import { format, isToday } from 'date-fns';
+import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { formatTime } from '../utils/dateUtils';
+import { formatTime, hourConvert, formatDay } from '../utils/functions.js';
+import { PiSoundcloudLogo } from "react-icons/pi";
 
 //import des composants
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
@@ -364,19 +363,6 @@ const App = () => {
   }
 
 
-  // fonction de formattage des am-pm en heures : on récup une chaine de caractères de l'api '06:16 PM'
-  const hourConvert = (hour)=> {
-    const [time, update] = hour.split(' ');
-    let [hours, minutes] = time.split(':');
-    if (hours === '12') {
-      hours = '00';
-    }
-    if (update === 'PM') {
-      hours = parseInt(hours, 10) + 12;
-    }
-    return `${hours}h${minutes}`;
-  }
-
   // Au clik sur un des jours de prévisions dans le Carousel, la modal apparait avec le résumé des prévisions pour ce jour  
   const handleDayClick = (day) => {
     const date = format(day.date, 'eeee dd LLLL', { locale: fr });
@@ -397,17 +383,6 @@ const handleCloseModal = () => {
     setSelectedDayInfo(null);
 };
 
-
-
-  //formattage du jour (date-fns) isToday
-  const formatDay = (date) => {
-    //si la date récupéré est Today alors on affiche 'auj.' au lieu de l'abbraviation du jour
-    if(isToday(date)) {
-      return 'auj.';
-    } else {
-      return format(date, 'E',{ locale: fr })
-    }
-  }
 
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
   const days = forecastWeather7.forecast?.forecastday?.map((day, index) => {
@@ -475,14 +450,17 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
 
        {/* test pour activer le son, désactivé par défaut */}
-        <label>
-            Lecture automatique :
-            <input
-              type="checkbox"
-              checked={autoplayEnabled}
-              onChange={(e) => setAutoplayEnabled(e.target.checked)}
-            />
-        </label>
+       <div className='sound-display'>
+          <label >
+            <PiSoundcloudLogo className='sound-icon'/>
+          </label>
+          <input
+            type="checkbox"
+            checked={autoplayEnabled}
+            onChange={(e) => setAutoplayEnabled(e.target.checked)}
+            className='sound-check'
+          />
+       </div>
 
 
         {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}

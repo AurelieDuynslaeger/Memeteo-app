@@ -13,6 +13,20 @@
   text-align: center;
 }
 
+.sound-display {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  .sound-icon{
+    font-size: 2rem;
+  }
+  .sound-check{
+    outline: none;
+    border: 1px solid v.$color-text; 
+  }
+ 
+}
+
 // CurrentCity Component style
 .city {
   display: flex;
