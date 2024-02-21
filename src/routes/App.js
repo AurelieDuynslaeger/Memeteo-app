@@ -19,13 +19,13 @@ import HeaderNav from '../components/HeaderNav.js';
 import Precipitation from '../components/Precipitation.js';
 import CurrentCity from '../components/CurrentCity.js'
 import Modal from '../components/Modal.js'
-// import WeatherMeme from '../components/WeatherMeme.js';
+import WeatherMeme from '../components/WeatherMeme.js';
+
 
 //import des feuilles de styles
 import '../main.css';
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
-import WeatherMeme from '../components/WeatherMeme.js';
 
 
 
@@ -72,9 +72,11 @@ const App = () => {
   // const [selectedMeme, setSelectedMeme] = useState(null);
 
   // Constante pour stocker le texte des conditions météos actuelles
+  //gestion du background, des memes et des sons
   const currentWeatherText = currentWeather?.current?.condition?.text;
-
   console.log(currentWeatherText);
+
+
 
   //Fetch pour aller chercher les memes sur notre API
   useEffect(() => {
@@ -106,11 +108,13 @@ const App = () => {
   }, []);
   
 
+ 
+
   const getWeatherBackgroundClass = () => {
-    return weatherConditionsGroup[currentWeatherText] || 'default-background';
+    const backgroundClass = weatherConditionsGroup[currentWeatherText];
+    // console.log(backgroundClass.background);
+    return backgroundClass.background || 'default-background';
   };
-
-
 
 
    //fetch current data weather
@@ -290,26 +294,13 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
           />
        </div>
 
-
         {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
         <CurrentCity 
         currentWeather={forecastWeather}  
         handleCityClick={handleCityClick} 
         />
-        {/* <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} /> */}
-        {/* <div className="weather-meme">
-          {selectedMeme && (
-            <div>
-              <img src={selectedMeme.image} alt={selectedMeme.name} class="meme-display"/>
-            </div>
-          )}
-          {selectedMusique && (
-            <div>
-              <audio src={selectedMusique.musique} autoPlay={autoplayEnabled} />
-            </div>
-          )}
-        </div> */}
 
+         {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
         <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques}/>
   
 

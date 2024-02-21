@@ -32,7 +32,7 @@ const WeatherMeme = ({ currentWeatherText, memes, musiques }) => {
 
     if (currentWeatherText && musiques.length > 0) {
       const musiqueName = weatherConditionsMap[currentWeatherText];
-      console.log(musiqueName.sound); //cloudy
+      // console.log(musiqueName.sound); //cloudy
       const selectedMusique = musiques.find(musique => musique.name.toLowerCase() === musiqueName.sound);
       setSelectedMusique(selectedMusique || null);
     } else {
@@ -40,8 +40,8 @@ const WeatherMeme = ({ currentWeatherText, memes, musiques }) => {
     }
   }, [currentWeatherText, musiques]);
 
-  console.log(selectedMeme); // => memeName.name
-  console.log(selectedMusique); // => musiqueName.sound
+  // console.log(selectedMeme); // => memeName.name
+  // console.log(selectedMusique); // => musiqueName.sound
   
  
   return (

@@ -12,13 +12,13 @@ body {
   }
   .cloudy-background {
     background-color: v.$color-green;
-}
-.rain-background {
-  background-color: v.$color-blue; 
-}
-.default-background {
-  background-color: v.$color-default;
-}
+  }
+  .rain-background {
+    background-color: v.$color-blue; 
+  }
+  .default-background {
+    background-color: v.$color-default;
+  }
 }
 
 code {
