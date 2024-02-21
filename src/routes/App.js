@@ -18,12 +18,12 @@ import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
 import Precipitation from '../components/Precipitation.js';
 import CurrentCity from '../components/CurrentCity.js'
-import Modal from '../components/Modal.js'
+import Modal from '../components/Modal.js';
+import WeatherImage from '../components/WeatherImage.js';
 import WeatherMeme from '../components/WeatherMeme.js';
 
 
 //import des feuilles de styles
-import '../main.css';
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
 
@@ -62,8 +62,6 @@ const App = () => {
   // Constante pour stocker le texte des conditions météos actuelles
   //gestion du background, des memes et des sons
   const currentWeatherText = currentWeather?.current?.condition?.text;
-  console.log(currentWeatherText);
-
 
   //Fetch pour aller chercher les memes et les sons sur notre API
   const fetchData = async (endpoint) => {
@@ -109,7 +107,7 @@ const App = () => {
       const data = await response.json();
       setCurrentWeather(data);
     };
-  
+
     weatherData();
   }, [weatherInput]);
 
@@ -152,6 +150,8 @@ const App = () => {
   const handleCityClick = () => {
     console.log("déclenché");
     setShowNavBar(true);
+
+
   }
 
   //saisie input et à la soumission la Navbar disparait
