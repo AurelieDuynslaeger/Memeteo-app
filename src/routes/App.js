@@ -12,7 +12,7 @@ import sunsetIcon from "../assets/icons/sunset.svg";
 import sunriseIcon from "../assets/icons/sunrise.svg";
 
 //import composant Ant Design et React Icons
-import { Carousel, Radio } from 'antd';
+import { Carousel, Radio, Switch } from 'antd';
 import { format, isToday } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime } from '../utils/dateUtils';
@@ -31,10 +31,15 @@ import Modal from '../components/Modal.js'
 //import des feuilles de styles
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
+import "../stylesheet/darkmode.scss"
 
 
 const App = () => {
-
+  //Darkmode
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
   //météo a l'instant T
   const [currentWeather, setCurrentWeather] = useState({});
   //météo prévisions 24h (pluie et heure par heure)
@@ -50,8 +55,6 @@ const App = () => {
   const [showMobileDetails, setShowMobileDetails] = useState(false);
   //modal Infos Prévisions
   const [selectedDayInfo, setSelectedDayInfo] = useState(null);
-
-  const [dotPosition, setDotPosition] = useState('right');
 
   //permet l'affichage ou non du weather skeletton
   const [loadingCity, setLoadingCity] = useState(false);
@@ -98,7 +101,7 @@ const App = () => {
 
     fetchMusiques();
   }, []);
-  
+
   //Conditionnement pour que la description de la condition météo soit le meme que le nom du meme. 
   useEffect(() => {
     const weatherMemeMap = {
@@ -286,8 +289,8 @@ const App = () => {
     return weatherBackgrounds[currentWeatherText] || 'default-background';
   };
 
-   //fetch current data weather
-   useEffect(() => {
+  //fetch current data weather
+  useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
@@ -348,8 +351,8 @@ const App = () => {
 
   //saisie input et à la soumission la Navbar disparait
   const handleWeatherInput = async (city) => {
-  setLoadingCity(true);
-  setWeatherInput(city);
+    setLoadingCity(true);
+    setWeatherInput(city);
     // Appel de l'API avec la city soumise dans la nav
     setWeatherInput(city);
     try {
@@ -379,11 +382,11 @@ const App = () => {
     const wind = day.day.maxwind_kph;
 
     setSelectedDayInfo({ maxTemp, minTemp, rain, wind });
-};
+  };
 
-const handleCloseModal = () => {
+  const handleCloseModal = () => {
     setSelectedDayInfo(null);
-};
+  };
 
 
   const infosModal = forecastWeather7.forecast && forecastWeather7.forecast.forecastday && forecastWeather7.forecast.forecastday;
@@ -394,10 +397,10 @@ const handleCloseModal = () => {
   //formattage du jour (date-fns) isToday
   const formatDay = (date) => {
     //si la date récupéré est Today alors on affiche 'auj.' au lieu de l'abbraviation du jour
-    if(isToday(date)) {
+    if (isToday(date)) {
       return 'auj.';
     } else {
-      return format(date, 'E',{ locale: fr })
+      return format(date, 'E', { locale: fr })
     }
   }
 
@@ -431,11 +434,11 @@ const handleCloseModal = () => {
   //   </div>
   // ))
 
-//on récupre l'heure actuelle
-const currentTime = new Date().getHours();
+  //on récupre l'heure actuelle
+  const currentTime = new Date().getHours();
 
-//on filtre les prévisions par heure à PARTIR de l'heure actuelle
-const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
+  //on filtre les prévisions par heure à PARTIR de l'heure actuelle
+  const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
   (
     <div className="MiniCards" key={index}>
       {/* substr extrait une partie de la chaîne de caractères hour.time. Elle commence à l'index 11 (pour obtenir les deux premiers caractères de l'heure) et extrait 2 caractères (pour obtenir les heures). */}
@@ -474,89 +477,97 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className="container">
+      <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+        <div className="container" >
 
-        {/* composant Navbar qui n'apparait que si on clik sur la ville */}
-        {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
-        <div className='city'>
+          {/* composant Navbar qui n'apparait que si on clik sur la ville */}
+          {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} />}
 
-          <h3 className='city-name' onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
-          <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
+          <div className='icon'>
+            <p>🔆</p>
+            <Switch onClick={toggleDarkMode} />
+            <p>🌙</p>
+          </div>
 
-          {/* Icône mobile visible uniquement sur les appareils mobiles */}
-          <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
-          {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
+          <div className='city'>
+            <h3 className='city-name' onClick={handleCityClick}>{currentWeather?.location?.name}</h3>
+            <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
 
-          <img src={currentWeather?.current?.condition?.icon} alt="" />
-          <p>{currentWeather?.current?.condition?.text}</p>
-        </div>
+            {/* Icône mobile visible uniquement sur les appareils mobiles */}
+            {/* <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} /> */}
+            {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
 
-        {/* Div des détails de la météo */}
-        <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
-          {/* Contenu des détails de la météo */}
-          <div className="forecast">
-            <div className='forecast-details'>
-              <DetailCard iconSrc={windIcon} description="Vitesse du vent" value={`${currentWeather?.current?.wind_kph} km/h`} />
-              <DetailCard iconSrc={humidityIcon} description="Humidité" value={`${currentWeather?.current?.humidity} %`} />
-              <DetailCard iconSrc={uvIcon} description="Indice UV" value={currentWeather?.current?.uv} />
-              <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${currentWeather?.current?.feelslike_c} °C`} />
-              <DetailCard iconSrc={airQualityIcon} description="Qualité de l'air" value={`indice ${currentWeather?.current?.air_quality['gb-defra-index']}`} />
+            <img src={currentWeather?.current?.condition?.icon} alt="" />
+            <p>{currentWeather?.current?.condition?.text}</p>
+          </div>
+
+          {/* Div des détails de la météo */}
+          <div className={`weather-details ${showMobileDetails ? 'show-mobile' : ''}`}>
+            {/* Contenu des détails de la météo */}
+            <div className="forecast">
+              <div className='forecast-details'>
+                <DetailCard iconSrc={windIcon} description="Vitesse du vent" value={`${currentWeather?.current?.wind_kph} km/h`} />
+                <DetailCard iconSrc={humidityIcon} description="Humidité" value={`${currentWeather?.current?.humidity} %`} />
+                <DetailCard iconSrc={uvIcon} description="Indice UV" value={currentWeather?.current?.uv} />
+                <DetailCard iconSrc={feelsLikeIcon} description="Ressenti" value={`${currentWeather?.current?.feelslike_c} °C`} />
+                <DetailCard iconSrc={airQualityIcon} description="Qualité de l'air" value={`indice ${currentWeather?.current?.air_quality['gb-defra-index']}`} />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="weather-meme">
-          {selectedMeme && (
-            <div>
-              <img src={selectedMeme.image} alt={selectedMeme.name} class="meme-display"/>
-            </div>
-          )}
-          {selectedMusique && (
-            <div>
-              <audio src={selectedMusique.musique} autoPlay />
-            </div>
-          )}
-        </div>
-
-        <div className='carousel-container'>
-          <Radio.Group
-            onChange={handlePositionChange}
-            value={dotPosition}
-            style={{
-              marginBottom: 8,
-            }}
-          >
-          </Radio.Group>
-            
-          <Carousel dotPosition={dotPosition}>
-            <div>
-              
-              <div className="week">
-                {days}
+          <div className="weather-meme">
+            {selectedMeme && (
+              <div>
+                <img src={selectedMeme.image} alt={selectedMeme.name} class="meme-display" />
               </div>
-            </div>
-
-
-            <div>
-              {/* <p>Temps sur 24h</p> */}
-              <div className="MiniCards">
-                {hours}
+            )}
+            {selectedMusique && (
+              <div>
+                <audio src={selectedMusique.musique} autoPlay />
               </div>
-            </div>
+            )}
+          </div>
 
-            <div>
-              
-              <div className="precip">
-                {minutes}
+          <div className='carousel-container'>
+            <Radio.Group
+              onChange={handlePositionChange}
+              value={dotPosition}
+              style={{
+                marginBottom: 8,
+              }}
+            >
+            </Radio.Group>
+
+            <Carousel dotPosition={dotPosition}>
+              <div>
+
+                <div className="week">
+                  {days}
+                </div>
               </div>
-            </div>
 
 
-          </Carousel>
+              <div>
+                {/* <p>Temps sur 24h</p> */}
+                <div className="MiniCards">
+                  {filteredHours}
+                </div>
+              </div>
+
+              <div>
+
+                <div className="precip">
+                  {minutes}
+                </div>
+              </div>
+
+
+            </Carousel>
+          </div>
+          <>
+            {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
+          </>
         </div>
-        <>
-        {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
-        </>
       </div>
 
     )

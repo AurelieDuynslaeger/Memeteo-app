@@ -18,7 +18,7 @@ const CurrentCity = ({ currentWeather, handleCityClick, handleMobileIconClick })
       <h3 className="current-temp">{currentWeather.current?.temp_c}°C</h3>
 
       {/* Icône mobile visible uniquement sur les appareils mobiles */}
-      <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
+      {/* <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} /> */}
 
       {/* Composant qui prend le code de condition météo et l'indicateur de jour/nuit pour display de la bonne icone */}
       <WeatherIcon code={code} isDay={isDay} />
