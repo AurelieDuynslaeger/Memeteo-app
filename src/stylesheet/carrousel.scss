@@ -7,6 +7,13 @@
         border-radius: 7%;
         padding: 0.5rem; 
         width: 5rem;
+        h4 {
+          margin-bottom: 0;
+        }
+        h6 {
+          margin-top:0.5rem;
+        }
+        //margin enlevées par défaut pour placements des élements dans les petites cartes voir rendu avec maquette
     }
 
      display: flex;

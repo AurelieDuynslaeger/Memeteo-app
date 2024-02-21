@@ -55,10 +55,8 @@ const App = () => {
   };
   //permet l'affichage ou non du weather skeletton
   const [loadingCity, setLoadingCity] = useState(false);
-
   //état du background
   const [backgroundClass, setBackgroundClass] = useState('');
-
   // Constante pour stocker le texte des conditions météos actuelles
   //gestion du background, des memes et des sons
   const currentWeatherText = currentWeather?.current?.condition?.text;
@@ -82,15 +80,7 @@ const App = () => {
 
   }, []);
 
-
-   //couleur background dynamique
-  //  useEffect(() => {
-  //    const WeatherBackgroundClass = weatherConditionsGroup[currentWeatherText];
-  //    
-  //      setBackgroundClass(backgroundClass.background) ;
-  //    };
-  //    getWeatherBackgroundClass();
-  //  });
+  //couleur background dynamique
   useEffect(() => {
     //si le text des conditions météo est dans notre tableau weatherConditionsGroup
     if (currentWeatherText in weatherConditionsGroup) {
