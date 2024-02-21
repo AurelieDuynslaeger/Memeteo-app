@@ -74,7 +74,7 @@ const App = () => {
 
   //Fetch pour aller chercher les memes et les sons sur notre API
   const fetchData = async (endpoint) => {
-    const apiUrl = `http://localhost:3500/${endpoint}`;
+    const apiUrl = `http://localhost:7001/${endpoint}`;
     const response = await fetch(apiUrl);
     return response.json()
   }
