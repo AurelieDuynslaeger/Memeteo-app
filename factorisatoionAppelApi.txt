@@ -8,7 +8,7 @@ const App = () => {
   const fetchData = async (endpoint, days) => {
     const defaultCity = 'Lille';
     const queryCity = weatherInput || defaultCity;
-    const apiUrl = `http://api.weatherapi.com/${endpoint}.json?key=5929e663f6c74ae192890247240802&q=${queryCity}&days=${days}&aqi=yes&alerts=yes&lang=fr`;
+    const apiUrl = `http://api.weatherapi.com/${endpoint}.json?key=5929e663f6c74ae192890247240802&q=${queryCity}&days=${days}&aqi=yes&alerts=yes`;
     const response = await fetch(apiUrl);
     return response.json();
   };
@@ -28,11 +28,6 @@ const App = () => {
     fetchWeatherData();
   }, [weatherInput]);
 
-  return (
-    <div>
-      {///}
-    </div>
-  );
 };
 
 export default App;
