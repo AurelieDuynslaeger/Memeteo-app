@@ -55,7 +55,7 @@ const App = () => {
 
   //permet l'affichage ou non du weather skeletton
   const [loadingCity, setLoadingCity] = useState(false);
-  const [dotPosition, setDotPosition] = useState('right');
+
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
@@ -74,7 +74,7 @@ const App = () => {
   useEffect(() => {
     const fetchMemes = async () => {
       try {
-        const response = await fetch('http://localhost:7000/memes');
+        const response = await fetch('http://localhost:7001/memes');
         const data = await response.json();
         setMemes(data);
       } catch (error) {
@@ -88,7 +88,7 @@ const App = () => {
   useEffect(() => {
     const fetchMusiques = async () => {
       try {
-        const response = await fetch('http://localhost:7000/musiques');
+        const response = await fetch('http://localhost:7001/musiques');
         const data = await response.json();
         setMusiques(data);
       } catch (error) {
@@ -291,9 +291,9 @@ const App = () => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes&lang=fr`;
+        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes`;
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -484,7 +484,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
           <h3 className='current-temp'>{currentWeather?.current?.temp_c}°C </h3>
 
           {/* Icône mobile visible uniquement sur les appareils mobiles */}
-          <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
+         
           {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
 
           <img src={currentWeather?.current?.condition?.icon} alt="" />
@@ -540,7 +540,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
             <div>
               {/* <p>Temps sur 24h</p> */}
               <div className="MiniCards">
-                {hours}
+                {filteredHours}
               </div>
             </div>
 
