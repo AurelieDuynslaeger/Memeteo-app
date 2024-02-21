@@ -9,7 +9,7 @@ import { PiSoundcloudLogo } from "react-icons/pi";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime, hourConvert, formatDay } from '../utils/functions.js';
-import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
+// import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
 
 //import des composants
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
@@ -28,9 +28,7 @@ import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
 
 
-
 const App = () => {
-
 
   //météo a l'instant T
   const [currentWeather, setCurrentWeather] = useState({});
@@ -44,27 +42,22 @@ const App = () => {
   const [weatherInput, setWeatherInput] = useState('');
   //modal Infos Prévisions / Current
   const [selectedDayInfo, setSelectedDayInfo] = useState(null);
-
-
-
+   //Recupération du Meme
+   const [memes, setMemes] = useState([]);
+   //Récupération du son
+   const [musiques, setMusiques] = useState([]);
+  //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
+  const [autoplayEnabled, setAutoplayEnabled] = useState(false);
+  //carousel dots
   const [dotPosition, setDotPosition] = useState('right');
-
-  //permet l'affichage ou non du weather skeletton
-  const [loadingCity, setLoadingCity] = useState(false);
-
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
+  //permet l'affichage ou non du weather skeletton
+  const [loadingCity, setLoadingCity] = useState(false);
 
-  //Recupération du Meme
-  const [memes, setMemes] = useState([]);
-  //Récupération du son
-  const [musiques, setMusiques] = useState([]);
-  //couleur background dynamique
-  // const [selectedBackgroundColor, setSelectedBackgroundColor] = useState('default-background'); 
-
-  //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
-  const [autoplayEnabled, setAutoplayEnabled] = useState(false);
+  //état du background
+  const [backgroundClass, setBackgroundClass] = useState('sun-background');
 
   // Constante pour stocker le texte des conditions météos actuelles
   //gestion du background, des memes et des sons
@@ -92,11 +85,15 @@ const App = () => {
   }, []);
 
 
-  const getWeatherBackgroundClass = () => {
-    const backgroundClass = weatherConditionsGroup[currentWeatherText];
-    // console.log(backgroundClass.background);
-    return backgroundClass.background || 'default-background';
-  };
+   //couleur background dynamique
+  //  useEffect(() => {
+  //    const getWeatherBackgroundClass = () => {
+  //      const backgroundClass = weatherConditionsGroup[currentWeatherText];
+  //      console.log(backgroundClass.background);
+  //      setBackgroundClass(backgroundClass.background) ;
+  //    };
+  //    getWeatherBackgroundClass();
+  //  });
 
 
    //fetch current data weather
@@ -197,23 +194,21 @@ const handleCloseModal = () => {
     setSelectedDayInfo(null);
 };
 
-
-  ///// Carrousel page 1 pour la météo des 5 prochains jours /////
-  const days = forecastWeather7.forecast?.forecastday?.map((day, index) => {
-    const dayDate = new Date(day.date);
-    return (
-      <div className="week" key={index}>
-        <Week
-          day={formatDay(dayDate)}
-          date={format(day.date, 'dd', { locale: fr })}
-          weather={day.day.condition.code}
-          temperature={day.day.avgtemp_c}
-          onClick={() => handleDayClick(day)}
-        />
-      </div>
-    );
-  });
-
+///// Carrousel page 1 pour la météo des 5 prochains jours /////
+const days = forecastWeather7.forecast?.forecastday?.map((day, index) => {
+  const dayDate = new Date(day.date);
+  return (
+    <div className="week" key={index}>
+      <Week
+        day={formatDay(dayDate)}
+        date={format(day.date, 'dd', { locale: fr })}
+        weather={day.day.condition.code}
+        temperature={day.day.avgtemp_c}
+        onClick={() => handleDayClick(day)}
+      />
+    </div>
+  );
+});
 
 //on récupre l'heure actuelle
 const currentTime = new Date().getHours();
@@ -233,7 +228,6 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
     </div>
   ));
 
-
   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
   const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
     forecastWeather.forecast.forecastday.map((day, index) =>
@@ -252,14 +246,14 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
       )
     )
 
-
-
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className={`container ${getWeatherBackgroundClass()}`}>
+      <div className='container'>
+     
+
         {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
 
@@ -284,7 +278,16 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
 
          {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
         <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques}/>
-  
+
+       
+        <div className='shape'>
+          <div className='shape-absolute'>
+            <p>
+              {currentWeather?.current?.precip_mm}
+            </p>
+          </div>
+        </div>
+        
 
         <div className='carousel-container'>
           <Radio.Group
@@ -295,31 +298,26 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
             }}
           >
           </Radio.Group>
-            
           <Carousel dotPosition={dotPosition}>
             <div>
               <div className="week">
                 {days}
               </div>
             </div>
-
-
             <div>
               <div className="MiniCards">
                 {filteredHours}
               </div>
             </div>
-
             <div>
               <div className="precip">
                 {minutes}
               </div>
             </div>
-
-
           </Carousel>
         </div>
         <>
+        {/* modal déclenchée au clik sur un jour du carousel */}
         {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
         </>
       </div>

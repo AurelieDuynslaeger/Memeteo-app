@@ -8,15 +8,12 @@ const CurrentCity = ({ currentWeather, handleCityClick }) => {
   return (
     <div className="city">
       <h3 className="current-temp">{currentWeather.current?.temp_c}°</h3>
-      
       <div className='city-search'>
         <h3 className="city-name" onClick={handleCityClick}>
           {currentWeather.location?.name} 
         </h3>
         <FaMagnifyingGlass className='search-icon'/>
       </div>
-
-      
     </div>
   );
 };
