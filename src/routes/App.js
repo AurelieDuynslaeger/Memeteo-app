@@ -125,6 +125,7 @@ const App = () => {
 const handleCityClick = () => {
   console.log("déclenché");
   setShowNavBar(true);
+}
 
 //saisie input et à la soumission la Navbar disparait
 const handleWeatherInput = async (city) => {
@@ -316,5 +317,5 @@ if (loadingCity) {
 
   )
 }}
-}
+
 export default App
