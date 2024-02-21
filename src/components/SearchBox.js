@@ -1,19 +1,22 @@
 import React, { useState } from "react";
+
+//import composant Ant Design et React Icons
 import { Form, Input, Button } from "antd";
 import { FaCheck } from "react-icons/fa";
-import Logo from "../assets/memteo-logo-base.png";
 import { MdMyLocation } from "react-icons/md";
 
+// import des assets
+import Logo from "../assets/memteo-logo-base.png";
 
 //import des feuilles de styles
-import "../stylesheet/HeaderNav.scss";
+import "../stylesheet/_searchBox.scss";
 import "../stylesheet/_suggestionBox.scss";
 
 //import des composants
 import SuggestionBox from "./SuggestionBox.js";
 
 
-export const HeaderNav = ({ onWeatherInput, setLoadingCity }) => {
+export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
   const [city, setCity] = useState("");
 
 
@@ -120,4 +123,4 @@ export const HeaderNav = ({ onWeatherInput, setLoadingCity }) => {
   );
 };
 
-export default HeaderNav;
+export default SearchBox;

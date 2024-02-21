@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+//import des assets
 import nonprecip from "../assets/icons/nonPrecipitation.svg";
 import precip from "../assets/icons/precipitation.svg";
 
@@ -8,6 +9,8 @@ import { Carousel, Radio, Switch } from "antd";
 import { PiSoundcloudLogo } from "react-icons/pi";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+
+//import des fonctions utils
 import { formatTime, hourConvert, formatDay } from "../utils/functions.js";
 // import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
 
@@ -15,7 +18,7 @@ import { formatTime, hourConvert, formatDay } from "../utils/functions.js";
 import WeatherSkeleton from "../components/WeatherSkeleton.js";
 import Week from "../components/Week.js";
 import Day from "../components/Day.js";
-import HeaderNav from "../components/HeaderNav.js";
+import SearchBox from "../components/SearchBox.js";
 import Precipitation from "../components/Precipitation.js";
 import CurrentCity from "../components/CurrentCity.js";
 import Modal from "../components/Modal.js";
@@ -24,8 +27,8 @@ import WeatherMeme from "../components/WeatherMeme.js";
 
 //import des feuilles de styles
 import "../stylesheet/Root.scss";
-import "../stylesheet/carrousel.scss";
-import "../stylesheet/darkmode.scss";
+import "../stylesheet/_carrousel.scss";
+import "../stylesheet/_darkmode.scss";
 
 const App = () => {
   //Darkmode
@@ -275,82 +278,104 @@ const App = () => {
     return (
       <div className={isDarkMode ? "dark-mode" : "light-mode"}>
         <div className="container">
-          {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
-          {showNavBar && (
-            <HeaderNav
-              onWeatherInput={handleWeatherInput}
-              setLoadingCity={setLoadingCity}
-            />
-          )}
+          {/* HEADER = searchBox + params (light/dark mode + sound) */}
+          <header>
+            {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
+            {showNavBar && (
+              <SearchBox
+                onWeatherInput={handleWeatherInput}
+                setLoadingCity={setLoadingCity}
+              />
+            )}
 
-          <div className="icon">
-            <p>🔆</p>
-            <Switch onClick={toggleDarkMode} />
-            <p>🌙</p>
-          </div>
+            <div className="icon">
+              <p>🔆</p>
+              <Switch onClick={toggleDarkMode} />
+              <p>🌙</p>
+            </div>
 
-          {/* test pour activer le son, désactivé par défaut */}
-          <div className="sound-display">
-            <label>
-              <PiSoundcloudLogo className="sound-icon" />
-            </label>
-            <input
-              type="checkbox"
-              checked={autoplayEnabled}
-              onChange={(e) => setAutoplayEnabled(e.target.checked)}
-              className="sound-check"
-            />
-          </div>
+            {/* test pour activer le son, désactivé par défaut */}
+            <div className="sound-display">
+              <label>
+                <PiSoundcloudLogo className="sound-icon" />
+              </label>
+              <input
+                type="checkbox"
+                checked={autoplayEnabled}
+                onChange={(e) => setAutoplayEnabled(e.target.checked)}
+                className="sound-check"
+              />
+            </div>
+          </header>
 
-          {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
-          <CurrentCity
-            currentWeather={forecastWeather}
-            handleCityClick={handleCityClick}
-          />
+          {/* MAIN*/}
+          <main>
+            <div className="group">
+              <section className="currentWeatherForecast">
+                {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
+                <CurrentCity
+                  currentWeather={forecastWeather}
+                  handleCityClick={handleCityClick}
+                />
+              </section>
 
-          {currentWeather && <WeatherImage currentWeather={currentWeather} />}
+              <section className="currentWeatherImage">
+                {currentWeather && (
+                  <WeatherImage currentWeather={currentWeather} />
+                )}
+              </section>
+            </div>
 
-          {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
-          <WeatherMeme
-            currentWeatherText={currentWeatherText}
-            memes={memes}
-            musiques={musiques}
-          />
+            <div className="group">
+              <section className="meme">
+                {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
+                <WeatherMeme
+                  currentWeatherText={currentWeatherText}
+                  memes={memes}
+                  musiques={musiques}
+                />
+              </section>
 
-          {/* <div className='shape'>
+              {/* <div className='shape'>
           <div className='shape-absolute'>
             <p>
               {currentWeather?.current?.precip_mm}
             </p>
           </div>
         </div> */}
-
-          <div className="carousel-container">
-            <Radio.Group
-              onChange={handlePositionChange}
-              value={dotPosition}
-              style={{
-                marginBottom: 8,
-              }}
-            ></Radio.Group>
-            <Carousel dotPosition={dotPosition}>
-              <div>
-                <div className="week">{days}</div>
-              </div>
-              <div>
-                <div className="MiniCards">{filteredHours}</div>
-              </div>
-              <div>
-                <div className="precip">{minutes}</div>
-              </div>
-            </Carousel>
-          </div>
-          <>
-            {/* modal déclenchée au clik sur un jour du carousel */}
-            {selectedDayInfo && (
-              <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />
-            )}
-          </>
+              <section className="carousel">
+                <div className="carousel-container">
+                  <Radio.Group
+                    onChange={handlePositionChange}
+                    value={dotPosition}
+                    style={{
+                      marginBottom: 8,
+                    }}
+                  ></Radio.Group>
+                  <Carousel dotPosition={dotPosition}>
+                    <div>
+                      <div className="week">{days}</div>
+                    </div>
+                    <div>
+                      <div className="MiniCards">{filteredHours}</div>
+                    </div>
+                    <div>
+                      <div className="precip">{minutes}</div>
+                    </div>
+                  </Carousel>
+                </div>
+                <>
+                  {/* modal déclenchée au clik sur un jour du carousel */}
+                  {selectedDayInfo && (
+                    <Modal
+                      onClose={handleCloseModal}
+                      dayInfo={selectedDayInfo}
+                    />
+                  )}
+                </>
+              </section>
+            </div>
+          </main>
         </div>
       </div>
     );
