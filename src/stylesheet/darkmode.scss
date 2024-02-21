@@ -1,25 +1,20 @@
-.light-mode {
-    background-color: #f8b993;
-    color: #000000;
-}
-
 .dark-mode {
     background-color: #212121;
     color: #f8b993;
 
-    .navbar{
-        .logo{
+    .navbar {
+        .logo {
             background-color: #f8b993;
             border-radius: 10%;
             margin-top: 0.5rem;
         }
-        
-        .geolocalisationIcon{
-            color:#f8b993
+
+        .geolocalisationIcon {
+            color: #f8b993
         }
     }
 
-    .details-card img{
+    .details-card img {
         background-color: #f8b993;
     }
 
@@ -27,21 +22,21 @@
         background-color: #181616;
         color: #f8b993;
 
-        .icon-display svg{
+        .icon-display svg {
             color: #f8b993;
         }
     }
 
-    .hour{
+    .hour {
         background-color: #181616;
         color: #f8b993;
 
-        .icon-display svg{
+        .icon-display svg {
             color: #f8b993;
         }
     }
 
-    .rain{
+    .rain {
         color: #f8b993;
     }
 }
