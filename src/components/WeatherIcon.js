@@ -7,6 +7,7 @@ import { BsCloudRainHeavyFill, BsCloudRainHeavy, BsCloudSleetFill, BsCloudSleet 
 
 
 
+//récup des données json pour les icones météo (reconstruction du tableau en gardant les codes de l'api, afin de dispather notre propre set dd'icones)
 const weatherIcons = [
   {
     "code": 1000,
@@ -345,18 +346,20 @@ const weatherIcons = [
 ];
 
 
-
-const WeatherIcon = ({ currentWeather }) => {
-  const currentCode = currentWeather?.current?.condition?.code;
-  const isDay = currentWeather?.current?.is_day === 1;
-
-  const icon = weatherIcons.find(icon => icon.code === currentCode);
-  if (!icon) return null;
-
-  const selectedIcon = isDay ? icon.icon : icon.nightIcon;
-
-  return <div className="icon-display">{selectedIcon}</div>;
-};
-
+  
+  const WeatherIcon = ({ code, isDay }) => {
+    // Recherche l'icône correspondant au code de condition météo dans weatherIcons ci dessus
+    const iconData = weatherIcons.find(icon => icon.code === code);
+  
+    //on s'assure que l'icone est trouvée
+    if (!iconData) return null;
+  
+    //selection de l'icone en fonction de Day ou Night
+    const selectedIcon = isDay ? iconData.icon : iconData.nightIcon;
+  
+    //on retourne l'icone selectionnée selon le code des conditions météo de l'api
+    return <div className="icon-display">{selectedIcon}</div>;
+  };
+  
 
 export default WeatherIcon;

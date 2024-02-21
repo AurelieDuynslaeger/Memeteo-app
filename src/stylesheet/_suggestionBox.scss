@@ -1,0 +1,33 @@
+.suggestions {
+    margin:0;
+    list-style-type : none;
+    margin-bottom: 4px;
+    background-color: white;
+    position: absolute;
+    left: 0;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem; // 6px
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; // 4px
+    padding: 0.5rem 0; 
+  
+    .error {
+      color: #dc2626;
+      padding: 0.25rem 0.5rem; // 4px 8px
+    }
+  
+    .suggestion {
+      cursor: pointer;
+      padding: 0.25rem 0.5rem; 
+      border-radius: 0.375rem; 
+      display:flex;
+      justify-content: space-between;
+  
+      &:hover {
+        background-color: #f3f4f6;
+      }
+    }
+  }
+  
