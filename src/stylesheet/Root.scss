@@ -146,28 +146,45 @@
   }
 }
 
-.shape {
-  position: relative;
-  width : 4rem;
-  height: 4rem;
-  background-color: v.$color-blue;
-  border-radius: 50%;
-  border-top-right-radius: 0;
-  transform: rotate(-45deg);
-  display: flex;
-  align-items: center;
-}
-.shape-absolute{
-  position: absolute;
-  left:1.7rem;
-  p{
-    color: white;
-    font-size: 1rem;
-    transform: rotate(45deg);
-  }
-}
+
 
 .image-display{
   width: 10rem;
   height: 10rem;
+}
+
+//2 div en forme de goutte toutes les 2 grace au radius
+//celle en absolute prend en height le % de chance de pluie via le composant RainDrop
+//avec la propriété style
+.rain-drop {
+  width: 3.5rem;
+  height:3.5rem;
+  background-color: transparent;
+  border-radius: 50%;
+  border-top-right-radius: 0;
+  transform: rotate(-45deg);
+  position: relative;
+  overflow: hidden;
+  border: 0.15rem solid black;
+  .filled-raindrop{
+    position: absolute;
+    bottom:0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border-radius: 50%;
+    border-top-right-radius: 0;
+    span {
+      position: absolute;
+      top:0;
+      color: black;
+      font-size: 0.6rem;
+    }
+  }
+}
+
+.rain-time{
+  color: black;
+  font-size: 0.6rem;
+  margin-bottom: 1rem;
 }

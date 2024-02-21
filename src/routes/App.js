@@ -21,11 +21,13 @@ import CurrentCity from '../components/CurrentCity.js'
 import Modal from '../components/Modal.js';
 import WeatherImage from '../components/WeatherImage.js';
 import WeatherMeme from '../components/WeatherMeme.js';
+import RainDrop from '../components/RainDrop';
 
 
 //import des feuilles de styles
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
+
 
 
 const App = () => {
@@ -247,6 +249,25 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
       )
     )
 
+//test composant RainDrop pour le % de pluie
+// const rainTest = forecastWeather?.forecast?.forecastday;
+// console.log('log du rest pluie' ,rainTest);
+      ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
+  const rainPercent = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
+  forecastWeather.forecast.forecastday.map((day, index) =>
+  (
+    <div className="precip" key={index}>
+     {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
+      <div>
+        <p className='rain-time'>{formatTime(hour.time)}</p>
+        <RainDrop pourcentage={hour.chance_of_rain}/>
+      </div>
+      ))}
+    </div>
+    )
+    )
+
+
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
     return <WeatherSkeleton />;
@@ -275,10 +296,14 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
         currentWeather={forecastWeather}  
         handleCityClick={handleCityClick} 
         />
+        <WeatherImage currentWeather={currentWeatherText}/>
 
          {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
         <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques}/>
 
+        <div>
+          {rainPercent}
+        </div>
         {/* <div className='shape'>
           <div className='shape-absolute'>
             <p>
@@ -286,7 +311,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
             </p>
           </div>
         </div> */}
-        
+ 
         <div className='carousel-container'>
           <Radio.Group
             onChange={handlePositionChange}
