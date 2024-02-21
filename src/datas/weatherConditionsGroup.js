@@ -6,6 +6,11 @@ const weatherConditionsGroup = {
         sound: 'sun',
         background: 'sun-background'
       },
+      'Clear': {
+        meme: 'sun',
+        sound: 'sun',
+        background: 'sun-background'
+      },
       'Partly cloudy': {
         meme: 'cloudy',
         sound: 'cloudy',

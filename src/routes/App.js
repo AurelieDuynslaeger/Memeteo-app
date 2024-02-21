@@ -66,40 +66,12 @@ const App = () => {
   //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
   const [autoplayEnabled, setAutoplayEnabled] = useState(false);
 
-  //Constante pour filtrer les sons
-  // const [selectedMusique, setSelectedMusique] = useState(null);
-  //Constante pour filtrer les memes
-  // const [selectedMeme, setSelectedMeme] = useState(null);
-
   // Constante pour stocker le texte des conditions météos actuelles
   //gestion du background, des memes et des sons
   const currentWeatherText = currentWeather?.current?.condition?.text;
   console.log(currentWeatherText);
 
 
-  // const fetchData = async (endpoint, days) => {
-  //   const defaultCity = 'Lille';
-  //   const queryCity = weatherInput || defaultCity;
-  //   const apiUrl = `http://api.weatherapi.com/${endpoint}.json?key=5929e663f6c74ae192890247240802&q=${queryCity}&days=${days}&aqi=yes&alerts=yes&lang=fr`;
-  //   const response = await fetch(apiUrl);
-  //   return response.json();
-  // };
-
-  // useEffect(() => {
-  //   const fetchWeatherData = async () => {
-  //     const currentWeatherData = await fetchData('v1/current', 1);
-  //     setCurrentWeather(currentWeatherData);
-
-  //     const forecastWeatherData24h = await fetchData('v1/forecast', 1);
-  //     setForecastWeather(forecastWeatherData24h);
-
-  //     const forecastWeatherData7days = await fetchData('v1/forecast', 7);
-  //     setForecastWeather7(forecastWeatherData7days);
-  //   };
-
-  //   fetchWeatherData();
-  // }, [weatherInput]);
- 
   //Fetch pour aller chercher les memes et les sons sur notre API
   const fetchData = async (endpoint) => {
     const apiUrl = `http://localhost:3500/${endpoint}`;
@@ -119,7 +91,6 @@ const App = () => {
 
   }, []);
 
-  
 
   const getWeatherBackgroundClass = () => {
     const backgroundClass = weatherConditionsGroup[currentWeatherText];
@@ -288,7 +259,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className='container'>
+      <div className={`container ${getWeatherBackgroundClass()}`}>
         {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
 
