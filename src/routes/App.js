@@ -9,7 +9,7 @@ import { PiSoundcloudLogo } from "react-icons/pi";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime, hourConvert, formatDay } from '../utils/functions.js';
-// import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
+import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
 
 //import des composants
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
@@ -57,7 +57,7 @@ const App = () => {
   const [loadingCity, setLoadingCity] = useState(false);
 
   //état du background
-  const [backgroundClass, setBackgroundClass] = useState('sun-background');
+  const [backgroundClass, setBackgroundClass] = useState('');
 
   // Constante pour stocker le texte des conditions météos actuelles
   //gestion du background, des memes et des sons
@@ -87,13 +87,24 @@ const App = () => {
 
    //couleur background dynamique
   //  useEffect(() => {
-  //    const getWeatherBackgroundClass = () => {
-  //      const backgroundClass = weatherConditionsGroup[currentWeatherText];
-  //      console.log(backgroundClass.background);
+  //    const WeatherBackgroundClass = weatherConditionsGroup[currentWeatherText];
+  //    
   //      setBackgroundClass(backgroundClass.background) ;
   //    };
   //    getWeatherBackgroundClass();
   //  });
+  useEffect(() => {
+    //si le text des conditions météo est dans notre tableau weatherConditionsGroup
+    if (currentWeatherText in weatherConditionsGroup) {
+      // on récup la class du background à mettre dans la className
+      const weatherBackgroundClass = weatherConditionsGroup[currentWeatherText].background;
+      // on met à jour l'état du background dans le state
+      setBackgroundClass(weatherBackgroundClass);
+    } else {
+      // Sinon on affiche les erreurs 
+      console.error(`Aucune correspondance trouvée pour les conditions météorologiques actuelles : ${currentWeatherText}`);
+    }
+  }, [currentWeatherText]); 
 
 
    //fetch current data weather
@@ -251,9 +262,8 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className='container'>
+      <div className={`container ${backgroundClass}`}>
      
-
         {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
 
@@ -279,16 +289,14 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
          {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
         <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques}/>
 
-       
-        <div className='shape'>
+        {/* <div className='shape'>
           <div className='shape-absolute'>
             <p>
               {currentWeather?.current?.precip_mm}
             </p>
           </div>
-        </div>
+        </div> */}
         
-
         <div className='carousel-container'>
           <Radio.Group
             onChange={handlePositionChange}
