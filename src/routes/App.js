@@ -30,7 +30,8 @@ import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
 import DetailCard from '../components/DetailCard.js';
 import Precipitation from '../components/Precipitation.js';
-import WeatherIcon from "../components/WeatherIcon.js"
+import WeatherIcon from "../components/WeatherIcon.js";
+import WeatherImage from '../components/WeatherImage.js'
 
 
 //import des feuilles de styles
@@ -84,7 +85,7 @@ const App = () => {
   useEffect(() => {
     const fetchMemes = async () => {
       try {
-        const response = await fetch('http://localhost:7000/memes');
+        const response = await fetch('http://localhost:3500/memes');
         const data = await response.json();
         setMemes(data);
       } catch (error) {
@@ -98,7 +99,7 @@ const App = () => {
   useEffect(() => {
     const fetchMusiques = async () => {
       try {
-        const response = await fetch('http://localhost:7000/musiques');
+        const response = await fetch('http://localhost:3500/musiques');
         const data = await response.json();
         setMusiques(data);
       } catch (error) {
@@ -183,9 +184,19 @@ const App = () => {
   useEffect(() => {
     const weatherSoundMap = {
       'Sunny': 'sun',
+      'Heatwave': 'sun',
+
       'Partly cloudy': 'cloudy',
       'Cloudy': 'cloudy',
       'Overcast': 'cloudy',
+      'Wind': 'cloudy',
+      'Fog': 'cloudy',
+      'Mist': 'cloudy',
+      'Freezing fog': 'cloudy',
+
+      'Patchy light drizzle': 'rain',
+      'Light drizzle': 'rain',
+
       'Patchy rain possible': 'rain',
       'Moderate or heavy freezing rain': 'rain',
       'Light freezing rain': 'rain',
@@ -198,38 +209,34 @@ const App = () => {
       'Moderate or heavy rain shower': 'rain',
       'Patchy light rain': 'rain',
       'Torrential rain shower': 'rain',
-      'Wind': 'wind',
-      'Blowing snow': 'snow',
-      'Patchy snow possible': 'snow',
-      'Patchy sleet possible': 'snow',
-      'Blizzard': 'snow',
-      'Light snow showers': 'snow',
-      'Moderate or heavy snow showers': 'snow',
-      'Patchy light snow with thunder': 'snow',
-      'Moderate or heavy snow with thunder': 'snow',
-      'Moderate or heavy sleet': 'snow',
-      'Patchy light snow': 'snow',
-      'Light snow': 'snow',
-      'Patchy moderate snow': 'snow',
-      'Moderate snow': 'snow',
-      'Patchy heavy snow': 'snow',
-      'Heavy snow': 'snow',
-      'Patchy freezing drizzle possible': 'freezing',
-      'Freezing drizzle': 'freezing',
-      'Light sleet': 'freezing',
-      'Light sleet showers': 'freezing',
-      'Moderate or heavy sleet showers': 'freezing',
-      'Light showers of ice pellets': 'freezing',
-      'Ice pellets': 'verglas',
-      'Thundery outbreaks possible': 'thunderstorm',
-      'Patchy light rain with thunder': 'thunderstorm',
-      'Moderate or heavy rain with thunder': 'thunderstorm',
-      'Heatwave': 'heatwave',
-      'Fog': 'fog',
-      'Mist': 'fog',
-      'Freezing fog': 'fog',
-      'Patchy light drizzle': 'fog',
-      'Light drizzle': 'fog',
+      'Blowing snow': 'rain',
+      'Patchy snow possible': 'rain',
+      'Patchy sleet possible': 'rain',
+      'Blizzard': 'rain',
+      'Light snow showers': 'rain',
+      'Moderate or heavy snow showers': 'rain',
+      'Patchy light snow with thunder': 'rain',
+      'Moderate or heavy snow with thunder': 'rain',
+      'Moderate or heavy sleet': 'rain',
+      'Patchy light snow': 'rain',
+      'Light snow': 'rain',
+      'Patchy moderate snow': 'rain',
+      'Moderate snow': 'rain',
+      'Patchy heavy snow': 'rain',
+      'Heavy snow': 'rain',
+      'Patchy freezing drizzle possible': 'rain',
+      'Freezing drizzle': 'rain',
+      'Light sleet': 'rain',
+      'Light sleet showers': 'rain',
+      'Moderate or heavy sleet showers': 'rain',
+      'Light showers of ice pellets': 'rain',
+      'Ice pellets': 'rain',
+      'Thundery outbreaks possible': 'rain',
+      'Patchy light rain with thunder': 'rain',
+      'Moderate or heavy rain with thunder': 'rain',
+
+      
+     
     };
 
     if (currentWeatherText && musiques.length > 0) {
@@ -465,7 +472,8 @@ const App = () => {
           <TbCloudQuestion className="mobile-icon" onClick={handleMobileIconClick} />
           {/* <BiMessageSquareDetail className="mobile-icon" onClick={handleMobileIconClick} /> */}
 
-          {currentWeather && <WeatherIcon currentWeather={currentWeather} />}
+          {currentWeather && <WeatherImage currentWeather={currentWeather} />}
+          {/* {currentWeather && <WeatherIcon currentWeather={currentWeather} />} */}
           {/* <img src={currentWeather?.current?.condition?.icon} alt="" /> */}
           {/* <p>{currentWeather?.current?.condition?.text}</p> */}
         </div>
