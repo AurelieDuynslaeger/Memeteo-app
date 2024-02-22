@@ -101,19 +101,22 @@ const App = () => {
 
   //fetch current data weather
   useEffect(() => {
-    const weatherData = async () => {
-      let apiUrl;
-      if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&alerts=yes`;
-      } else {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes&alerts=yes`;
+    const fetchWeatherData = async () => {
+      try {
+        let apiUrl;
+        if (weatherInput) {
+          apiUrl = `http://localhost:7001/testApi/city/${weatherInput}`;
+        } else {
+          apiUrl = `http://localhost:7001/testApi/city/Sunnyday`;
+        }
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        setCurrentWeather(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données météorologiques:', error);
       }
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      setCurrentWeather(data);
     };
-
-    weatherData();
+    fetchWeatherData();
   }, [weatherInput]);
 
   /*fetch forecast 24h*/
@@ -166,7 +169,7 @@ const App = () => {
     // Appel de l'API avec la city soumise dans la nav
     setWeatherInput(city);
     try {
-      const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes`);
+      const response = await fetch(`http://localhost:7001/testApi/city/q=${city}&aqi=yes`);
       const data = await response.json();
 
       setCurrentWeather(data);
@@ -283,7 +286,7 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
 
         {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
         <CurrentCity 
-        currentWeather={forecastWeather}  
+        currentWeather={currentWeather}  
         handleCityClick={handleCityClick} 
         />
 
