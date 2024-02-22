@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import WeatherConditionsGroup from '../datas/weatherConditionsGroup'; // Import du fichier contenant les données de WeatherMappings
-import { Switch } from 'antd';
 
 const WeatherMeme = ({ currentWeatherText, memes, musiques, isMuted }) => {
   const [selectedMeme, setSelectedMeme] = useState(null);

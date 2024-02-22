@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio, Switch } from 'antd';
+import { CiVolumeMute, CiVolumeHigh } from "react-icons/ci";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime, hourConvert, formatDay } from '../utils/functions.js';
@@ -258,9 +259,11 @@ const App = () => {
             <p>🌙</p>
           </div>
           <div className='sound-display'>
-            <p>🔇</p>
-            <Switch onClick={toggleMute} />
-            <p>🔊</p>
+            <Switch
+              checked={!isMuted}
+              onChange={toggleMute}
+              className={isMuted ? 'muted-switch' : 'unmuted-switch'}
+            />
           </div>
 
         {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}

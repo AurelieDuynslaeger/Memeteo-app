@@ -218,3 +218,14 @@
     }
   }
 }
+
+//récup des class ant design pour pouvoir mettre en fond du toggle une image 🔇🔊
+.muted-switch .ant-switch-handle::before {
+  background-color: white; 
+  background-image: url('../assets/icons/sound-mute.svg');
+}
+
+.unmuted-switch .ant-switch-handle::before {
+  background-color: white; 
+  background-image: url('../assets/icons/sound-display.svg');
+}
