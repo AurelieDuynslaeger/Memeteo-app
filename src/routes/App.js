@@ -293,8 +293,7 @@ const App = () => {
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className={isDarkMode ? "dark-mode" : "light-mode"}>
-        <div className={`container ${backgroundClass}`}>
+      <div className={isDarkMode ? `container dark-mode` : `container ${backgroundClass}`}>
           {/* HEADER = searchBox + params (light/dark mode + sound) */}
           <header>
             {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
@@ -386,7 +385,6 @@ const App = () => {
             </div>
           </main>
         </div>
-      </div>
     );
   }
 };
