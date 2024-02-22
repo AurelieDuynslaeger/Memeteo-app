@@ -1,6 +1,6 @@
 import React from "react"
 import blizzard from "../assets/Weather Icons/blizzard.png";
-import blowingSnow from "../assets/Weather Icons/blowingSnow.png";
+// import blowingSnow from "../assets/Weather Icons/blowingSnow.png";
 import cloudyDay from "../assets/Weather Icons/cloudyDay.png";
 import cloudyNight from "../assets/Weather Icons/cloudyNight.png";
 import fogDay from "../assets/Weather Icons/fogDay.png";
@@ -15,10 +15,10 @@ import icePellets from "../assets/Weather Icons/icePellets.png";
 import lightDrizzleDay from "../assets/Weather Icons/LightDrizzleDay.png";
 import lightDrizzleNight from "../assets/Weather Icons/LightDrizzleNight.png";
 import lightFreezinRain from "../assets/Weather Icons/lightFreezingRain.png";
-import lightRain from "../assets/Weather Icons/lightRain.png";
+// import lightRain from "../assets/Weather Icons/lightRain.png";
 import lightRainShowerDay from "../assets/Weather Icons/lightRainShowerDay.png";
 import lightRainShowerNight from "../assets/Weather Icons/lightRainShowerNight.png";
-import lightSleet from "../assets/Weather Icons/lightSleet.png";
+// import lightSleet from "../assets/Weather Icons/lightSleet.png";
 import lightSleetDay from "../assets/Weather Icons/lightSleetDay.png";
 import lightSleetNight from "../assets/Weather Icons/lightSleetNight.png";
 import lightSnowShowerDay from "../assets/Weather Icons/lightSnowShowerDay.png";
@@ -48,13 +48,13 @@ import patchySleetPossibleNight from "../assets/Weather Icons/patchySleetPossibl
 import patchySnowPossibleDay from "../assets/Weather Icons/patchySnowPossibleDay.png";
 import patchySnowPossibleNight from "../assets/Weather Icons/patchySnowPossibleNight.png";
 import pluieEparse from "../assets/Weather Icons/pluieEparse.png";
-import pollution from "../assets/Weather Icons/pollution.png";
+// import pollution from "../assets/Weather Icons/pollution.png";
 import SunnyDay from "../assets/Weather Icons/SunnyDay.png";
 import SunnyNight from "../assets/Weather Icons/SunnyNight.png";
 import ThunderyOutbreaksPossibleDay from "../assets/Weather Icons/ThunderyOutbreaksPossibleDay.png";
 import ThunderyOutbreaksPossibleNight from "../assets/Weather Icons/ThunderyOutbreaksPossibleNight.png";
 import torrentialRainShower from "../assets/Weather Icons/torrentialRainShower.png";
-import Wind from "../assets/Weather Icons/Wind.png";
+// import Wind from "../assets/Weather Icons/Wind.png";
 
 
 
