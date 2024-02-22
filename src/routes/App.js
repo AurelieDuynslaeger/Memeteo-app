@@ -15,7 +15,7 @@ import weatherConditionsGroup from "../datas/weatherConditionsGroup.js";
 //import des composants
 import CurrentCity from "../components/CurrentCity.js";
 import Day from "../components/Day.js";
-import HeaderNav from "../components/HeaderNav.js";
+import SearchBox from "../components/SearchBox.js";
 import Modal from "../components/Modal.js";
 // import Precipitation from '../components/Precipitation.js';
 import RainDrop from "../components/RainDrop";
@@ -299,7 +299,7 @@ const App = () => {
           <header>
             {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
             {showNavBar && (
-              <HeaderNav
+              <SearchBox
                 onWeatherInput={handleWeatherInput}
                 setLoadingCity={setLoadingCity}
               />

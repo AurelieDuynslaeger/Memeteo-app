@@ -1,0 +1,40 @@
+//2 div en forme de goutte toutes les 2 grace au radius
+//celle en absolute prend en height le % de chance de pluie via le composant RainDrop
+//avec la propriété style
+.rain-drop {
+    width: 5rem;
+    height:5rem;
+    background-color: white;
+    border-radius: 50%;
+    border-top-right-radius: 0;
+    transform: rotate(-45deg);
+    position: relative;
+    overflow: hidden;
+    border: 0.15rem solid white;
+    margin: 1rem;
+    margin-top: 3rem;
+    .filled-raindrop{
+      position: absolute;
+      bottom:0;
+      left: 0;
+      width: 100%;
+      background-color: blue;
+      border-radius: 50%;
+      border-top-right-radius: 0;
+      span {
+        position: absolute;
+        top:0;
+        color: black;
+        font-size: 0.6rem;
+  
+      }
+    }
+  }
+  
+  .rain-time{
+    color: black;
+    font-size: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  
+  
