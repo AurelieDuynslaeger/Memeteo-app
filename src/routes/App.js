@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 
-import nonprecip from '../assets/icons/nonPrecipitation.svg';
-import precip from '../assets/icons/precipitation.svg';
-
 //import composant Ant Design et React Icons
 import { Carousel, Radio } from 'antd';
 import { PiSoundcloudLogo } from "react-icons/pi";
@@ -16,7 +13,7 @@ import WeatherSkeleton from '../components/WeatherSkeleton.js';
 import Week from '../components/Week.js';
 import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
-import Precipitation from '../components/Precipitation.js';
+// import Precipitation from '../components/Precipitation.js';
 import CurrentCity from '../components/CurrentCity.js'
 import Modal from '../components/Modal.js';
 import WeatherImage from '../components/WeatherImage.js';
@@ -44,10 +41,10 @@ const App = () => {
   const [weatherInput, setWeatherInput] = useState('');
   //modal Infos Prévisions / Current
   const [selectedDayInfo, setSelectedDayInfo] = useState(null);
-   //Recupération du Meme
-   const [memes, setMemes] = useState([]);
-   //Récupération du son
-   const [musiques, setMusiques] = useState([]);
+  //Recupération du Meme
+  const [memes, setMemes] = useState([]);
+  //Récupération du son
+  const [musiques, setMusiques] = useState([]);
   //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
   const [autoplayEnabled, setAutoplayEnabled] = useState(false);
   //carousel dots
@@ -69,7 +66,7 @@ const App = () => {
     const response = await fetch(apiUrl);
     return response.json()
   }
-  useEffect(()=> {
+  useEffect(() => {
     const fetchMemeSoundData = async () => {
       const displayMeme = await fetchData('memes');
       setMemes(displayMeme);
@@ -94,11 +91,11 @@ const App = () => {
       // Sinon on affiche les erreurs 
       console.error(`Aucune correspondance trouvée pour les conditions météorologiques actuelles : ${currentWeatherText}`);
     }
-  }, [currentWeatherText]); 
+  }, [currentWeatherText]);
 
 
-   //fetch current data weather
-   useEffect(() => {
+  //fetch current data weather
+  useEffect(() => {
     const weatherData = async () => {
       let apiUrl;
       if (weatherInput) {
@@ -159,8 +156,8 @@ const App = () => {
 
   //saisie input et à la soumission la Navbar disparait
   const handleWeatherInput = async (city) => {
-  setLoadingCity(true);
-  setWeatherInput(city);
+    setLoadingCity(true);
+    setWeatherInput(city);
     // Appel de l'API avec la city soumise dans la nav
     setWeatherInput(city);
     try {
@@ -192,31 +189,32 @@ const App = () => {
     const avghumidity = day.day.avghumidity;
     const uv = day.day.uv;
     setSelectedDayInfo({ date, sunrise, sunset, maxTemp, minTemp, rain, wind, avgtemp_c, avghumidity, uv });
-};
-const handleCloseModal = () => {
+  };
+  const handleCloseModal = () => {
     setSelectedDayInfo(null);
-};
+  };
 
-///// Carrousel page 1 pour la météo des 5 prochains jours /////
-const days = forecastWeather7.forecast?.forecastday?.map((day, index) => {
-  const dayDate = new Date(day.date);
-  return (
-    <div className="week" key={index}>
-      <Week
-        day={formatDay(dayDate)}
-        date={format(day.date, 'dd', { locale: fr })}
-        weather={day.day.condition.code}
-        temperature={day.day.avgtemp_c}
-        onClick={() => handleDayClick(day)}
-      />
-    </div>
-  );
-});
+  ///// Carrousel page 1 pour la météo des 5 prochains jours /////
+  const days = forecastWeather7.forecast?.forecastday?.map((day, index) => {
+    const dayDate = new Date(day.date);
+    return (
+      <div className="week" key={index}>
+        <Week
+          key={index}
+          day={formatDay(dayDate)}
+          date={format(day.date, 'dd', { locale: fr })}
+          weather={day.day.condition.code}
+          temperature={day.day.avgtemp_c}
+          onClick={() => handleDayClick(day)}
+        />
+      </div>
+    );
+  });
 
-//on récupre l'heure actuelle
-const currentTime = new Date().getHours();
-//on filtre les prévisions par heure à PARTIR de l'heure actuelle
-const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
+  //on récupre l'heure actuelle
+  const currentTime = new Date().getHours();
+  //on filtre les prévisions par heure à PARTIR de l'heure actuelle
+  const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
   (
     <div className="MiniCards" key={index}>
       {/* substr extrait une partie de la chaîne de caractères hour.time. Elle commence à l'index 11 (pour obtenir les deux premiers caractères de l'heure) et extrait 2 caractères (pour obtenir les heures). */}
@@ -232,39 +230,39 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
   ));
 
   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
-  const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
+  // const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
+  //   forecastWeather.forecast.forecastday.map((day, index) =>
+  //   (
+  //     <div className="precip" key={index}>
+  //       {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
+  //         <Precipitation
+  //           key={index}
+  //           minutes={formatTime(hour.time)}
+  //           rain={hour.chance_of_rain > 0 ? (
+  //             <img src={precip} alt="Precipitating" />) :
+  //             (<img src={nonprecip} alt="Not Precipitating" />)}
+  //         />
+  //       ))}
+  //     </div>
+  //   )
+  //   )
+
+  //test composant RainDrop pour le % de pluie
+  // const rainTest = forecastWeather?.forecast?.forecastday;
+  // console.log('log du rest pluie' ,rainTest);
+  ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
+  const rainPercent = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
     forecastWeather.forecast.forecastday.map((day, index) =>
     (
       <div className="precip" key={index}>
-       {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
-          <Precipitation
-            key={index}
-            minutes={formatTime(hour.time)}
-            rain={hour.chance_of_rain > 0 ? (
-              <img src={precip} alt="Precipitating" />) :
-              (<img src={nonprecip} alt="Not Precipitating" />)}
-          />
+        {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
+          <div>
+            <p className='rain-time'>{formatTime(hour.time)}</p>
+            <RainDrop pourcentage={hour.chance_of_rain} />
+          </div>
         ))}
       </div>
       )
-    )
-
-//test composant RainDrop pour le % de pluie
-// const rainTest = forecastWeather?.forecast?.forecastday;
-// console.log('log du rest pluie' ,rainTest);
-      ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
-  const rainPercent = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
-  forecastWeather.forecast.forecastday.map((day, index) =>
-  (
-    <div className="precip" key={index}>
-     {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
-      <div>
-        <p className='rain-time'>{formatTime(hour.time)}</p>
-        <RainDrop pourcentage={hour.chance_of_rain}/>
-      </div>
-      ))}
-    </div>
-    )
     )
 
 
@@ -274,14 +272,14 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
   } else {
     return (
       <div className={`container ${backgroundClass}`}>
-     
+
         {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
 
-       {/* test pour activer le son, désactivé par défaut */}
-       <div className='sound-display'>
+        {/* test pour activer le son, désactivé par défaut */}
+        <div className='sound-display'>
           <label >
-            <PiSoundcloudLogo className='sound-icon'/>
+            <PiSoundcloudLogo className='sound-icon' />
           </label>
           <input
             type="checkbox"
@@ -289,29 +287,19 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
             onChange={(e) => setAutoplayEnabled(e.target.checked)}
             className='sound-check'
           />
-       </div>
+        </div>
 
         {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
-        <CurrentCity 
-        currentWeather={forecastWeather}  
-        handleCityClick={handleCityClick} 
+        <CurrentCity
+          currentWeather={forecastWeather}
+          handleCityClick={handleCityClick}
         />
-        <WeatherImage currentWeather={currentWeatherText}/>
 
-         {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
-        <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques}/>
+        <WeatherImage currentWeather={currentWeatherText} />
 
-        <div>
-          {rainPercent}
-        </div>
-        {/* <div className='shape'>
-          <div className='shape-absolute'>
-            <p>
-              {currentWeather?.current?.precip_mm}
-            </p>
-          </div>
-        </div> */}
- 
+        {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
+        <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} />
+
         <div className='carousel-container'>
           <Radio.Group
             onChange={handlePositionChange}
@@ -334,14 +322,14 @@ const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forec
             </div>
             <div>
               <div className="precip">
-                {minutes}
+                {rainPercent}
               </div>
             </div>
           </Carousel>
         </div>
         <>
-        {/* modal déclenchée au clik sur un jour du carousel */}
-        {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
+          {/* modal déclenchée au clik sur un jour du carousel */}
+          {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
         </>
       </div>
 
