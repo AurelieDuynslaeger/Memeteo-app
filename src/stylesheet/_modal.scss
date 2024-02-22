@@ -1,0 +1,36 @@
+//modal pour le détail d'un jour à venir au clik sur le composant week
+.modal {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 2rem;
+    border-radius: 2rem;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    backdrop-filter: blur(40px);
+    width: 80%; 
+    height: 30%; 
+    max-width: 40rem;
+    max-height: 25rem; 
+    .modal-content{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      h5 {
+        text-align: center;
+        text-decoration: underline;
+        margin-bottom: 1rem;
+        margin-top: 0;
+      }
+      .modal-part {
+        display: flex;
+        padding:0.3rem;
+        .details-card {
+          flex-basis: 30%;
+          text-align: center;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }

@@ -7,6 +7,8 @@ import precip from "../assets/icons/precipitation.svg";
 //import composant Ant Design et React Icons
 import { Carousel, Radio, Switch } from "antd";
 import { PiSoundcloudLogo } from "react-icons/pi";
+
+//import format de date-fns
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
@@ -15,15 +17,15 @@ import { formatTime, hourConvert, formatDay } from "../utils/functions.js";
 // import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
 
 //import des composants
-import WeatherSkeleton from "../components/WeatherSkeleton.js";
-import Week from "../components/Week.js";
-import Day from "../components/Day.js";
-import SearchBox from "../components/SearchBox.js";
-import Precipitation from "../components/Precipitation.js";
 import CurrentCity from "../components/CurrentCity.js";
+import Day from "../components/Day.js";
 import Modal from "../components/Modal.js";
+import Precipitation from "../components/Precipitation.js";
+import SearchBox from "../components/SearchBox.js";
 import WeatherImage from "../components/WeatherImage.js";
 import WeatherMeme from "../components/WeatherMeme.js";
+import WeatherSkeleton from "../components/WeatherSkeleton.js";
+import Week from "../components/Week.js";
 
 //import des feuilles de styles
 import "../stylesheet/Root.scss";

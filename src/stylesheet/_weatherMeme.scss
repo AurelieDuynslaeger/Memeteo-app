@@ -1,0 +1,14 @@
+//position et taille du meme
+.weather-meme {
+    width: 50%;
+    margin: auto;
+    .meme-display{
+    border-radius: 1.5rem;
+    width:15rem;
+    height: 15rem;
+    }
+    &.show-mobile {
+      display: block;
+      z-index: 0;
+    }
+  }
