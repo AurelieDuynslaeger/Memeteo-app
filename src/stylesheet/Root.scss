@@ -1,5 +1,12 @@
-@use '_weatherskeleton';
 @use "./variables" as v;
+@use '_carrousel';
+@use '_currentcity';
+@use '_darkmode';
+@use '_searchBox';
+@use '_splashScreen';
+@use '_suggestionBox';
+@use '_weatherskeleton';
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body {
@@ -29,7 +36,6 @@ body {
 .container {
   width: 100%;
   margin: auto;
-  font-family: "Poppins", sans-serif;
   position: relative;
 }
 
@@ -50,59 +56,6 @@ body {
   }
  
 }
-
-// CurrentCity Component style
-.city {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  margin: auto;
-  .current-temp {
-    font-size: 6.5rem;
-    margin-top: 1rem;
-    margin-bottom: -1rem;
-    font-weight: 300;
-  }
-  .city-search {
-    display: flex;
-    align-items: center;
-    .city-name {
-      font-size: 1.3rem;
-      margin: 0 1rem;
-      font-weight: 800;
-    }
-    .search-icon {
-      width: 0.8rem;
-      }
-    }
-    //taille de l'icone affiché à l'acceuil
-    .icon-display svg {
-      // z-index: -10;
-      // position: absolute;
-      // top:-2rem;
-      // right:-3rem;
-      margin-top: 1rem;
-      width: 7rem;
-      height: 7rem;
-    }
-}
-
-
-
-.SplashScreen-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: v.$color-default;
-
-  .LogoMemeteo {
-    max-width: 60%;
-  }
-}
-
 
 
 //position et taille du meme

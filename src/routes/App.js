@@ -27,8 +27,6 @@ import WeatherMeme from "../components/WeatherMeme.js";
 
 //import des feuilles de styles
 import "../stylesheet/Root.scss";
-import "../stylesheet/_carrousel.scss";
-import "../stylesheet/_darkmode.scss";
 
 const App = () => {
   //Darkmode

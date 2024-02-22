@@ -1,0 +1,37 @@
+
+// CurrentCity Component style
+.city {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: auto;
+    .current-temp {
+      font-size: 6.5rem;
+      margin-top: 1rem;
+      margin-bottom: -1rem;
+      font-weight: 300;
+    }
+    .city-search {
+      display: flex;
+      align-items: center;
+      .city-name {
+        font-size: 1.3rem;
+        margin: 0 1rem;
+        font-weight: 800;
+      }
+      .search-icon {
+        width: 0.8rem;
+        }
+      }
+      //taille de l'icone affiché à l'acceuil
+      .icon-display svg {
+        // z-index: -10;
+        // position: absolute;
+        // top:-2rem;
+        // right:-3rem;
+        margin-top: 1rem;
+        width: 7rem;
+        height: 7rem;
+      }
+  }
