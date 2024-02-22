@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 //import composant Ant Design et React Icons
-import { Carousel, Radio } from 'antd';
+import { Carousel, Radio, Switch } from 'antd';
 import { PiSoundcloudLogo } from "react-icons/pi";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -24,11 +24,15 @@ import RainDrop from '../components/RainDrop';
 //import des feuilles de styles
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
-
+import "../stylesheet/darkmode.scss"
 
 
 const App = () => {
-
+  //Darkmode
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
   //météo a l'instant T
   const [currentWeather, setCurrentWeather] = useState({});
   //météo prévisions 24h (pluie et heure par heure)
@@ -271,13 +275,20 @@ const App = () => {
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className={`container ${backgroundClass}`}>
+      <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+        <div className={`container ${backgroundClass}`} >
 
         {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
 
-        {/* test pour activer le son, désactivé par défaut */}
-        <div className='sound-display'>
+        <div className='icon'>
+            <p>🔆</p>
+            <Switch onClick={toggleDarkMode} />
+            <p>🌙</p>
+          </div>
+
+       {/* test pour activer le son, désactivé par défaut */}
+       <div className='sound-display'>
           <label >
             <PiSoundcloudLogo className='sound-icon' />
           </label>
@@ -295,7 +306,7 @@ const App = () => {
           handleCityClick={handleCityClick}
         />
 
-        <WeatherImage currentWeather={currentWeatherText} />
+        {currentWeather && <WeatherImage currentWeather={currentWeather} />}
 
         {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
         <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} />
@@ -332,7 +343,7 @@ const App = () => {
           {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
         </>
       </div>
-
+      </div>
     )
   }
 }
