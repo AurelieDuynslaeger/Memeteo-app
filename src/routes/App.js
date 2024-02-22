@@ -19,6 +19,7 @@ import Modal from '../components/Modal.js';
 import WeatherImage from '../components/WeatherImage.js';
 import WeatherMeme from '../components/WeatherMeme.js';
 import RainDrop from '../components/RainDrop';
+import alertIcon from "../assets/icons/alert-icon.svg"
 
 
 //import des feuilles de styles
@@ -28,6 +29,8 @@ import "../stylesheet/darkmode.scss"
 
 
 const App = () => {
+
+  
   //Darkmode
   const [isDarkMode, setIsDarkMode] = useState(false);
   const toggleDarkMode = () => {
@@ -63,6 +66,7 @@ const App = () => {
   // Constante pour stocker le texte des conditions météos actuelles
   //gestion du background, des memes et des sons
   const currentWeatherText = currentWeather?.current?.condition?.text;
+  console.log(currentWeatherText);
 
   //Fetch pour aller chercher les memes et les sons sur notre API
   const fetchData = async (endpoint) => {
@@ -150,6 +154,7 @@ const App = () => {
   }, [weatherInput]);
 
 
+
   /*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
   const handleCityClick = () => {
     console.log("déclenché");
@@ -233,24 +238,6 @@ const App = () => {
     </div>
   ));
 
-  ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
-  // const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
-  //   forecastWeather.forecast.forecastday.map((day, index) =>
-  //   (
-  //     <div className="precip" key={index}>
-  //       {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
-  //         <Precipitation
-  //           key={index}
-  //           minutes={formatTime(hour.time)}
-  //           rain={hour.chance_of_rain > 0 ? (
-  //             <img src={precip} alt="Precipitating" />) :
-  //             (<img src={nonprecip} alt="Not Precipitating" />)}
-  //         />
-  //       ))}
-  //     </div>
-  //   )
-  //   )
-
   //test composant RainDrop pour le % de pluie
   // const rainTest = forecastWeather?.forecast?.forecastday;
   // console.log('log du rest pluie' ,rainTest);
@@ -260,7 +247,7 @@ const App = () => {
     (
       <div className="precip" key={index}>
         {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
-          <div>
+          <div key={index}>
             <p className='rain-time'>{formatTime(hour.time)}</p>
             <RainDrop pourcentage={hour.chance_of_rain} />
           </div>
@@ -268,6 +255,26 @@ const App = () => {
       </div>
       )
     )
+
+    const alertsList = forecastWeather.forecast &&
+    forecastWeather.alerts && forecastWeather.alerts.alert.map((alert, index) => {
+      return (
+        <div key={index} className='alerts-display'>
+          <img src={alertIcon} alt="" className='alert-icon'/>
+          <p className='alert-event'> {alert.event} :  {alert.desc}</p>
+          <p className='alert-event'>{format(alert.effective, 'HH', { locale: fr })}h</p>
+          {/* Green warning for wind */}
+        </div>
+      )
+    });
+
+    
+    //code couleur des alertes météo : vert-green, jaune-yellow, orange-idem, rouge-red => dots ou panneau au lieu du texte definissant la couleur ? 
+    //exclure le vert ? et n'afficher que les alertes allant de jaune à rouge ?
+    //if event includes "green" => no display
+    //else if event includes yellow => display icone concaténer avant le reste de la description
+    //ne pas inclure le for mettre : "traduction de l'event vent, pluie etc..." : "heure"
+    // etc pr orange ou rouge et remplacer warning par :  ⚠️ "Vigilance" 🟡🟠🔴 ": Vent", "heure";
 
 
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
@@ -310,6 +317,10 @@ const App = () => {
 
         {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
         <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} />
+
+        {/* Alertes affichées s'il la récup du forecast en contient */}
+        {alertsList}
+
 
         <div className='carousel-container'>
           <Radio.Group

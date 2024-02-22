@@ -167,7 +167,7 @@
 .rain-drop {
   width: 5rem;
   height:5rem;
-  background-color: white;
+  background-color: transparent;
   border-radius: 50%;
   border-top-right-radius: 0;
   transform: rotate(-45deg);
@@ -181,14 +181,15 @@
     bottom:0;
     left: 0;
     width: 100%;
-    background-color: blue;
+    background-color: rgba(0, 0, 255, 0.4);
+    // background-color: blue;
     border-radius: 50%;
     border-top-right-radius: 0;
     span {
       position: absolute;
       top:0;
-      color: black;
-      font-size: 0.6rem;
+      color: white;
+      font-size: 0.8rem;
 
     }
   }
@@ -198,4 +199,13 @@
   color: black;
   font-size: 0.6rem;
   margin-bottom: 1rem;
+}
+.alerts-display {
+  display: flex;
+  .alert-icon {
+    width: 1.5rem;
+  }
+  .alert-event {
+    font-size: 0.5rem;
+  }
 }
