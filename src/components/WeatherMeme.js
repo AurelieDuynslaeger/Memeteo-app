@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import WeatherConditionsGroup from '../datas/weatherConditionsGroup'; // Import du fichier contenant les données de WeatherMappings
+import { Switch } from 'antd';
 
-const WeatherMeme = ({ currentWeatherText, memes, musiques }) => {
+const WeatherMeme = ({ currentWeatherText, memes, musiques, isMuted }) => {
   const [selectedMeme, setSelectedMeme] = useState(null);
   const [selectedMusique, setSelectedMusique] = useState(null);
  
@@ -53,7 +54,7 @@ const WeatherMeme = ({ currentWeatherText, memes, musiques }) => {
       )}
       {selectedMusique && (
         <div>
-          <audio src={selectedMusique.musique} autoPlay />
+          <audio src={selectedMusique.musique} autoPlay loop muted={isMuted} />
         </div>
       )}
     </div>

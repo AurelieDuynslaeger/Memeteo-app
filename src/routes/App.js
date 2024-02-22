@@ -6,19 +6,18 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime, hourConvert, formatDay } from '../utils/functions.js';
 import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
+import alertIcon from "../assets/icons/alert-icon.svg"
 
 //import des composants
 import WeatherSkeleton from '../components/WeatherSkeleton.js';
 import Week from '../components/Week.js';
 import Day from '../components/Day.js';
 import HeaderNav from '../components/HeaderNav.js';
-// import Precipitation from '../components/Precipitation.js';
 import CurrentCity from '../components/CurrentCity.js'
 import Modal from '../components/Modal.js';
 import WeatherImage from '../components/WeatherImage.js';
 import WeatherMeme from '../components/WeatherMeme.js';
 import RainDrop from '../components/RainDrop';
-import alertIcon from "../assets/icons/alert-icon.svg"
 
 //import des feuilles de styles
 import "../stylesheet/Root.scss";
@@ -33,10 +32,12 @@ const App = () => {
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
+
+  const [isMuted, setIsMuted] = useState(true);
   //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
-  const [autoplayEnabled, setAutoplayEnabled] = useState(false);
-  const toggleSound = () => {
-    setAutoplayEnabled(!autoplayEnabled);
+  //Fonction pour activer/désactiver le mute
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
   };
 
   // données météo current et forecast :)
@@ -182,24 +183,26 @@ const App = () => {
     );
   });
 
+//on récupère la date actuelle
+  const currentDate = new Date().toISOString().split('T')[0];
 
-  //on récupre l'heure actuelle
+  //on récupère l'heure actuelle
   const currentTime = new Date().getHours();
   //on filtre les prévisions par heure à PARTIR de l'heure actuelle
   const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index) =>
   (
     <div className="MiniCards" key={index}>
-      {/* substr extrait une partie de la chaîne de caractères hour.time. Elle commence à l'index 11 (pour obtenir les deux premiers caractères de l'heure) et extrait 2 caractères (pour obtenir les heures). */}
-      {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
-        <Day
-          key={index}
-          time={formatTime(hour.time)}
-          weather={hour.condition.code}
-          temperature={hour.temp_c}
-        />
-      ))}
-    </div>
-  ));
+    {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure du jour*/}
+    {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
+      <Day
+        key={index}
+        time={formatTime(hour.time)}
+        weather={hour.condition.code}
+        temperature={hour.temp_c}
+      />
+    ))}
+  </div>
+));
 
   //test composant RainDrop pour le % de pluie
   // const rainTest = forecastWeather?.forecast?.forecastday;
@@ -209,15 +212,14 @@ const App = () => {
     weatherData.forecast.forecastday.map((day, index) =>
     (
       <div className="precip" key={index}>
-        {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
-          <div key={index}>
-            <p className='rain-time'>{formatTime(hour.time)}</p>
-            <RainDrop pourcentage={hour.chance_of_rain} />
-          </div>
-        ))}
+    {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
+      <div key={index}>
+        <p className='rain-time'>{formatTime(hour.time)}</p>
+        <RainDrop pourcentage={hour.chance_of_rain} />
       </div>
-      )
-    )
+    ))}
+  </div>
+));
 
     const alertsList = weatherData.forecast &&
     weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
@@ -257,24 +259,9 @@ const App = () => {
           </div>
           <div className='sound-display'>
             <p>🔇</p>
-            <Switch onClick={toggleSound} />
+            <Switch onClick={toggleMute} />
             <p>🔊</p>
           </div>
-
-
-       {/* test pour activer le son, désactivé par défaut */}
-       {/* <div className='sound-display'>
-          <label > */}
-            {/* <PiSoundcloudLogo className='sound-icon' /> */}
-          {/* </label> */}
-          {/* <input
-            type="checkbox"
-            checked={autoplayEnabled}
-            onChange={(e) => setAutoplayEnabled(e.target.checked)}
-            className='sound-check'
-          /> */}
-
-        {/* </div> */}
 
         {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
         <CurrentCity
@@ -289,7 +276,7 @@ const App = () => {
         {weatherData && <WeatherImage currentWeather={weatherData} />}
 
         {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
-        <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} />
+        <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} isMuted={isMuted}/>
 
         <div className='carousel-container'>
           <Radio.Group
