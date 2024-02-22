@@ -72,6 +72,7 @@ body {
     margin-right: 100px;
   .group {
     display:flex;
+    align-items:center;
     section.currentWeatherForecast, section.currentWeatherImage {
       flex-basis:25%;
     }

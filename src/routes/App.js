@@ -276,7 +276,7 @@ const App = () => {
     forecastWeather.forecast &&
     forecastWeather.forecast.forecastday &&
     forecastWeather.forecast.forecastday.map((day, index) => (
-      <div className="precip" key={index}>
+      <>
         {day.hour
           .filter((hour) => parseInt(hour.time.substr(11, 2)) > currentTime)
           .map((hour, index) => (
@@ -285,7 +285,7 @@ const App = () => {
               <RainDrop pourcentage={hour.chance_of_rain} />
             </div>
           ))}
-      </div>
+      </>
     ));
 
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
@@ -350,7 +350,7 @@ const App = () => {
               </section>
             </div>
 
-            <div className="">
+            <div>
               <section className="carousel">
                 <div className="carousel-container">
                   <Radio.Group
