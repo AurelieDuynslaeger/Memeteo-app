@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-//import des assets
-import nonprecip from "../assets/icons/nonPrecipitation.svg";
-import precip from "../assets/icons/precipitation.svg";
-
 //import composant Ant Design et React Icons
 import { Carousel, Radio, Switch } from "antd";
 import { PiSoundcloudLogo } from "react-icons/pi";
@@ -14,14 +10,15 @@ import { fr } from "date-fns/locale";
 
 //import des fonctions utils
 import { formatTime, hourConvert, formatDay } from "../utils/functions.js";
-// import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
+import weatherConditionsGroup from "../datas/weatherConditionsGroup.js";
 
 //import des composants
 import CurrentCity from "../components/CurrentCity.js";
 import Day from "../components/Day.js";
+import HeaderNav from "../components/HeaderNav.js";
 import Modal from "../components/Modal.js";
-import Precipitation from "../components/Precipitation.js";
-import SearchBox from "../components/SearchBox.js";
+// import Precipitation from '../components/Precipitation.js';
+import RainDrop from "../components/RainDrop";
 import WeatherImage from "../components/WeatherImage.js";
 import WeatherMeme from "../components/WeatherMeme.js";
 import WeatherSkeleton from "../components/WeatherSkeleton.js";
@@ -61,10 +58,8 @@ const App = () => {
   };
   //permet l'affichage ou non du weather skeletton
   const [loadingCity, setLoadingCity] = useState(false);
-
   //état du background
-  const [backgroundClass, setBackgroundClass] = useState("sun-background");
-
+  const [backgroundClass, setBackgroundClass] = useState("");
   // Constante pour stocker le texte des conditions météos actuelles
   //gestion du background, des memes et des sons
   const currentWeatherText = currentWeather?.current?.condition?.text;
@@ -88,14 +83,21 @@ const App = () => {
   }, []);
 
   //couleur background dynamique
-  //  useEffect(() => {
-  //    const getWeatherBackgroundClass = () => {
-  //      const backgroundClass = weatherConditionsGroup[currentWeatherText];
-  //      console.log(backgroundClass.background);
-  //      setBackgroundClass(backgroundClass.background) ;
-  //    };
-  //    getWeatherBackgroundClass();
-  //  });
+  useEffect(() => {
+    //si le text des conditions météo est dans notre tableau weatherConditionsGroup
+    if (currentWeatherText in weatherConditionsGroup) {
+      // on récup la class du background à mettre dans la className
+      const weatherBackgroundClass =
+        weatherConditionsGroup[currentWeatherText].background;
+      // on met à jour l'état du background dans le state
+      setBackgroundClass(weatherBackgroundClass);
+    } else {
+      // Sinon on affiche les erreurs
+      console.error(
+        `Aucune correspondance trouvée pour les conditions météorologiques actuelles : ${currentWeatherText}`
+      );
+    }
+  }, [currentWeatherText]);
 
   //fetch current data weather
   useEffect(() => {
@@ -214,6 +216,7 @@ const App = () => {
     return (
       <div className="week" key={index}>
         <Week
+          key={index}
           day={formatDay(dayDate)}
           date={format(day.date, "dd", { locale: fr })}
           weather={day.day.condition.code}
@@ -247,7 +250,28 @@ const App = () => {
     ));
 
   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
-  const minutes =
+  // const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
+  //   forecastWeather.forecast.forecastday.map((day, index) =>
+  //   (
+  //     <div className="precip" key={index}>
+  //       {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
+  //         <Precipitation
+  //           key={index}
+  //           minutes={formatTime(hour.time)}
+  //           rain={hour.chance_of_rain > 0 ? (
+  //             <img src={precip} alt="Precipitating" />) :
+  //             (<img src={nonprecip} alt="Not Precipitating" />)}
+  //         />
+  //       ))}
+  //     </div>
+  //   )
+  //   )
+
+  //test composant RainDrop pour le % de pluie
+  // const rainTest = forecastWeather?.forecast?.forecastday;
+  // console.log('log du rest pluie' ,rainTest);
+  ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
+  const rainPercent =
     forecastWeather &&
     forecastWeather.forecast &&
     forecastWeather.forecast.forecastday &&
@@ -256,17 +280,10 @@ const App = () => {
         {day.hour
           .filter((hour) => parseInt(hour.time.substr(11, 2)) > currentTime)
           .map((hour, index) => (
-            <Precipitation
-              key={index}
-              minutes={formatTime(hour.time)}
-              rain={
-                hour.chance_of_rain > 0 ? (
-                  <img src={precip} alt="Precipitating" />
-                ) : (
-                  <img src={nonprecip} alt="Not Precipitating" />
-                )
-              }
-            />
+            <div>
+              <p className="rain-time">{formatTime(hour.time)}</p>
+              <RainDrop pourcentage={hour.chance_of_rain} />
+            </div>
           ))}
       </div>
     ));
@@ -277,12 +294,12 @@ const App = () => {
   } else {
     return (
       <div className={isDarkMode ? "dark-mode" : "light-mode"}>
-        <div className="container">
+        <div className={`container ${backgroundClass}`}>
           {/* HEADER = searchBox + params (light/dark mode + sound) */}
           <header>
             {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
             {showNavBar && (
-              <SearchBox
+              <HeaderNav
                 onWeatherInput={handleWeatherInput}
                 setLoadingCity={setLoadingCity}
               />
@@ -335,14 +352,6 @@ const App = () => {
                   musiques={musiques}
                 />
               </section>
-
-              {/* <div className='shape'>
-          <div className='shape-absolute'>
-            <p>
-              {currentWeather?.current?.precip_mm}
-            </p>
-          </div>
-        </div> */}
               <section className="carousel">
                 <div className="carousel-container">
                   <Radio.Group
@@ -360,7 +369,7 @@ const App = () => {
                       <div className="MiniCards">{filteredHours}</div>
                     </div>
                     <div>
-                      <div className="precip">{minutes}</div>
+                      <div className="precip">{rainPercent}</div>
                     </div>
                   </Carousel>
                 </div>
