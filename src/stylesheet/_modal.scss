@@ -10,7 +10,7 @@
     z-index: 9999;
     backdrop-filter: blur(40px);
     width: 80%; 
-    height: 30%; 
+    min-height: 30%; 
     max-width: 40rem;
     max-height: 25rem; 
     .modal-content{

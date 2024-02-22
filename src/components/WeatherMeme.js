@@ -47,9 +47,7 @@ const WeatherMeme = ({ currentWeatherText, memes, musiques }) => {
   return (
     <div className="weather-meme">
       {selectedMeme && (
-        <div>
           <img src={selectedMeme.image} alt={selectedMeme.name} className="meme-display" />
-        </div>
       )}
       {selectedMusique && (
         <div>

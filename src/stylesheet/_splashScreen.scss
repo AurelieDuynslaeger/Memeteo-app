@@ -9,6 +9,9 @@
     background-color: v.$color-default;
   
     .LogoMemeteo {
-      max-width: 60%;
+      max-width: 50%;
+      @media screen and (min-width: v.$md-breakpoint) {
+        max-width: 30%;
+      }
     }
   }

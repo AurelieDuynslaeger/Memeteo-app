@@ -1,4 +1,16 @@
+@use "./variables" as v;
+
+.images-display {
+  display:flex;
+  justify-content:center;
+}
+
 .image-display{
-    width: 10rem;
-    height: 10rem;
+  width: 10rem;
+  height: 10rem;
+  @media screen and (min-width: v.$md-breakpoint) {
+    width: 15rem;
+    height: 15rem;
   }
+}
+

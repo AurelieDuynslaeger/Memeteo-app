@@ -341,9 +341,6 @@ const App = () => {
                   <WeatherImage currentWeather={currentWeather} />
                 )}
               </section>
-            </div>
-
-            <div className="group">
               <section className="meme">
                 {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
                 <WeatherMeme
@@ -352,6 +349,9 @@ const App = () => {
                   musiques={musiques}
                 />
               </section>
+            </div>
+
+            <div className="">
               <section className="carousel">
                 <div className="carousel-container">
                   <Radio.Group
