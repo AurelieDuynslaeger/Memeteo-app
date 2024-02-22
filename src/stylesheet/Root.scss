@@ -190,7 +190,6 @@
       top:0;
       color: white;
       font-size: 0.8rem;
-
     }
   }
 }
@@ -200,12 +199,22 @@
   font-size: 0.6rem;
   margin-bottom: 1rem;
 }
-.alerts-display {
+
+.alerts {
+  height: 4vh;
+  overflow: hidden;
+  width: 50%;
+  margin: auto;
   display: flex;
-  .alert-icon {
-    width: 1.5rem;
-  }
-  .alert-event {
-    font-size: 0.5rem;
+  flex-direction: column;
+  align-items: center;
+  .alerts-display {
+    display: flex;
+    .alert-icon {
+      width: 1.2rem;
+    }
+    .alert-event {
+      font-size: 0.5rem;
+    }
   }
 }

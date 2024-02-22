@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 
 //import composant Ant Design et React Icons
 import { Carousel, Radio, Switch } from 'antd';
-import { PiSoundcloudLogo } from "react-icons/pi";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime, hourConvert, formatDay } from '../utils/functions.js';
@@ -21,7 +20,6 @@ import WeatherMeme from '../components/WeatherMeme.js';
 import RainDrop from '../components/RainDrop';
 import alertIcon from "../assets/icons/alert-icon.svg"
 
-
 //import des feuilles de styles
 import "../stylesheet/Root.scss";
 import '../stylesheet/carrousel.scss';
@@ -30,18 +28,20 @@ import "../stylesheet/darkmode.scss"
 
 const App = () => {
 
-  
   //Darkmode
   const [isDarkMode, setIsDarkMode] = useState(false);
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
-  //météo a l'instant T
-  const [currentWeather, setCurrentWeather] = useState({});
-  //météo prévisions 24h (pluie et heure par heure)
-  const [forecastWeather, setForecastWeather] = useState({});
-  //météo prévisions 7 (jour-temps-icon)
-  const [forecastWeather7, setForecastWeather7] = useState({});
+  //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
+  const [autoplayEnabled, setAutoplayEnabled] = useState(false);
+  const toggleSound = () => {
+    setAutoplayEnabled(!autoplayEnabled);
+  };
+
+  // données météo current et forecast :)
+  const [weatherData, setWeatherData] = useState({});
+
   //état de la navBar à false, passe à true au clik sur la ville
   const [showNavBar, setShowNavBar] = useState(false);
   //menu input pour saisie de la ville
@@ -52,8 +52,7 @@ const App = () => {
   const [memes, setMemes] = useState([]);
   //Récupération du son
   const [musiques, setMusiques] = useState([]);
-  //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
-  const [autoplayEnabled, setAutoplayEnabled] = useState(false);
+
   //carousel dots
   const [dotPosition, setDotPosition] = useState('right');
   const handlePositionChange = ({ target: { value } }) => {
@@ -65,7 +64,7 @@ const App = () => {
   const [backgroundClass, setBackgroundClass] = useState('');
   // Constante pour stocker le texte des conditions météos actuelles
   //gestion du background, des memes et des sons
-  const currentWeatherText = currentWeather?.current?.condition?.text;
+  const currentWeatherText = weatherData?.current?.condition?.text;
   console.log(currentWeatherText);
 
   //Fetch pour aller chercher les memes et les sons sur notre API
@@ -102,65 +101,27 @@ const App = () => {
   }, [currentWeatherText]);
 
 
-  //fetch current data weather
+  //fetch des données météo
   useEffect(() => {
-    const weatherData = async () => {
+    const fetchWeatherData = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&aqi=yes&alerts=yes`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=5&aqi=no&alerts=yes`;
       } else {
-        apiUrl = `http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=Lille&aqi=yes&alerts=yes`;
+        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=5&aqi=no&alerts=yes';
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
-      setCurrentWeather(data);
-    };
-
-    weatherData();
-  }, [weatherInput]);
-
-  /*fetch forecast 24h*/
-  useEffect(() => {
-    const weatherDataForecast = async () => {
-      let apiUrl;
-      if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=1&aqi=yes&alerts=yes`;
-      } else {
-        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=1&aqi=yes&alerts=yes';
-      }
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      setForecastWeather(data);
-      // console.log("Nouvelles données de prévisions 24h :", data);
-    };
-    weatherDataForecast();
-  }, [weatherInput]);
-
-  /*fetch forecast 5jrs*/
-  useEffect(() => {
-    const weatherForecast7 = async () => {
-      let apiUrl;
-      if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=7&aqi=no&alerts=yes`;
-      } else {
-        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=7&aqi=no&alerts=yes';
-      }
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      setForecastWeather7(data);
+      setWeatherData(data);
       // console.log("Nouvelles données de prévisions 7 jours :", data);
     };
-    weatherForecast7();
+    fetchWeatherData();
   }, [weatherInput]);
-
-
-
+  
   /*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
   const handleCityClick = () => {
     console.log("déclenché");
     setShowNavBar(true);
-
-
   }
 
   //saisie input et à la soumission la Navbar disparait
@@ -170,10 +131,10 @@ const App = () => {
     // Appel de l'API avec la city soumise dans la nav
     setWeatherInput(city);
     try {
-      const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=5929e663f6c74ae192890247240802&q=${city}&aqi=yes`);
+      const response = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${city}&days=5&aqi=no&alerts=yes`);
       const data = await response.json();
 
-      setCurrentWeather(data);
+      setWeatherData(data);
       setShowNavBar(false);
       setLoadingCity(false);
     } catch (error) {
@@ -204,8 +165,9 @@ const App = () => {
   };
 
   ///// Carrousel page 1 pour la météo des 5 prochains jours /////
-  const days = forecastWeather7.forecast?.forecastday?.map((day, index) => {
+  const days = weatherData.forecast?.forecastday?.map((day, index) => {
     const dayDate = new Date(day.date);
+    console.log(format(day.date, 'dd', { locale: fr }));
     return (
       <div className="week" key={index}>
         <Week
@@ -220,10 +182,11 @@ const App = () => {
     );
   });
 
+
   //on récupre l'heure actuelle
   const currentTime = new Date().getHours();
   //on filtre les prévisions par heure à PARTIR de l'heure actuelle
-  const filteredHours = forecastWeather.forecast && forecastWeather.forecast.forecastday && forecastWeather.forecast.forecastday.map((day, index) =>
+  const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index) =>
   (
     <div className="MiniCards" key={index}>
       {/* substr extrait une partie de la chaîne de caractères hour.time. Elle commence à l'index 11 (pour obtenir les deux premiers caractères de l'heure) et extrait 2 caractères (pour obtenir les heures). */}
@@ -242,8 +205,8 @@ const App = () => {
   // const rainTest = forecastWeather?.forecast?.forecastday;
   // console.log('log du rest pluie' ,rainTest);
   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
-  const rainPercent = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
-    forecastWeather.forecast.forecastday.map((day, index) =>
+  const rainPercent = weatherData && weatherData.forecast && weatherData.forecast.forecastday &&
+    weatherData.forecast.forecastday.map((day, index) =>
     (
       <div className="precip" key={index}>
         {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
@@ -256,13 +219,12 @@ const App = () => {
       )
     )
 
-    const alertsList = forecastWeather.forecast &&
-    forecastWeather.alerts && forecastWeather.alerts.alert.map((alert, index) => {
+    const alertsList = weatherData.forecast &&
+    weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
       return (
         <div key={index} className='alerts-display'>
           <img src={alertIcon} alt="" className='alert-icon'/>
-          <p className='alert-event'> {alert.event} :  {alert.desc}</p>
-          <p className='alert-event'>{format(alert.effective, 'HH', { locale: fr })}h</p>
+          <p className='alert-event'> {alert.event} :  {format(alert.effective, 'HH', { locale: fr })}h</p>
           {/* Green warning for wind */}
         </div>
       )
@@ -293,34 +255,41 @@ const App = () => {
             <Switch onClick={toggleDarkMode} />
             <p>🌙</p>
           </div>
+          <div className='sound-display'>
+            <p>🔇</p>
+            <Switch onClick={toggleSound} />
+            <p>🔊</p>
+          </div>
+
 
        {/* test pour activer le son, désactivé par défaut */}
-       <div className='sound-display'>
-          <label >
-            <PiSoundcloudLogo className='sound-icon' />
-          </label>
-          <input
+       {/* <div className='sound-display'>
+          <label > */}
+            {/* <PiSoundcloudLogo className='sound-icon' /> */}
+          {/* </label> */}
+          {/* <input
             type="checkbox"
             checked={autoplayEnabled}
             onChange={(e) => setAutoplayEnabled(e.target.checked)}
             className='sound-check'
-          />
-        </div>
+          /> */}
+
+        {/* </div> */}
 
         {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
         <CurrentCity
-          currentWeather={forecastWeather}
+          currentWeather={weatherData}
           handleCityClick={handleCityClick}
         />
+        {/* Alertes affichées s'il la récup du forecast en contient */}
+        <div className='alerts'>
+          {alertsList}
+        </div>
 
-        {currentWeather && <WeatherImage currentWeather={currentWeather} />}
+        {weatherData && <WeatherImage currentWeather={weatherData} />}
 
         {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
         <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} />
-
-        {/* Alertes affichées s'il la récup du forecast en contient */}
-        {alertsList}
-
 
         <div className='carousel-container'>
           <Radio.Group
