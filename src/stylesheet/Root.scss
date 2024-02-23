@@ -229,3 +229,10 @@
   background-color: white; 
   background-image: url('../assets/icons/sound-display.svg');
 }
+
+.wind-combo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 30%;
+}

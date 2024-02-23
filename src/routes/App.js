@@ -157,10 +157,12 @@ const App = () => {
     const minTemp = day.day.mintemp_c;
     const rain = day.day.totalprecip_mm;
     const wind = day.day.maxwind_kph;
+    const wind_dir = weatherData?.current?.wind_dir;
+    const wind_dir_text = weatherData?.current?.wind_dir;
     const avgtemp_c = day.day.avgtemp_c;
     const avghumidity = day.day.avghumidity;
     const uv = day.day.uv;
-    setSelectedDayInfo({ date, sunrise, sunset, maxTemp, minTemp, rain, wind, avgtemp_c, avghumidity, uv });
+    setSelectedDayInfo({ date, sunrise, sunset, maxTemp, minTemp, rain, wind, wind_dir,wind_dir_text, avgtemp_c, avghumidity, uv });
   };
   const handleCloseModal = () => {
     setSelectedDayInfo(null);
