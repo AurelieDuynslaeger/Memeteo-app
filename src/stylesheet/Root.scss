@@ -243,3 +243,11 @@
   font-size: 2rem;
   margin: 1rem;
 }
+
+.ant-drawer-title {
+  font-family: "Poppins", sans-serif;
+}
+
+.ant-drawer-body, .ant-drawer-header{
+  background-color: v.$color-blue;
+}
