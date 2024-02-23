@@ -207,6 +207,7 @@ const App = () => {
         key={index}
         time={formatTime(hour.time)}
         weather={hour.condition.code}
+        isDay={hour.is_day}
         temperature={hour.temp_c}
       />
     ))}
