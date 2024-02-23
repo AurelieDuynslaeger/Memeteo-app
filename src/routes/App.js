@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
 //import composant Ant Design et React Icons
-import { Carousel, Radio, Switch } from 'antd';
-import { CiVolumeMute, CiVolumeHigh } from "react-icons/ci";
+import { Carousel, Drawer, Radio, Switch } from 'antd';
+import { MdOutlineSettingsSuggest } from "react-icons/md";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { formatTime, hourConvert, formatDay } from '../utils/functions.js';
@@ -44,6 +44,15 @@ const App = () => {
   // données météo current et forecast :)
   const [weatherData, setWeatherData] = useState({});
 
+  //etat du drawer pour les settings
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+
   //état de la navBar à false, passe à true au clik sur la ville
   const [showNavBar, setShowNavBar] = useState(false);
   //menu input pour saisie de la ville
@@ -83,9 +92,7 @@ const App = () => {
       const displaySound = await fetchData('musiques');
       setMusiques(displaySound)
     };
-
     fetchMemeSoundData();
-
   }, []);
 
   //couleur background dynamique
@@ -188,7 +195,6 @@ const App = () => {
 
 //on récupère la date actuelle
   const currentDate = new Date().toISOString().split('T')[0];
-
   //on récupère l'heure actuelle
   const currentTime = new Date().getHours();
   //on filtre les prévisions par heure à PARTIR de l'heure actuelle
@@ -255,18 +261,23 @@ const App = () => {
         {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
         {showNavBar && <HeaderNav onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />}
 
-        <div className='icon'>
-            <p>🔆</p>
-            <Switch onClick={toggleDarkMode} />
-            <p>🌙</p>
-          </div>
-          <div className='sound-display'>
-            <Switch
-              checked={!isMuted}
-              onChange={toggleMute}
-              className={isMuted ? 'muted-switch' : 'unmuted-switch'}
-            />
-          </div>
+        <MdOutlineSettingsSuggest className='settings-icon'onClick={showDrawer}/>
+        <>
+          <Drawer title="Paramètres" onClose={onClose} open={open}>
+              <div className='icon'>
+                  <p>🔆</p>
+                  <Switch onClick={toggleDarkMode} />
+                  <p>🌙</p>
+                </div>
+                <div className='sound-display'>
+                  <Switch
+                    checked={!isMuted}
+                    onChange={toggleMute}
+                    className={isMuted ? 'muted-switch' : 'unmuted-switch'}
+                  />
+                </div>
+          </Drawer>
+        </>
 
         {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
         <CurrentCity
@@ -319,6 +330,4 @@ const App = () => {
     )
   }
 }
-
-
 export default App

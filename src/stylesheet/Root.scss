@@ -230,9 +230,16 @@
   background-image: url('../assets/icons/sound-display.svg');
 }
 
+//span ajouté dans la modal pour placer l'icone de dir du vent, couplé a la detail card qui affiche les infos sur le vent forcément 😏
 .wind-combo{
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-basis: 30%;
+}
+
+
+.settings-icon {
+  font-size: 2rem;
+  margin: 1rem;
 }
