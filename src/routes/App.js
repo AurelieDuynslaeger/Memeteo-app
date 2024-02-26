@@ -284,11 +284,12 @@ weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
                     currentWeather={weatherData}
                     handleCityClick={handleCityClick}
                   />
+                  {/* test de placement de la div alerts afin qu'elle soit tjr sous la ville desktop OU mobile  */}
+                <div className='alerts'>
+                  {alertsList}
+                </div>
                 </section>
 
-                <section className='alerts'>
-                  {alertsList}
-                </section>
 
                 <section className="currentWeatherImage">
                   {weatherData && <WeatherImage currentWeather={weatherData}/>}
