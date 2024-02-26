@@ -22,6 +22,7 @@ const Alerts = (alertInfo) => {
     // Extreme cold = "Grand Froid"
 
     // Traduction de l'événement
+    //si dans la chaine retournée par l'api inclus "wind" (=true) alors au lieu de wind on affiche Vent etc...
     switch (true) {
         case event.includes("violent wind"):
             eventTranslate = "Vents Violents";
@@ -58,6 +59,7 @@ const Alerts = (alertInfo) => {
     }
 
     // Couleur de l'icône en fonction de l'événement de l'alerte (green, yellow, orange, red)
+    //si dans la chaine retournée par l'api inclus "green" (=true) alors au lieu de Green on affiche un circle icone Vert...
     switch (true) {
         case event.includes("Green"):
             iconColor = 'green';
@@ -80,6 +82,7 @@ const Alerts = (alertInfo) => {
             <p className='alert-event'>
                 Vigilance 
             </p>
+            {/* couleur de l'icone react dynamique en fonction de ce qui est retournée dans la chaine de l'api pour l'event */}
             <BsCircleFill color={iconColor} />
             <p className='alert-event'>
                 {eventTranslate} jusque {format(expires, 'HH', { locale: fr })}h
