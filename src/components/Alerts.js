@@ -10,6 +10,8 @@ const Alerts = (alertInfo) => {
     let iconColor = '';
     let eventTranslate = '';
 
+
+    //alertes météo les plus courantes récupérées sur Meteo france
     // Violent wind = vents violents
     // Wind = Vent
     // Rain-Flood = Pluie-Inondations
@@ -22,7 +24,7 @@ const Alerts = (alertInfo) => {
     // Extreme cold = "Grand Froid"
 
     // Traduction de l'événement
-    //si dans la chaine retournée par l'api inclus "wind" (=true) alors au lieu de wind on affiche Vent etc...
+    //si dans la chaine retournée par l'api => weatherData.alerts.alert.event = "Green Warning for wind" où "wind" (=true) alors au lieu de wind on affiche Vent etc...
     switch (true) {
         case event.includes("violent wind"):
             eventTranslate = "Vents Violents";
@@ -31,7 +33,7 @@ const Alerts = (alertInfo) => {
             eventTranslate = "Vent";
             break;
         case event.includes("flood"):
-            eventTranslate = "Pluie-Inondations";
+            eventTranslate = "Inondations";
             break;
         case event.includes("rain"):
             eventTranslate = "Pluie";
@@ -59,7 +61,7 @@ const Alerts = (alertInfo) => {
     }
 
     // Couleur de l'icône en fonction de l'événement de l'alerte (green, yellow, orange, red)
-    //si dans la chaine retournée par l'api inclus "green" (=true) alors au lieu de Green on affiche un circle icone Vert...
+    //si dans la chaine retournée par l'api => weatherData.alerts.alert.event = "Green Warning for wind" où "Green" (=true) alors au lieu de Green on affiche un circle icone Vert...
     switch (true) {
         case event.includes("Green"):
             iconColor = 'green';
@@ -85,6 +87,7 @@ const Alerts = (alertInfo) => {
             {/* couleur de l'icone react dynamique en fonction de ce qui est retournée dans la chaine de l'api pour l'event */}
             <BsCircleFill color={iconColor} />
             <p className='alert-event'>
+                {/* alert.event="wind" ou "flood" ou "thunderstorms", alors l'event est traduit grace au switch du dessus */}
                 {eventTranslate} jusque {format(expires, 'HH', { locale: fr })}h
             </p>
         </div>
