@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Form, Input, Button } from "antd";
-import { FaCheck } from "react-icons/fa";
+import React, { useEffect, useRef, useState } from "react";
+import { Input } from "antd";
+import { FaStar } from "react-icons/fa";
 import Logo from "../assets/memteo-logo-base.png";
 import { MdMyLocation } from "react-icons/md";
-
+import { IoSearch } from "react-icons/io5";
 
 //import des feuilles de styles
 import "../stylesheet/HeaderNav.scss";
@@ -12,50 +12,45 @@ import "../stylesheet/_suggestionBox.scss";
 //import des composants
 import SuggestionBox from "./SuggestionBox.js";
 
-
 export const HeaderNav = ({ onWeatherInput, setLoadingCity }) => {
   const [city, setCity] = useState("");
-
 
   // Suggestions de villes
   const [error, setError] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-
+  const [showFavoris, setShowFavoris] = useState(false);
 
   async function handleInputChange(value) {
     setCity(value);
-    //console.log("Input value after :", value);
-    if(value.length >= 3) {
+    if (value.length >= 3) {
       try {
-        const response = await fetch(`http://api.weatherapi.com/v1/search.json?key=5929e663f6c74ae192890247240802&q=${value}`);
+        const response = await fetch(
+          `http://api.weatherapi.com/v1/search.json?key=5929e663f6c74ae192890247240802&q=${value}`
+        );
         if (!response.ok) {
-          throw new Error('Ville non trouvée');
+          throw new Error("Ville non trouvée");
         }
 
         const data = await response.json();
 
         const suggestions = data.map((item) => `${item.name}, ${item.country}`);
-        console.log(suggestions);
         setSuggestions(suggestions || []);
         setError("");
         setShowSuggestions(true);
-
       } catch (error) {
         setSuggestions([]);
         setShowSuggestions(false);
       }
-    }
-    else {
+    } else {
       setSuggestions([]);
       setShowSuggestions(false);
     }
-  };
+  }
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log("Formulaire soumis", city);
-    if(error) {
+    if (error) {
       setError("Location not found");
     } else {
       setError("");
@@ -67,10 +62,10 @@ export const HeaderNav = ({ onWeatherInput, setLoadingCity }) => {
     }
   };
 
-
   function handleSuggestionClick(value) {
     setCity(value);
     setShowSuggestions(false);
+    setShowFavoris(false);
   }
 
   /* geolocalisation */
@@ -87,34 +82,43 @@ export const HeaderNav = ({ onWeatherInput, setLoadingCity }) => {
   return (
     <div className="navbar">
       <img src={Logo} alt="Logo Memetéo" className="logo" />
-
-      <Form layout="inline">
-        <Form.Item>
+      <div class="setCity">
+        <div>
           <MdMyLocation
-            title="Votre position actuelle" // when you hover, you can see this title
+            title="Votre position actuelle" // légende affichée lors du hover
             onClick={handleGeolocation}
-            className='geolocalisationIcon'
+            className="iconLarger"
           />
-        </Form.Item>
-        <Form.Item>
-          <Input
+        </div>
+        <div>
+          <FaStar
+            title="Vos favoris" // légende affichée lors du hover
+            onClick={() => {
+              setShowFavoris(!showFavoris);
+            }}
+            className="iconLarger"
+          />
+        </div>
+        <form>
+          <input
             placeholder="Tapez votre recherche ici..."
             value={city}
             onChange={(e) => handleInputChange(e.target.value)}
           />
           <SuggestionBox
-            {...{showSuggestions,
+            {...{
+              showSuggestions,
+              showFavoris,
               suggestions,
               handleSuggestionClick,
-              error}}
+              error,
+            }}
           />
-        </Form.Item>
-        <Form.Item>
-          <Button htmlType="submit" onClick={(e) => handleFormSubmit(e)}>
-            <FaCheck color="#51ADCE" />
-          </Button>
-        </Form.Item>
-      </Form>
+          <button htmlType="submit" onClick={(e) => handleFormSubmit(e)}>
+            <IoSearch class="iconSearch" />
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
