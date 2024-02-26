@@ -46,6 +46,7 @@ const App = () => {
 
   //etat du drawer pour les settings
   const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState('left');
   const showDrawer = () => {
     setOpen(true);
   };
@@ -236,8 +237,8 @@ const App = () => {
       return (
         <div key={index} className='alerts-display'>
           <img src={alertIcon} alt="" className='alert-icon'/>
-          <p className='alert-event'> {alert.event} :  {format(alert.effective, 'HH', { locale: fr })}h</p>
-          {/* Green warning for wind */}
+          <p className='alert-event'> {alert.event} :  {format(alert.expires, 'HH', { locale: fr })}h</p>
+          {/* Green warning for wind : (alerte qui expire à) */}
         </div>
       )
     });
@@ -264,7 +265,7 @@ const App = () => {
 
         <MdOutlineSettingsSuggest className='settings-icon'onClick={showDrawer}/>
         <>
-          <Drawer title="Paramètres" onClose={onClose} open={open}>
+          <Drawer title="Paramètres" placement={placement} onClose={onClose} open={open}>
               <div className='icon'>
                   <p>🔆</p>
                   <Switch onClick={toggleDarkMode} />
