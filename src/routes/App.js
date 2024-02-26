@@ -216,7 +216,7 @@ const App = () => {
     weatherData.forecast &&
     weatherData.forecast.forecastday &&
     weatherData.forecast.forecastday.map((day, index) => (
-      <div className="MiniCards" key={index}>
+      <>
         {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure du jour*/}
         {day.date === currentDate &&
           day.hour
@@ -230,7 +230,7 @@ const App = () => {
                 temperature={hour.temp_c}
               />
             ))}
-      </div>
+      </>
     ));
 
   //test composant RainDrop pour le % de pluie

@@ -5,8 +5,10 @@
   width: 5rem;
   height:5rem;
   background-color: transparent;
-  border-radius: 50%;
   border-top-right-radius: 0;
+  border-bottom-right-radius: 70%;
+  border-top-left-radius: 70%;
+  border-bottom-left-radius: 50%;
   transform: rotate(-45deg);
   position: relative;
   overflow: hidden;
@@ -16,23 +18,21 @@
   .filled-raindrop{
     position: absolute;
     bottom:0;
-    left: 0;
     width: 100%;
     background-color: #0000FF66;
-    border-radius: 50%;
-    border-top-right-radius: 0;
     span {
       position: absolute;
       top:0;
       color: white;
       font-size: 0.8rem;
- 
+      font-weight:800;
+
     }
   }
 }
   
   .rain-time{
-    font-size: 0.7rem;
+    font-size: 1rem;
     margin-bottom: 1rem;
     color: black;
   }
