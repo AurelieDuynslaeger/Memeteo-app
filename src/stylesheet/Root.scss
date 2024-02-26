@@ -68,8 +68,8 @@ body {
 /* Responsive for desktop */
 @media screen and (min-width: v.$md-breakpoint) {
   main {
-    margin-left: 100px;
-    margin-right: 100px;
+    max-width: 80rem;
+    margin:0 auto; //permet de centrer horizontalement les div
   .group {
     display:flex;
     align-items:center;
@@ -85,12 +85,19 @@ body {
 
 /* Alerts */
 .alert-event {
-  background-color: black;
+  background-color: #212121;
   color:white;
   border-radius:20px;
   padding:3px;
   text-align:center;
   width:75%;
+}
+
+/* Settings icon */
+.settings-icon {
+  font-size:2rem;
+  padding-top:10px;
+  padding-left:10px;
 }
 
 

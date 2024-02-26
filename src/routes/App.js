@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 //import composant Ant Design et React Icons
 import { Carousel, Drawer, Radio, Switch, Tag } from "antd";
-import { MdOutlineSettingsSuggest } from "react-icons/md";
+import { FiSettings } from "react-icons/fi";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { formatTime, hourConvert, formatDay } from "../utils/functions.js";
@@ -13,7 +13,6 @@ import CurrentCity from "../components/CurrentCity.js";
 import Day from "../components/Day.js";
 import SearchBox from "../components/SearchBox.js";
 import Modal from "../components/Modal.js";
-// import Precipitation from '../components/Precipitation.js';
 import RainDrop from "../components/RainDrop";
 import WeatherImage from "../components/WeatherImage.js";
 import WeatherMeme from "../components/WeatherMeme.js";
@@ -330,7 +329,7 @@ const App = () => {
           )}
         </header>
 
-        <MdOutlineSettingsSuggest
+        <FiSettings
           className="settings-icon"
           onClick={showDrawer}
         />

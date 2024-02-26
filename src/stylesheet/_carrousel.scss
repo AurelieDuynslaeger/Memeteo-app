@@ -34,12 +34,9 @@
   overflow-x: auto;
   height: 15rem;
   gap:20px;
-  
-  .MiniCard {
-    display: flex;
-    text-align: center; 
-    align-items: center;
-    height: 15rem;
+  @media screen and (min-width: v.$md-breakpoint) {
+    gap:50px;
+  }
 
     .hour {
       //background-color: v.$color-carrousel;
@@ -53,7 +50,6 @@
           color: black;
       }
     }
-  }
   
 }
 
