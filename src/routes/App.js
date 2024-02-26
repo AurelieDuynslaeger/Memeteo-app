@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 //import composant Ant Design et React Icons
-import { Carousel, Drawer, Radio, Switch, Tag } from 'antd';
+import { Carousel, Drawer, Radio, Switch, Tag } from "antd";
 import { MdOutlineSettingsSuggest } from "react-icons/md";
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import { formatTime, hourConvert, formatDay } from '../utils/functions.js';
-import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { formatTime, hourConvert, formatDay } from "../utils/functions.js";
+import weatherConditionsGroup from "../datas/weatherConditionsGroup.js";
 
 //import des composants
 import CurrentCity from "../components/CurrentCity.js";
@@ -24,7 +24,6 @@ import Week from "../components/Week.js";
 import "../stylesheet/Root.scss";
 
 const App = () => {
-
   //Darkmode
   const [isDarkMode, setIsDarkMode] = useState(false);
   const toggleDarkMode = () => {
@@ -43,7 +42,7 @@ const App = () => {
 
   //etat du drawer pour les settings
   const [open, setOpen] = useState(false);
-  const [placement, setPlacement] = useState('left');
+  const [placement, setPlacement] = useState("left");
   const showDrawer = () => {
     setOpen(true);
   };
@@ -117,7 +116,8 @@ const App = () => {
       if (weatherInput) {
         apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=5&aqi=no&alerts=yes`;
       } else {
-        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=5&aqi=no&alerts=yes';
+        apiUrl =
+          "http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=5&aqi=no&alerts=yes";
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -126,7 +126,7 @@ const App = () => {
     };
     fetchWeatherData();
   }, [weatherInput]);
-  
+
   /*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
   const handleCityClick = () => {
     console.log("déclenché");
@@ -140,7 +140,9 @@ const App = () => {
     // Appel de l'API avec la city soumise dans la nav
     setWeatherInput(city);
     try {
-      const response = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${city}&days=5&aqi=no&alerts=yes`);
+      const response = await fetch(
+        `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${city}&days=5&aqi=no&alerts=yes`
+      );
       const data = await response.json();
 
       setWeatherData(data);
@@ -168,7 +170,20 @@ const App = () => {
     const avgtemp_c = day.day.avgtemp_c;
     const avghumidity = day.day.avghumidity;
     const uv = day.day.uv;
-    setSelectedDayInfo({ date, sunrise, sunset, maxTemp, minTemp, rain, wind, wind_dir,wind_dir_text, avgtemp_c, avghumidity, uv });
+    setSelectedDayInfo({
+      date,
+      sunrise,
+      sunset,
+      maxTemp,
+      minTemp,
+      rain,
+      wind,
+      wind_dir,
+      wind_dir_text,
+      avgtemp_c,
+      avghumidity,
+      uv,
+    });
   };
   const handleCloseModal = () => {
     setSelectedDayInfo(null);
@@ -192,188 +207,213 @@ const App = () => {
     );
   });
 
-//on récupère la date actuelle
-  const currentDate = new Date().toISOString().split('T')[0];
+  //on récupère la date actuelle
+  const currentDate = new Date().toISOString().split("T")[0];
   //on récupère l'heure actuelle
   const currentTime = new Date().getHours();
   //on filtre les prévisions par heure à PARTIR de l'heure actuelle
-  const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index) =>
-  (
-    <div className="MiniCards" key={index}>
-    {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure du jour*/}
-    {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
-      <Day
-        key={index}
-        time={formatTime(hour.time)}
-        weather={hour.condition.code}
-        isDay={hour.is_day}
-        temperature={hour.temp_c}
-      />
-    ))}
-  </div>
-));
+  const filteredHours =
+    weatherData.forecast &&
+    weatherData.forecast.forecastday &&
+    weatherData.forecast.forecastday.map((day, index) => (
+      <div className="MiniCards" key={index}>
+        {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure du jour*/}
+        {day.date === currentDate &&
+          day.hour
+            .filter((hour) => parseInt(hour.time.substr(11, 2)) >= currentTime)
+            .map((hour, index) => (
+              <Day
+                key={index}
+                time={formatTime(hour.time)}
+                weather={hour.condition.code}
+                isDay={hour.is_day}
+                temperature={hour.temp_c}
+              />
+            ))}
+      </div>
+    ));
 
   //test composant RainDrop pour le % de pluie
   // const rainTest = forecastWeather?.forecast?.forecastday;
   // console.log('log du rest pluie' ,rainTest);
   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
-  const rainPercent = weatherData && weatherData.forecast && weatherData.forecast.forecastday &&
-    weatherData.forecast.forecastday.map((day, index) =>
-    (
+  const rainPercent =
+    weatherData &&
+    weatherData.forecast &&
+    weatherData.forecast.forecastday &&
+    weatherData.forecast.forecastday.map((day, index) => (
       <div className="precip" key={index}>
-    {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
-      <div key={index}>
-        <p className='rain-time'>{formatTime(hour.time)}</p>
-        <RainDrop pourcentage={hour.chance_of_rain} />
+        {day.date === currentDate &&
+          day.hour
+            .filter((hour) => parseInt(hour.time.substr(11, 2)) >= currentTime)
+            .map((hour, index) => (
+              <div key={index}>
+                <p className="rain-time">{formatTime(hour.time)}</p>
+                <RainDrop pourcentage={hour.chance_of_rain} />
+              </div>
+            ))}
       </div>
-    ))}
-  </div>
-));
+    ));
 
-//affichage des alertes s'il l'api en renvoit 
-const alertsList = weatherData.forecast &&
-weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
-  let tagColor = "";
-  //couleur du tag en fonction de l'événement de l'alerte (green, yellow, orange, red)
-  if (alert.event.includes("green")) {
-    tagColor = "#2A9D8F";
-    console.log(tagColor);
-  } else if (alert.event.includes("yellow")) {
-    tagColor = "#E9C46A";
-  } else if (alert.event.includes("orange")) {
-    tagColor = "#F4A261";
-  } else if (alert.event.includes("red")) {
-    tagColor= "#E76F51"
-  }
+  //affichage des alertes s'il l'api en renvoit
+  const alertsList =
+    weatherData.forecast &&
+    weatherData.alerts &&
+    weatherData.alerts.alert.map((alert, index) => {
+      let tagColor = "";
+      //couleur du tag en fonction de l'événement de l'alerte (green, yellow, orange, red)
+      if (alert.event.includes("green")) {
+        tagColor = "#2A9D8F";
+        console.log(tagColor);
+      } else if (alert.event.includes("yellow")) {
+        tagColor = "#E9C46A";
+      } else if (alert.event.includes("orange")) {
+        tagColor = "#F4A261";
+      } else if (alert.event.includes("red")) {
+        tagColor = "#E76F51";
+      }
 
-  // Affichage de l'alerte en remplacant la chaine "warning for" par "Vigilance" son icône dots correspondants
-  return (
-    <div key={index} className='alerts-display'>
-      <p className='alert-event'>{alert.event.replace(/(\w+) warning for (\w+)/, '⚠️ Vigilance $2')}</p> 
-      <Tag color={tagColor}></Tag>
-      <p className='alert-event'> : {format(alert.expires, 'HH', { locale: fr })}h</p>
-    </div>
-  );
-})
+      // Affichage de l'alerte en remplacant la chaine "warning for" par "Vigilance" son icône dots correspondants
+      return (
+        <div key={index} className="alerts-display">
+          <p className="alert-event">
+            {alert.event.replace(/(\w+) warning for (\w+)/, "⚠️ Vigilance $2")}
+          </p>
+          <Tag color={tagColor}></Tag>
+          <p className="alert-event">
+            {" "}
+            : {format(alert.expires, "HH", { locale: fr })}h
+          </p>
+        </div>
+      );
+    });
 
-    // Violent wind
-    // Wind
-    // Rain-Flood
-    // Flood
-    // Thunderstorms
-    // Snow
-    // black ice
-    // Avalanches
-    // Heat wave
-    // Extreme cold
-    // Flood
-    // Couleur Warning for Event : heure.
+  // Violent wind
+  // Wind
+  // Rain-Flood
+  // Flood
+  // Thunderstorms
+  // Snow
+  // black ice
+  // Avalanches
+  // Heat wave
+  // Extreme cold
+  // Flood
+  // Couleur Warning for Event : heure.
 
-    //code couleur des alertes météo : vert-green, jaune-yellow, orange-idem, rouge-red => dots ou panneau au lieu du texte definissant la couleur ? 
-    //exclure le vert ? et n'afficher que les alertes allant de jaune à rouge ?
-    //if event includes "green" => no display
-    //else if event includes yellow => display icone concaténer avant le reste de la description
-    //ne pas inclure le for mettre : "traduction de l'event vent, pluie etc..." : "heure"
+  //code couleur des alertes météo : vert-green, jaune-yellow, orange-idem, rouge-red => dots ou panneau au lieu du texte definissant la couleur ?
+  //exclure le vert ? et n'afficher que les alertes allant de jaune à rouge ?
+  //if event includes "green" => no display
+  //else if event includes yellow => display icone concaténer avant le reste de la description
+  //ne pas inclure le for mettre : "traduction de l'event vent, pluie etc..." : "heure"
 
-    // etc pr orange ou rouge et remplacer warning par :  ⚠️ "Vigilance" 🟡🟠🔴 ": Vent", "heure";
-
+  // etc pr orange ou rouge et remplacer warning par :  ⚠️ "Vigilance" 🟡🟠🔴 ": Vent", "heure";
 
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className={isDarkMode ? `container dark-mode` : `container ${backgroundClass}`}>
-          {/* HEADER = searchBox + params (light/dark mode + sound) */}
-          <header>
-            {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
-            {showNavBar && (
-              <SearchBox
-                onWeatherInput={handleWeatherInput}
-                setLoadingCity={setLoadingCity}
-              />
-            )}
-             </header>
+      <div
+        className={
+          isDarkMode ? `container dark-mode` : `container ${backgroundClass}`
+        }
+      >
+        {/* HEADER = searchBox + params (light/dark mode + sound) */}
+        <header>
+          {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
+          {showNavBar && (
+            <SearchBox
+              onWeatherInput={handleWeatherInput}
+              setLoadingCity={setLoadingCity}
+            />
+          )}
+        </header>
 
-        <MdOutlineSettingsSuggest className='settings-icon'onClick={showDrawer}/>
+        <MdOutlineSettingsSuggest
+          className="settings-icon"
+          onClick={showDrawer}
+        />
         <>
-          <Drawer title="Paramètres" placement={placement} onClose={onClose} open={open}>
-              <div className='icon'>
-                  <p>🔆</p>
-                  <Switch onClick={toggleDarkMode} />
-                  <p>🌙</p>
-                </div>
-                <div className='sound-display'>
-                  <Switch
-                    checked={!isMuted}
-                    onChange={toggleMute}
-                    className={isMuted ? 'muted-switch' : 'unmuted-switch'}
-                  />
-                </div>
+          <Drawer
+            title="Paramètres"
+            placement={placement}
+            onClose={onClose}
+            open={open}
+          >
+            <div className="icon">
+              <p>🔆</p>
+              <Switch onClick={toggleDarkMode} />
+              <p>🌙</p>
+            </div>
+            <div className="sound-display">
+              <Switch
+                checked={!isMuted}
+                onChange={toggleMute}
+                className={isMuted ? "muted-switch" : "unmuted-switch"}
+              />
+            </div>
           </Drawer>
         </>
 
         {/* MAIN*/}
         <main>
-            <div className="group">
-                <section className="currentWeatherForecast">
-        {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
-        <CurrentCity
-          currentWeather={weatherData}
-          handleCityClick={handleCityClick}
-        />
-         </section>
-        <div className='alerts'>
-          {alertsList}
-        </div>
+          <div className="group">
+            <section className="currentWeatherForecast">
+              {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
+              <CurrentCity
+                currentWeather={weatherData}
+                handleCityClick={handleCityClick}
+              />
+              <div className="alerts">{alertsList}</div>
+            </section>
 
-         <section className="currentWeatherImage">
-      {weatherData && <WeatherImage currentWeather={weatherData}/>}
-        </section>       
-        <section className="meme">
-        {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
-        <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} />
-        </section>
-        </div>
+            <section className="currentWeatherImage">
+              {weatherData && <WeatherImage currentWeather={weatherData} />}
+            </section>
+            <section className="meme">
+              {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
+              <WeatherMeme
+                currentWeatherText={currentWeatherText}
+                memes={memes}
+                musiques={musiques}
+              />
+            </section>
+          </div>
 
-            <div>
-              <section className="carousel">
-        <div className='carousel-container'>
-          <Radio.Group
-            onChange={handlePositionChange}
-            value={dotPosition}
-            style={{
-              marginBottom: 8,
-            }}
-          >
-          </Radio.Group>
-          <Carousel dotPosition={dotPosition}>
-            <div>
-              <div className="week">
-                {days}
+          <div>
+            <section className="carousel">
+              <div className="carousel-container">
+                <Radio.Group
+                  onChange={handlePositionChange}
+                  value={dotPosition}
+                  style={{
+                    marginBottom: 8,
+                  }}
+                ></Radio.Group>
+                <Carousel dotPosition={dotPosition}>
+                  <div>
+                    <div className="week">{days}</div>
+                  </div>
+                  <div>
+                    <div className="MiniCards">{filteredHours}</div>
+                  </div>
+                  <div>
+                    <div className="precip">{rainPercent}</div>
+                  </div>
+                </Carousel>
               </div>
-            </div>
-            <div>
-              <div className="MiniCards">
-                {filteredHours}
-              </div>
-            </div>
-            <div>
-              <div className="precip">
-                {rainPercent}
-              </div>
-            </div>
-          </Carousel>
-        </div>
-        <>
-          {/* modal déclenchée au clik sur un jour du carousel */}
-          {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
-        </>
-        </section>
+              <>
+                {/* modal déclenchée au clik sur un jour du carousel */}
+                {selectedDayInfo && (
+                  <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />
+                )}
+              </>
+            </section>
+          </div>
+        </main>
       </div>
-      </main>
-      </div>
-    )
+    );
   }
 };
 
