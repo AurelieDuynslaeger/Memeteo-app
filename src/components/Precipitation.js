@@ -1,5 +1,4 @@
 import React from 'react'
-import '../stylesheet/carrousel.scss';
 
 const Precipitation = ({minutes, rain}) => {
   return (

@@ -1,5 +1,4 @@
 import React from 'react'
-import '../stylesheet/carrousel.scss';
 import WeatherIcon from './WeatherIcon';
 
 
