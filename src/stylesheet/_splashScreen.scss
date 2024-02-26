@@ -1,0 +1,17 @@
+@use "./variables" as v;
+
+.SplashScreen-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: v.$color-default;
+  
+    .LogoMemeteo {
+      max-width: 50%;
+      @media screen and (min-width: v.$md-breakpoint) {
+        max-width: 30%;
+      }
+    }
+  }

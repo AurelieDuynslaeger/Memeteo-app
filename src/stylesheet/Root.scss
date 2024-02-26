@@ -1,23 +1,57 @@
-@use '_weatherskeleton';
 @use "./variables" as v;
+@use '_carrousel';
+@use '_currentCity';
+@use '_darkMode';
+@use '_modal';
+@use '_rainDrop';
+@use '_searchBox';
+@use '_splashScreen';
+@use '_suggestionBox';
+@use '_weatherImage';
+@use '_weatherMeme';
+@use '_weatherSkeleton';
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-.icon {
-  display: flex;
-  align-items: center;
+body {
+  border: 0;
+  margin: 0;
+	padding: 0;
+  font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  .sun-background{
+    background-color: v.$color-peach;
+  }
+  .cloudy-background {
+    background-color: v.$color-green;
+  }
+  .rain-background {
+    background-color: v.$color-blue; 
+  }
+  .default-background {
+    background-color: v.$color-default;
+  }
 }
 
 .container {
   width: 100%;
   margin: auto;
-  font-family: "Poppins", sans-serif;
   position: relative;
+  height: 100vh;
 }
 
 .container h3 {
   text-align: center;
 }
 
+/* Toggle dark mode */
+.icon {
+  display: flex;
+  align-items: center;
+}
+
+/* Toggle sound */
 .sound-display {
   display: flex;
   align-items: center;
@@ -29,173 +63,42 @@
     outline: none;
     border: 1px solid v.$color-text; 
   }
- 
 }
 
-// CurrentCity Component style
-.city {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  margin: auto;
-  .current-temp {
-    font-size: 6.5rem;
-    margin-top: 1rem;
-    margin-bottom: -1rem;
-    font-weight: 300;
-  }
-  .city-search {
-    display: flex;
-    align-items: center;
-    .city-name {
-      font-size: 1.3rem;
-      margin: 0 1rem;
-      font-weight: 800;
+/* Responsive for desktop */
+@media screen and (min-width: v.$md-breakpoint) {
+  main {
+    margin-left: 100px;
+    margin-right: 100px;
+  .group {
+    display:flex;
+    align-items:center;
+    section.currentWeatherForecast, section.currentWeatherImage {
+      flex-basis:25%;
     }
-    .search-icon {
-      width: 0.8rem;
-      }
-    }
-    //taille de l'icone affiché à l'acceuil
-    .icon-display svg {
-      // z-index: -10;
-      // position: absolute;
-      // top:-2rem;
-      // right:-3rem;
-      margin-top: 1rem;
-      width: 7rem;
-      height: 7rem;
-    }
-}
-
-
-
-.SplashScreen-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: v.$color-default;
-
-  .LogoMemeteo {
-    max-width: 60%;
-  }
-}
-
-
-
-//position et taille du meme
-.weather-meme {
-  width: 50%;
-  margin: auto;
-  .meme-display{
-  border-radius: 1.5rem;
-  width:15rem;
-  height: 15rem;
-  }
-  &.show-mobile {
-    display: block;
-    z-index: 0;
-  }
-}
-
-//position relative afin de position la modale en absolute en fonction
-.carousel-container {
-  position: relative;
-  .days, .hour{
-    .icon-display svg{
-      width: 3rem;
-      height: 3rem;
-      // color: v.$color-peach;
+    section.meme {
+      flex-basis:50%;
     }
   }
 }
-
-
-//modal pour le détail d'un jour à venir au clik sur le composant week
-.modal {
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.3);
-  padding: 2rem;
-  border-radius: 2rem;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  backdrop-filter: blur(40px);
-  width: 80%; 
-  height: 35%; 
-  max-width: 40rem;
-  max-height: 25rem; 
-  .close svg{
-      font-size: 1.5rem;
-  }
-  .modal-content{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    h5 {
-      text-align: center;
-      text-decoration: underline;
-      margin-bottom: 1rem;
-      margin-top: 0;
-    }
-    .modal-part {
-      display: flex;
-      padding:0.3rem;
-      .details-card {
-        flex-basis: 30%;
-        text-align: center;
-        font-size: 0.8rem;
-      }
-    }
-  }
 }
 
 
 
-.image-display{
-  width: 10rem;
-  height: 10rem;
-}
 
-//2 div en forme de goutte toutes les 2 grace au radius
-//celle en absolute prend en height le % de chance de pluie via le composant RainDrop
-//avec la propriété style
-.rain-drop {
-  width: 5rem;
-  height:5rem;
-  background-color: white;
-  border-radius: 50%;
-  border-top-right-radius: 0;
-  transform: rotate(-45deg);
-  position: relative;
-  overflow: hidden;
-  border: 0.15rem solid white;
-  margin: 1rem;
-  margin-top: 3rem;
-  .filled-raindrop{
-    position: absolute;
-    bottom:0;
-    left: 0;
-    width: 100%;
-    background-color: blue;
-    border-radius: 50%;
-    border-top-right-radius: 0;
-    span {
-      position: absolute;
-      top:0;
-      color: black;
-      font-size: 0.6rem;
 
-    }
-  }
-}
 
-.rain-time{
-  color: black;
-  font-size: 0.6rem;
-  margin-bottom: 1rem;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
