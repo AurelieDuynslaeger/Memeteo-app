@@ -206,11 +206,15 @@
   justify-content:center;
   .alerts-display {
     display: flex;
-    .alert-icon {
+    align-items: center;
+    .ant-tag {
       width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50rem;
+      margin-left: 0.5rem;
     }
     .alert-event {
-      font-size: 0.8rem;
+      font-size: 1rem;
     }
   }
 }
