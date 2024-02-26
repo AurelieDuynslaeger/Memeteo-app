@@ -17,7 +17,6 @@ import CurrentCity from "../components/CurrentCity.js";
 import Day from "../components/Day.js";
 import SearchBox from "../components/SearchBox.js";
 import Modal from "../components/Modal.js";
-// import Precipitation from '../components/Precipitation.js';
 import RainDrop from "../components/RainDrop";
 import WeatherImage from "../components/WeatherImage.js";
 import WeatherMeme from "../components/WeatherMeme.js";
@@ -51,8 +50,9 @@ const App = () => {
   const [musiques, setMusiques] = useState([]);
   //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
   const [autoplayEnabled, setAutoplayEnabled] = useState(false);
-  //carousel dots
+  //carousel dots, le right va indiquer le côté où mettre les points
   const [dotPosition, setDotPosition] = useState("right");
+  //ce qui va permettre de passer à une slide du carrousel en cliquant sur le point
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
@@ -215,6 +215,7 @@ const App = () => {
     const dayDate = new Date(day.date);
     return (
       <div className="week" key={index}>
+        {/* //récupération du composant week */}
         <Week
           key={index}
           day={formatDay(dayDate)}
@@ -239,6 +240,7 @@ const App = () => {
         {day.hour
           .filter((hour) => parseInt(hour.time.substr(11, 2)) > currentTime)
           .map((hour, index) => (
+            //récupération du composant day
             <Day
               key={index}
               time={formatTime(hour.time)}
@@ -249,27 +251,7 @@ const App = () => {
       </div>
     ));
 
-  ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
-  // const minutes = forecastWeather && forecastWeather.forecast && forecastWeather.forecast.forecastday &&
-  //   forecastWeather.forecast.forecastday.map((day, index) =>
-  //   (
-  //     <div className="precip" key={index}>
-  //       {day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) > currentTime).map((hour, index) => (
-  //         <Precipitation
-  //           key={index}
-  //           minutes={formatTime(hour.time)}
-  //           rain={hour.chance_of_rain > 0 ? (
-  //             <img src={precip} alt="Precipitating" />) :
-  //             (<img src={nonprecip} alt="Not Precipitating" />)}
-  //         />
-  //       ))}
-  //     </div>
-  //   )
-  //   )
-
-  //test composant RainDrop pour le % de pluie
-  // const rainTest = forecastWeather?.forecast?.forecastday;
-  // console.log('log du rest pluie' ,rainTest);
+ 
   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
   const rainPercent =
     forecastWeather &&
@@ -282,6 +264,7 @@ const App = () => {
           .map((hour, index) => (
             <div>
               <p className="rain-time">{formatTime(hour.time)}</p>
+              {/* //récupération du composant RainDrop */}
               <RainDrop pourcentage={hour.chance_of_rain} />
             </div>
           ))}
@@ -353,6 +336,8 @@ const App = () => {
             <div>
               <section className="carousel">
                 <div className="carousel-container">
+
+                  {/* //radio.group va permettre de définir le mode de changement de diapo et la position des points */}
                   <Radio.Group
                     onChange={handlePositionChange}
                     value={dotPosition}
