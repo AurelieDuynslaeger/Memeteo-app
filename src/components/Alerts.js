@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { BsCircleFill } from "react-icons/bs";
+import { BsCircleFill } from 'react-icons/bs';
 
-import "../stylesheet/_alerts.scss"
+import "../stylesheet/_alerts.scss";
 
 const Alerts = (alertInfo) => {
-    const {event, expires} = alertInfo;
+    const { event, expires } = alertInfo;
     let iconColor = '';
     let eventTranslate = '';
 
@@ -21,46 +21,73 @@ const Alerts = (alertInfo) => {
     // Heat wave = "Chaleur"
     // Extreme cold = "Grand Froid"
 
-    if (event.includes("violent wind")) {
-      eventTranslate = "Vents Violents ";
-  } else if (event.includes("wind")) {
-      eventTranslate = "Vent ";
-  } else if (event.includes("flood")) {
-      eventTranslate = "Pluie-Inondations ";
-  } else if (event.includes("rain")) {
-    eventTranslate = "Pluie ";
-  }else if (event.includes("thunderstorm")) {
-      eventTranslate = "Orage ";
-  } else if (event.includes("snow")) {
-      eventTranslate = "Neige ";
-  } else if (event.includes("black ice")) {
-      eventTranslate = "Verglas ";
-  } else if (event.includes("avalanche")) {
-      eventTranslate = "Avalanches ";
-  } else if (event.includes("heat wave")) {
-      eventTranslate = "Chaleur ";
-  } else if (event.includes("extreme cold")) {
-      eventTranslate = "Grand Froid ";
-  }
-  
-    //couleur du svg react icons en fonction de l'événement de l'alerte (green, yellow, orange, red)
-  if (event.includes("green")) {
-    iconColor = "#008000";
-  } else if (event.includes("yellow") || event.includes("moderate")) {
-    iconColor = "#FFFF00";
-  } else if (event.includes("orange")) {
-    iconColor = "#FFA500";
-  } else if (event.includes("severe") || event.includes("red")) {
-    iconColor = "#FF0000";
-  }
-  
-  return (
-    <div key={event} className='alerts-display'>
-      <p className='alert-event'>{"Vigilance "}</p>
-      <BsCircleFill color={iconColor} />
-      <p className='alert-event'>{eventTranslate}  {" jusque "} {format(expires, 'HH', { locale: fr })}h</p>
-    </div>
-  )
+    // Traduction de l'événement
+    switch (true) {
+        case event.includes("violent wind"):
+            eventTranslate = "Vents Violents";
+            break;
+        case event.includes("wind"):
+            eventTranslate = "Vent";
+            break;
+        case event.includes("flood"):
+            eventTranslate = "Pluie-Inondations";
+            break;
+        case event.includes("rain"):
+            eventTranslate = "Pluie";
+        break;
+        case event.includes("thunderstorm"):
+            eventTranslate = "Orage";
+            break;
+        case event.includes("snow"):
+            eventTranslate = "Neige";
+            break;
+        case event.includes("black ice"):
+            eventTranslate = "Verglas";
+            break;
+        case event.includes("avalanche"):
+            eventTranslate = "Avalanches";
+            break;
+        case event.includes("heat wave"):
+            eventTranslate = "Chaleur";
+            break;
+        case event.includes("extreme cold"):
+            eventTranslate = "Grand Froid";
+            break;
+        default:
+            eventTranslate = "Autre";
+    }
+
+    // Couleur de l'icône en fonction de l'événement de l'alerte (green, yellow, orange, red)
+    switch (true) {
+        case event.includes("Green"):
+            iconColor = 'green';
+            break;
+        case event.includes("Yellow") || event.includes("Moderate"):
+            iconColor = 'yellow';
+            break;
+        case event.includes("Orange"):
+            iconColor = 'orange';
+            break;
+        case event.includes("Severe") || event.includes("Red"):
+            iconColor = 'red';
+            break;
+        default:
+            iconColor = 'gray'; 
+    }
+
+    return (
+        <div key={event} className='alerts-display'>
+            <p className='alert-event'>
+                Vigilance 
+            </p>
+            <BsCircleFill color={iconColor} />
+            <p className='alert-event'>
+                {eventTranslate} jusque {format(expires, 'HH', { locale: fr })}h
+            </p>
+        </div>
+    );
 }
 
-export default Alerts
+export default Alerts;
+
+

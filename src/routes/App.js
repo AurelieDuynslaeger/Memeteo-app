@@ -14,7 +14,6 @@ import CurrentCity from "../components/CurrentCity.js";
 import Day from "../components/Day.js";
 import SearchBox from "../components/SearchBox.js";
 import Modal from "../components/Modal.js";
-// import Precipitation from '../components/Precipitation.js';
 import RainDrop from "../components/RainDrop";
 import WeatherImage from "../components/WeatherImage.js";
 import WeatherMeme from "../components/WeatherMeme.js";
@@ -36,6 +35,7 @@ const App = () => {
   //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
   //Fonction pour activer/désactiver le mute
   const toggleMute = () => {
+    console.log(isMuted)
     setIsMuted(!isMuted);
   };
 
@@ -79,7 +79,8 @@ const App = () => {
 
   //Fetch pour aller chercher les memes et les sons sur notre API
   const fetchData = async (endpoint) => {
-    const apiUrl = `http://localhost:7001/${endpoint}`;
+    const apiUrl = `https://memeteo-api.onrender.com/${endpoint}`;
+    // https://memeteo-api.onrender.com/memes
     const response = await fetch(apiUrl);
     return response.json();
   };
@@ -267,7 +268,7 @@ weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
               <div className='sound-display'>
                 <Switch
                   checked={!isMuted}
-                  onChange={toggleMute}
+                  onClick={toggleMute}
                   className={isMuted ? 'muted-switch' : 'unmuted-switch'}
                 />
               </div>
@@ -294,7 +295,7 @@ weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
                 </section>       
                 <section className="meme">
                 {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
-                <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} />
+                <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} isMuted={isMuted}/>
                 </section>
             </div>
 
