@@ -255,7 +255,7 @@ const App = () => {
       </div>
     ));
 
-  //affichage des alertes s'il l'api en renvoit
+  //affichage des alertes si l'api en renvoie
   const alertsList =
     weatherData.forecast &&
     weatherData.alerts &&
