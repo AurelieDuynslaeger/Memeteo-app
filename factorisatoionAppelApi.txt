@@ -1,58 +1,25 @@
 
-const App = () => {
-  const [currentWeather, setCurrentWeather] = useState({});
-  const [forecastWeather, setForecastWeather] = useState({});
-  const [forecastWeather7, setForecastWeather7] = useState({});
-  const [weatherInput, setWeatherInput] = useState('');
-
-  const fetchData = async (endpoint, days) => {
-    const defaultCity = 'Lille';
-    const queryCity = weatherInput || defaultCity;
-    const apiUrl = `http://api.weatherapi.com/${endpoint}.json?key=5929e663f6c74ae192890247240802&q=${queryCity}&days=${days}&aqi=yes&alerts=yes`;
-    const response = await fetch(apiUrl);
-    return response.json();
-  };
-
-  useEffect(() => {
-    const fetchWeatherData = async () => {
-      const currentWeatherData = await fetchData('v1/current', 1);
-      setCurrentWeather(currentWeatherData);
-
-      const forecastWeatherData24h = await fetchData('v1/forecast', 1);
-      setForecastWeather(forecastWeatherData24h);
-
-      const forecastWeatherData7days = await fetchData('v1/forecast', 7);
-      setForecastWeather7(forecastWeatherData7days);
-    };
-
-    fetchWeatherData();
-  }, [weatherInput]);
-
-};
-
-export default App;
+0° — north wind (N)
+22.5° — north-northeast wind (NNE)
+45° — northeast wind (NE)
+67.5° — east-northeast wind (ENE)
+90°— east wind (E)
+112.5° — east-southeast wind (ESE)
+135° — southeast wind (SE)
+157.5° — south-southeast wind (SSE)
+180° — south wind (S)
+202.5° — south-southwest wind (SSW)
+225° — southwest wind (SW)
+247.5° — west-southwest wind (WSW)
+270° — west wind (W)
+292.5° — west-northwest wind (WNW)
+315° — northwest wind (NW)
+337.5° — north-northwest wind (NNW)
+360° — north wind (N)
 
 
+conditionner le rendu if (wind_dir === "N") {
+  return tel icone etc etc...
+}  else if (wind_dir ==="..")...
+//voir WindIcon component
 
-//résultats alerts api
-
-
-"alerts":{
-    "alert":[
-        {
-        -----"headline":"Flood Warning issued January 05 at 9:47PM EST until January 07 at 6:15AM EST by NWS",
-        "msgtype":"Alert",
-        "severity":"Moderate",
-        "urgency":"Expected",
-        "areas":"Calhoun; Lexington; Richland",
-        ------"category":"Met",
-        "certainty":"Likely",
-        ------"event":"Flood Warning",
-        "note":"Alert for Calhoun; Lexington; Richland (South Carolina) Issued by the National Weather Service",
-        "effective":"2021-01-05T21:47:00-05:00",
-        "expires":"2021-01-07T06:15:00-05:00",
-        "desc":"...The Flood Warning continues for the following rivers in South\nCarolina...\nCongaree River At Carolina Eastman affecting Richland, Calhoun\nand Lexington Counties.\nCongaree River At Congaree National Park-Gadsden affecting\nCalhoun and Richland Counties.\nNorth Fork Edisto River At Orangeburg affecting Orangeburg County.\n...The Flood Warning is now in effect until Thursday morning...\nThe Flood Warning continues for\nthe Congaree River At Carolina Eastman.\n* Until Thursday morning.\n* At 9:28 PM EST Tuesday the stage was 115.6 feet.\n* Flood stage is 115.0 feet.\n* Minor flooding is occurring and minor flooding is forecast.\n* Recent Activity...The maximum river stage in the 24 hours ending\nat 9:28 PM EST Tuesday was 118.2 feet.\n* Forecast...The river will rise to 115.7 feet just after midnight\ntonight. It will then fall below flood stage tomorrow morning to\n114.2 feet and begin rising again tomorrow evening. It will rise\nto 114.3 feet early Thursday morning. It will then fall again and\nremain below flood stage.\n* Impact...At 115.0 feet, Flooding occurs in low lying areas of the\nCarolina Eastman Facility and at the Congaree National Park.\n* Flood History...This crest compares to a previous crest of 116.3\nfeet on 12/03/2020.\n&&",
-        "instruction":"A Flood Warning means that flooding is imminent or occurring. All\ninterested parties should take necessary precautions immediately.\nMotorists should not attempt to drive around barricades or drive\ncars through flooded areas.\nCaution is urged when walking near riverbanks.\nAdditional information is available at www.weather.gov.\nThe next statement will be issued Wednesday morning at 1000 AM EST."
-        },
-    ]
-}
