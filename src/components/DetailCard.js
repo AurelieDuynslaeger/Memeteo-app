@@ -3,8 +3,8 @@ import React from 'react';
 const DetailCard = ({ iconSrc, description, value }) => {
   return (
     <div className='details-card'>
-      <img src={iconSrc} alt="" width={30} height={30} />
-      <p>{description}: {value}</p>
+      <img src={iconSrc} alt="" width={40} height={40} />
+      <p>{description} {value}</p>
     </div>
   );
 };

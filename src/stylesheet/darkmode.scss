@@ -1,0 +1,42 @@
+.dark-mode {
+    background-color: #212121;
+    color: #f8b993;
+
+    .navbar {
+        .logo {
+            background-color: #f8b993;
+            border-radius: 10%;
+            margin-top: 0.5rem;
+        }
+
+        .geolocalisationIcon {
+            color: #f8b993
+        }
+    }
+
+    .details-card img {
+        background-color: #f8b993;
+    }
+
+    .days {
+        background-color: #181616;
+        color: #f8b993;
+
+        .icon-display svg {
+            color: #f8b993;
+        }
+    }
+
+    .hour {
+        background-color: #181616;
+        color: #f8b993;
+
+        .icon-display svg {
+            color: #f8b993;
+        }
+    }
+
+    .rain {
+        color: #f8b993;
+    }
+}
