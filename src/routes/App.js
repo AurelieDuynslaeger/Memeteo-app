@@ -271,24 +271,21 @@ const App = () => {
         {/* HEADER = searchBox + params (light/dark mode + sound) */}
         <header>
           {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
-          {showNavBar && (
+          {/* {showNavBar && ( */}
             <SearchBox onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} isDarkMode={isDarkMode}/>
-          )}
-        </header>
+          {/* )} */}
 
+          {/* Affichage des params */}
         <FiSettings className="settings-icon" onClick={showDrawer} />
-        <>
-          <Drawer title="Paramètres" placement={placement} onClose={onClose} open={open}>
-            <div className="icon">
-              <p>🔆</p>
-              <Switch onClick={toggleDarkMode} />
-              <p>🌙</p>
-            </div>
-            <div className="sound-display">
-              <Switch checked={!isMuted} onClick={toggleMute} className={isMuted ? "muted-switch" : "unmuted-switch"}/>
-            </div>
-          </Drawer>
-        </>
+        <Drawer title="Paramètres" className="params" placement={placement} onClose={onClose} open={open}>
+          <div className="icon-display">
+            <Switch checked={isDarkMode} onClick={toggleDarkMode} className={isDarkMode ? "darkmode-switch" : "lightmode-switch"} />
+          </div>
+          <div className="sound-display">
+            <Switch checked={!isMuted} onClick={toggleMute} className={isMuted ? "muted-switch" : "unmuted-switch"}/>
+          </div>
+        </Drawer>
+        </header>
 
         {/* MAIN*/}
         <main>
