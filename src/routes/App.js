@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 //import composant Ant Design et React Icons
-import { Carousel, Drawer, Radio, Switch, Tag } from 'antd';
+import { Carousel, Drawer, Radio, Switch } from 'antd';
 import { MdOutlineSettingsSuggest } from "react-icons/md";
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -9,11 +9,11 @@ import { formatTime, hourConvert, formatDay } from '../utils/functions.js';
 import weatherConditionsGroup from '../datas/weatherConditionsGroup.js';
 
 //import des composants
+import Alerts from "../components/Alerts.js";
 import CurrentCity from "../components/CurrentCity.js";
 import Day from "../components/Day.js";
 import SearchBox from "../components/SearchBox.js";
 import Modal from "../components/Modal.js";
-// import Precipitation from '../components/Precipitation.js';
 import RainDrop from "../components/RainDrop";
 import WeatherImage from "../components/WeatherImage.js";
 import WeatherMeme from "../components/WeatherMeme.js";
@@ -25,60 +25,79 @@ import "../stylesheet/Root.scss";
 
 const App = () => {
 
+  /////////////////// HOOKS d'états (true/false) ///////////////////
+
   //Darkmode
   const [isDarkMode, setIsDarkMode] = useState(false);
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  //Sound
   const [isMuted, setIsMuted] = useState(true);
   //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
   //Fonction pour activer/désactiver le mute
   const toggleMute = () => {
+    console.log(isMuted)
     setIsMuted(!isMuted);
   };
 
-  // données météo current et forecast :)
-  const [weatherData, setWeatherData] = useState({});
+  //NavBAr => true clik sur la ville
+  const [showNavBar, setShowNavBar] = useState(false);
 
-  //etat du drawer pour les settings
+  //permet l'affichage ou non du weather skeletton
+  const [loadingCity, setLoadingCity] = useState(false);
+  
+  //Drawer
   const [open, setOpen] = useState(false);
-  const [placement, setPlacement] = useState('left');
-  const showDrawer = () => {
+  const [placement, setPlacement] = useState('left'); //par défaut sur la gauche, modifiable au onClick sur l'icone Settings
+  const showDrawer = (placementValue) => {
+    setPlacement(placementValue);
     setOpen(true);
   };
   const onClose = () => {
     setOpen(false);
   };
 
-  //état de la navBar à false, passe à true au clik sur la ville
-  const [showNavBar, setShowNavBar] = useState(false);
-  //menu input pour saisie de la ville
-  const [weatherInput, setWeatherInput] = useState("");
-  //modal Infos Prévisions / Current
+  //Etat des Infos Modal
   const [selectedDayInfo, setSelectedDayInfo] = useState(null);
-  //Recupération du Meme
+  
+  //Etat des données météo
+  const [weatherData, setWeatherData] = useState({});
+  //Etat de l'input de la SeachBox
+  const [weatherInput, setWeatherInput] = useState("");
+  //Etat des Memes
   const [memes, setMemes] = useState([]);
-  //Récupération du son
+  //Etat des Sons
   const [musiques, setMusiques] = useState([]);
-
-  //carousel dots
-  const [dotPosition, setDotPosition] = useState("right");
-  const handlePositionChange = ({ target: { value } }) => {
-    setDotPosition(value);
-  };
-  //permet l'affichage ou non du weather skeletton
-  const [loadingCity, setLoadingCity] = useState(false);
-  //état du background
-  const [backgroundClass, setBackgroundClass] = useState("");
-  // Constante pour stocker le texte des conditions météos actuelles
-  //gestion du background, des memes et des sons
+  //gestion du background, des memes et des sons grâce aux conditions actuelles renvoyées par l'api
   const currentWeatherText = weatherData?.current?.condition?.text;
-  // console.log(currentWeatherText);
+  // console.log(currentWeatherText) = Light rain
+  //état du Background
+  const [backgroundClass, setBackgroundClass] = useState("");
+
+  /////////////////// HOOKS d'effets (WeatherData, Background, Memes/Sons) ///////////////////
+  //fetch des données météo
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      let apiUrl;
+      if (weatherInput) {
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=5&aqi=no&alerts=yes`;
+      } else {
+        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=5&aqi=no&alerts=yes';
+      }
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      setWeatherData(data);
+      // console.log("Nouvelles données de prévisions 7 jours :", data);
+    };
+    fetchWeatherData();
+  }, [weatherInput]);
 
   //Fetch pour aller chercher les memes et les sons sur notre API
   const fetchData = async (endpoint) => {
-    const apiUrl = `http://localhost:7001/${endpoint}`;
+    const apiUrl = `https://memeteo-api.onrender.com/${endpoint}`;
+    // https://memeteo-api.onrender.com/memes
     const response = await fetch(apiUrl);
     return response.json();
   };
@@ -100,6 +119,7 @@ const App = () => {
       // on récup la class du background à mettre dans la className
       const weatherBackgroundClass =
         weatherConditionsGroup[currentWeatherText].background;
+        // console.log(weatherBackgroundClass) = rain-backgroung
       // on met à jour l'état du background dans le state
       setBackgroundClass(weatherBackgroundClass);
     } else {
@@ -110,26 +130,15 @@ const App = () => {
     }
   }, [currentWeatherText]);
 
-  //fetch des données météo
-  useEffect(() => {
-    const fetchWeatherData = async () => {
-      let apiUrl;
-      if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=5&aqi=no&alerts=yes`;
-      } else {
-        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=5&aqi=no&alerts=yes';
-      }
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      setWeatherData(data);
-      // console.log("Nouvelles données de prévisions 7 jours :", data);
-    };
-    fetchWeatherData();
-  }, [weatherInput]);
+
+  //carousel dots
+  const [dotPosition, setDotPosition] = useState("right");
+  const handlePositionChange = ({ target: { value } }) => {
+    setDotPosition(value);
+  };
   
   /*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
   const handleCityClick = () => {
-    console.log("déclenché");
     setShowNavBar(true);
   };
 
@@ -152,7 +161,7 @@ const App = () => {
     }
   };
 
-  // Au clik sur un des jours de prévisions dans le Carousel, la modal apparait avec le résumé des prévisions pour ce jour
+  // Au clik sur un des jours (props day) de prévisions dans le Carousel, la modal apparait avec le résumé des prévisions pour ce jour
   const handleDayClick = (day) => {
     const date = format(day.date, "eeee dd LLLL", { locale: fr });
     console.log(date);
@@ -194,13 +203,16 @@ const App = () => {
 
 //on récupère la date actuelle
   const currentDate = new Date().toISOString().split('T')[0];
+  // currentDate = 2024-02-26
   //on récupère l'heure actuelle
   const currentTime = new Date().getHours();
+  // currentTime = 21
   //on filtre les prévisions par heure à PARTIR de l'heure actuelle
   const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index) =>
   (
     <div className="MiniCards" key={index}>
-    {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure du jour*/}
+    {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure DU jour*/}
+    {/* substr => "time": "2024-03-01 21:00", 11 caractère, puis 2 de longueur = 21, si hour.time >= 21 alors on affiche*/}
     {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
       <Day
         key={index}
@@ -230,53 +242,13 @@ const App = () => {
   </div>
 ));
 
-//affichage des alertes s'il l'api en renvoit 
-const alertsList = weatherData.forecast &&
-weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
-  let tagColor = "";
-  //couleur du tag en fonction de l'événement de l'alerte (green, yellow, orange, red)
-  if (alert.event.includes("green")) {
-    tagColor = "#2A9D8F";
-    console.log(tagColor);
-  } else if (alert.event.includes("yellow")) {
-    tagColor = "#E9C46A";
-  } else if (alert.event.includes("orange")) {
-    tagColor = "#F4A261";
-  } else if (alert.event.includes("red")) {
-    tagColor= "#E76F51"
-  }
-
-  // Affichage de l'alerte en remplacant la chaine "warning for" par "Vigilance" son icône dots correspondants
-  return (
-    <div key={index} className='alerts-display'>
-      <p className='alert-event'>{alert.event.replace(/(\w+) warning for (\w+)/, '⚠️ Vigilance $2')}</p> 
-      <Tag color={tagColor}></Tag>
-      <p className='alert-event'> : {format(alert.expires, 'HH', { locale: fr })}h</p>
-    </div>
-  );
-})
-
-    // Violent wind
-    // Wind
-    // Rain-Flood
-    // Flood
-    // Thunderstorms
-    // Snow
-    // black ice
-    // Avalanches
-    // Heat wave
-    // Extreme cold
-    // Flood
-    // Couleur Warning for Event : heure.
-
-    //code couleur des alertes météo : vert-green, jaune-yellow, orange-idem, rouge-red => dots ou panneau au lieu du texte definissant la couleur ? 
-    //exclure le vert ? et n'afficher que les alertes allant de jaune à rouge ?
-    //if event includes "green" => no display
-    //else if event includes yellow => display icone concaténer avant le reste de la description
-    //ne pas inclure le for mettre : "traduction de l'event vent, pluie etc..." : "heure"
-
-    // etc pr orange ou rouge et remplacer warning par :  ⚠️ "Vigilance" 🟡🟠🔴 ": Vent", "heure";
-
+  //affichage des alertes si l'api en renvoit 
+  const alertsList = weatherData.forecast &&
+  weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
+    return(
+      <Alerts key={index} event={alert.event} expires={alert.expires}/>
+    )
+  });
 
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
@@ -293,23 +265,23 @@ weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
                 setLoadingCity={setLoadingCity}
               />
             )}
-             </header>
+          </header>
 
-        <MdOutlineSettingsSuggest className='settings-icon'onClick={showDrawer}/>
+        <MdOutlineSettingsSuggest className='settings-icon' onClick={() => showDrawer('left')}/>
         <>
           <Drawer title="Paramètres" placement={placement} onClose={onClose} open={open}>
               <div className='icon'>
-                  <p>🔆</p>
-                  <Switch onClick={toggleDarkMode} />
-                  <p>🌙</p>
-                </div>
-                <div className='sound-display'>
-                  <Switch
-                    checked={!isMuted}
-                    onChange={toggleMute}
-                    className={isMuted ? 'muted-switch' : 'unmuted-switch'}
-                  />
-                </div>
+                <p>🔆</p>
+                <Switch onClick={toggleDarkMode} />
+                <p>🌙</p>
+              </div>
+              <div className='sound-display'>
+                <Switch
+                  checked={!isMuted}
+                  onClick={toggleMute}
+                  className={isMuted ? 'muted-switch' : 'unmuted-switch'}
+                />
+              </div>
           </Drawer>
         </>
 
@@ -317,61 +289,63 @@ weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
         <main>
             <div className="group">
                 <section className="currentWeatherForecast">
-        {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
-        <CurrentCity
-          currentWeather={weatherData}
-          handleCityClick={handleCityClick}
-        />
-         </section>
-        <div className='alerts'>
-          {alertsList}
-        </div>
+                  {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
+                  <CurrentCity
+                    currentWeather={weatherData}
+                    handleCityClick={handleCityClick}
+                  />
+                  {/* test de placement de la div alerts afin qu'elle soit tjr sous la ville desktop OU mobile  */}
+                <div className='alerts'>
+                  {alertsList}
+                </div>
+                </section>
 
-         <section className="currentWeatherImage">
-      {weatherData && <WeatherImage currentWeather={weatherData}/>}
-        </section>       
-        <section className="meme">
-        {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
-        <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} />
-        </section>
-        </div>
+
+                <section className="currentWeatherImage">
+                  {weatherData && <WeatherImage currentWeather={weatherData}/>}
+                </section>       
+                <section className="meme">
+                {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
+                <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} isMuted={isMuted}/>
+                </section>
+            </div>
 
             <div>
               <section className="carousel">
-        <div className='carousel-container'>
-          <Radio.Group
-            onChange={handlePositionChange}
-            value={dotPosition}
-            style={{
-              marginBottom: 8,
-            }}
-          >
-          </Radio.Group>
-          <Carousel dotPosition={dotPosition}>
-            <div>
-              <div className="week">
-                {days}
-              </div>
+                <div className='carousel-container'>
+                  <Radio.Group
+                    onChange={handlePositionChange}
+                    value={dotPosition}
+                    style={{
+                      marginBottom: 8,
+                    }}
+                  >
+                  </Radio.Group>
+                  <Carousel dotPosition={dotPosition}>
+                    <div>
+                      <div className="week">
+                        {days}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="MiniCards">
+                        {filteredHours}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="precip">
+                        {rainPercent}
+                      </div>
+                    </div>
+                  </Carousel>
+                </div>
+                <>
+                  {/* modal déclenchée au clik sur un jour du carousel */}
+                  {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
+                </>
+              </section>
             </div>
-            <div>
-              <div className="MiniCards">
-                {filteredHours}
-              </div>
-            </div>
-            <div>
-              <div className="precip">
-                {rainPercent}
-              </div>
-            </div>
-          </Carousel>
-        </div>
-        <>
-          {/* modal déclenchée au clik sur un jour du carousel */}
-          {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
-        </>
-        </section>
-      </div>
-      </main>
+          </main>
       </div>
     )
   }
