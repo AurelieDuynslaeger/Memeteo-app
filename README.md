@@ -16,7 +16,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/AurelieDuynslaeger/Memeteo-app/">
-    <img src="https://github.com/AurelieDuynslaeger/Memeteo-app/assets/120843391/eabc2f2d-c067-405f-9ff4-7f99ecba929b" alt="Logo" width="300">
+    <img src="https://github.com/AurelieDuynslaeger/Memeteo-app/assets/135812251/8eb2fa52-4593-4f25-b3a9-12ce05e61cbc" alt="Logo" width="300">
   </a>
 
 <h3 align="center">Memteo</h3>
