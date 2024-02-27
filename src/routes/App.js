@@ -212,7 +212,7 @@ const App = () => {
   //on filtre les prévisions par heure à PARTIR de l'heure actuelle
   const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index) =>
   (
-    <div className="MiniCards" key={index}>
+    <>
     {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure DU jour*/}
     {/* substr => "time": "2024-03-01 21:00", 11 caractère, puis 2 de longueur = 21, si hour.time >= 21 alors on affiche*/}
     {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
@@ -224,7 +224,7 @@ const App = () => {
         temperature={hour.temp_c}
       />
     ))}
-  </div>
+  </>
 ));
 
   //test composant RainDrop pour le % de pluie
