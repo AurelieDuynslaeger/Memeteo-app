@@ -25,6 +25,8 @@ import "../stylesheet/Root.scss";
 
 const App = () => {
 
+  const apiWeather = process.env.REACT_APP_WEATHER_API_KEY;
+
   /////////////////// HOOKS d'états (true/false) ///////////////////
 
   //Darkmode
@@ -82,9 +84,9 @@ const App = () => {
     const fetchWeatherData = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=5&aqi=no&alerts=yes`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiWeather}&q=${weatherInput}&days=5&aqi=no&alerts=yes`;
       } else {
-        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=5&aqi=no&alerts=yes';
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiWeather}&q=Lille&days=5&aqi=no&alerts=yes`;
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -149,7 +151,7 @@ const App = () => {
     // Appel de l'API avec la city soumise dans la nav
     setWeatherInput(city);
     try {
-      const response = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${city}&days=5&aqi=no&alerts=yes`);
+      const response = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=${apiWeather}&q=${city}&days=5&aqi=no&alerts=yes`);
       const data = await response.json();
 
       setWeatherData(data);
