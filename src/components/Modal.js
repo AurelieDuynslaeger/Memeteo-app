@@ -12,10 +12,11 @@ import humidityIcon from "../assets/icons/humidity.svg"
 import uvIcon from "../assets/icons/uv.svg"
 import sunsetIcon from "../assets/icons/sunset.svg";
 import sunriseIcon from "../assets/icons/sunrise.svg";
+import WindIcon from './WindIcon';
 
 const Modal = ({ onClose, dayInfo }) => {
     //choix des infos que l'on veut mettre dans la modale (dayInfo étant la récup api sur app)
-    const { date, maxTemp, minTemp, rain, wind, avgtemp_c, avghumidity, uv, sunrise, sunset } = dayInfo;
+    const { date, maxTemp, minTemp, rain, wind, avgtemp_c, avghumidity, uv, sunrise, sunset, wind_dir, wind_dir_text } = dayInfo;
 
     return (
         <div className="modal">
@@ -31,7 +32,10 @@ const Modal = ({ onClose, dayInfo }) => {
                 </div>
                 <div className='modal-part'>
                     <DetailCard iconSrc={rainIcon} description="" value={`${rain} mm`}/>
-                    <DetailCard iconSrc={windAnim} description="Moy" value={`${wind} km/h`}/>
+                    <span className='wind-combo'>
+                        <DetailCard iconSrc={windAnim} description="Moy" value={`${wind} km/h `}/>
+                        <WindIcon direction={wind_dir} wind_dir={wind_dir_text}/>
+                    </span>
                     <DetailCard iconSrc={humidityIcon} description="" value={`${avghumidity} %`}/>
                     <DetailCard iconSrc={uvIcon} description="" value={`Indice ${uv}`}/>
                 </div>

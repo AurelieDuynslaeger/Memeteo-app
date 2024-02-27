@@ -1,0 +1,68 @@
+@use "../stylesheet/variables" as v;
+
+.navbar {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: space-around;
+   .logo {
+        width: 10rem;
+   }
+   .setCity {
+      display:flex;
+      align-items:center;
+      justify-content: space-around;
+      gap:1rem;
+   }
+   form {
+      display:flex;
+   }
+   input {
+      position: relative;
+      outline: none;
+      width: 13rem;
+      padding: 0.4rem 1rem;
+      border: #d1d5db solid 1px; 
+      border-radius: 0.375rem 0 0 0.375rem; 
+      height: 100%; 
+      font-family: "Poppins", sans-serif;
+      font-size:1rem;
+
+      &:focus {
+         border: solid 1px #d1d5db; 
+    }
+   }
+   button {
+      margin:0;
+      border: none;
+      padding: 0.6rem 1rem;
+      background-color: black; 
+      color: #ffffff; 
+      border-radius: 0 0.375rem 0.375rem 0; 
+      height: 100%; 
+      cursor: pointer;
+      
+      &:hover {
+         animation: fadeOutAndIn 1s;
+      }
+      .iconSearch {
+         font-size:1rem;
+      }
+
+      }
+      .iconLarger {
+         font-size:1.5rem;
+         padding-top:5px;
+         cursor: pointer;
+         &:hover {
+            animation: fadeOutAndIn 1s;
+         }
+   }
+
+    @keyframes fadeOutAndIn {
+      0% {opacity: 100%;}
+      50% {opacity: 50%;}
+      100% {opacity: 100%;}
+    }
+   
+}
