@@ -1,113 +1,115 @@
-@use '_weatherskeleton';
+@use "./variables" as v;
+@use '_alerts';
+@use '_carrousel';
+@use '_currentCity';
+@use '_darkMode';
+@use '_modal';
+@use '_rainDrop';
+@use '_searchBox';
+@use '_splashScreen';
+@use '_suggestionBox';
+@use '_weatherImage';
+@use '_weatherMeme';
+@use '_weatherSkeleton';
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+  border: 0;
+  margin: 0;
+	padding: 0;
+  font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  .sun-background{
+    background-color: v.$color-peach;
+  }
+  .cloudy-background {
+    background-color: v.$color-green;
+  }
+  .rain-background {
+    background-color: v.$color-blue; 
+  }
+  .default-background {
+    background-color: v.$color-default;
+  }
+}
 
 .container {
   width: 100%;
   margin: auto;
+  position: relative;
+  height: 100vh;
 }
 
-.city {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: space-between;
-margin: auto;
-  .city-name {
-    font-size: 5rem;
-    margin: 0 1rem;
-    font-weight: 200;
-  }
-  .current-temp{
-    font-size: 3rem;
-    margin-top: 2rem;
-    margin-bottom: -1rem;
-    font-weight: 300;
-  }
+.container h3 {
+  text-align: center;
 }
 
-//l'icone détail n'apparait que sur les écrans mobiles
-.mobile-icon {
-  display: block; 
-  margin-bottom: 2rem;
-   width: 6rem;
-}
-
-//détail météo masqués sur mobile et déclenchés au clik
-.weather-details {
-  display: none;
-  /* Ajoutez vos styles pour les détails de la météo ici */
-
-  &.show-mobile {
-    display: block;
-  }
-}
-
-@media (min-width: 768px) {
-  .mobile-icon {
-    //l'icone détail est masquée sur les tablettes et desktop
-    display: none; 
-  }
-
-  .weather-details {
-    //la div weather details apparait sur tablette et desktop
-    display: block; 
-  }
-}
-
-.sun-infos{
+/* Toggle dark mode */
+.icon {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  .sun-icons{
-    width: 2rem;
-  }
-  .sun-hours {
-    font-size: 0.7rem;
-  }
-  .sun-couple{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-}
-
-.forecast{
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  .forecast-details {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    .details-card{
-      flex-basis: 50%;
-      text-align: center;
-      font-size: 0.7rem;
+}
+
+/* Toggle sound */
+.sound-display {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  .sound-icon{
+    font-size: 2rem;
+  }
+  .sound-check{
+    outline: none;
+    border: 1px solid v.$color-text; 
+  }
+}
+
+/* Responsive for desktop */
+@media screen and (min-width: v.$md-breakpoint) {
+  main {
+    margin-left: 100px;
+    margin-right: 100px;
+  .group {
+    display:flex;
+    align-items:center;
+    section.currentWeatherForecast, section.currentWeatherImage {
+      flex-basis:25%;
+    }
+    section.meme {
+      flex-basis:50%;
     }
   }
-  .SplashScreen-page{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-background-color: #BBCDD3;
-.LogoMemeteo{
-  max-width: 60%;
-}
 }
 }
 
-.icon-display svg{
-  // z-index: -10;
-  // position: absolute;
-  // top:-2rem;
-  // right:-3rem;
-  width: 5rem;
-  height: 5rem;
+
+//récup des class ant design pour pouvoir mettre en fond du toggle une image 🔇🔊
+.muted-switch .ant-switch-handle::before {
+  background-color: white; 
+  background-image: url('../assets/icons/sound-mute.svg');
 }
+
+.unmuted-switch .ant-switch-handle::before {
+  background-color: white; 
+  background-image: url('../assets/icons/sound-display.svg');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
