@@ -1,6 +1,6 @@
 import React from "react"
 import blizzard from "../assets/Weather Icons/blizzard.png";
-// import blowingSnow from "../assets/Weather Icons/blowingSnow.png";
+import blowingSnow from "../assets/Weather Icons/blowingSnow.png";
 import cloudyDay from "../assets/Weather Icons/cloudyDay.png";
 import cloudyNight from "../assets/Weather Icons/cloudyNight.png";
 import fogDay from "../assets/Weather Icons/fogDay.png";
