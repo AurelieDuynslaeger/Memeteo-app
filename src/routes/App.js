@@ -24,7 +24,6 @@ import Week from "../components/Week.js";
 import "../stylesheet/Root.scss";
 
 const App = () => {
-
   /////////////////// HOOKS d'états (true/false) ///////////////////
 
   //Darkmode
@@ -38,7 +37,7 @@ const App = () => {
   //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
   //Fonction pour activer/désactiver le mute
   const toggleMute = () => {
-    console.log(isMuted)
+    console.log(isMuted);
     setIsMuted(!isMuted);
   };
 
@@ -47,10 +46,10 @@ const App = () => {
 
   //permet l'affichage ou non du weather skeletton
   const [loadingCity, setLoadingCity] = useState(false);
-  
+
   //Drawer
   const [open, setOpen] = useState(false);
-  const [placement, setPlacement] = useState('left'); //par défaut sur la gauche, modifiable au onClick sur l'icone Settings
+  const [placement, setPlacement] = useState("left"); //par défaut sur la gauche, modifiable au onClick sur l'icone Settings
   const showDrawer = (placementValue) => {
     setPlacement(placementValue);
     setOpen(true);
@@ -61,7 +60,7 @@ const App = () => {
 
   //Etat des Infos Modal
   const [selectedDayInfo, setSelectedDayInfo] = useState(null);
-  
+
   //Etat des données météo
   const [weatherData, setWeatherData] = useState({});
   //Etat de l'input de la SeachBox
@@ -84,7 +83,8 @@ const App = () => {
       if (weatherInput) {
         apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=5&aqi=no&alerts=yes`;
       } else {
-        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=5&aqi=no&alerts=yes';
+        apiUrl =
+          "http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=5&aqi=no&alerts=yes";
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -119,7 +119,7 @@ const App = () => {
       // on récup la class du background à mettre dans la className
       const weatherBackgroundClass =
         weatherConditionsGroup[currentWeatherText].background;
-        // console.log(weatherBackgroundClass) = rain-backgroung
+      // console.log(weatherBackgroundClass) = rain-backgroung
       // on met à jour l'état du background dans le state
       setBackgroundClass(weatherBackgroundClass);
     } else {
@@ -130,13 +130,12 @@ const App = () => {
     }
   }, [currentWeatherText]);
 
-
   //carousel dots
   const [dotPosition, setDotPosition] = useState("right");
   const handlePositionChange = ({ target: { value } }) => {
     setDotPosition(value);
   };
-  
+
   /*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
   const handleCityClick = () => {
     setShowNavBar(true);
@@ -179,20 +178,7 @@ const App = () => {
     const avgtemp_c = day.day.avgtemp_c;
     const avghumidity = day.day.avghumidity;
     const uv = day.day.uv;
-    setSelectedDayInfo({
-      date,
-      sunrise,
-      sunset,
-      maxTemp,
-      minTemp,
-      rain,
-      wind,
-      wind_dir,
-      wind_dir_text,
-      avgtemp_c,
-      avghumidity,
-      uv,
-    });
+    setSelectedDayInfo({date, sunrise, sunset, maxTemp, minTemp, rain, wind, wind_dir, wind_dir_text, avgtemp_c, avghumidity, uv});
   };
   const handleCloseModal = () => {
     setSelectedDayInfo(null);
@@ -223,22 +209,27 @@ const App = () => {
   const currentTime = new Date().getHours();
   // currentTime = 21
   //on filtre les prévisions par heure à PARTIR de l'heure actuelle
-  const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index) =>
-  (
-    <>
-    {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure DU jour*/}
-    {/* substr => "time": "2024-03-01 21:00", 11 caractère, puis 2 de longueur = 21, si hour.time >= 21 alors on affiche*/}
-    {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
-      <Day
-        key={index}
-        time={formatTime(hour.time)}
-        weather={hour.condition.code}
-        isDay={hour.is_day}
-        temperature={hour.temp_c}
-      />
-    ))}
-  </>
-));
+  const filteredHours =
+    weatherData.forecast &&
+    weatherData.forecast.forecastday &&
+    weatherData.forecast.forecastday.map((day, index) => (
+      <>
+        {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure DU jour*/}
+        {/* substr => "time": "2024-03-01 21:00", 11 caractère, puis 2 de longueur = 21, si hour.time >= 21 alors on affiche*/}
+        {day.date === currentDate &&
+          day.hour
+            .filter((hour) => parseInt(hour.time.substr(11, 2)) >= currentTime)
+            .map((hour, index) => (
+              <Day
+                key={index}
+                time={formatTime(hour.time)}
+                weather={hour.condition.code}
+                isDay={hour.is_day}
+                temperature={hour.temp_c}
+              />
+            ))}
+      </>
+    ));
 
   //test composant RainDrop pour le % de pluie
   // const rainTest = forecastWeather?.forecast?.forecastday;
@@ -262,113 +253,87 @@ const App = () => {
       </div>
     ));
 
-  //affichage des alertes si l'api en renvoit 
-  const alertsList = weatherData.forecast &&
-  weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
-    return(
-      <Alerts key={index} event={alert.event} expires={alert.expires}/>
-    )
-  });
+  //affichage des alertes si l'api en renvoit
+  const alertsList =
+    weatherData.forecast &&
+    weatherData.alerts &&
+    weatherData.alerts.alert.map((alert, index) => {
+      return <Alerts key={index} event={alert.event} expires={alert.expires} />;
+    });
 
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
     return <WeatherSkeleton />;
   } else {
     return (
-      <div className={isDarkMode ? `container dark-mode` : `container ${backgroundClass}`}>
-          {/* HEADER = searchBox + params (light/dark mode + sound) */}
-          <header>
-            {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
-            {showNavBar && (
-              <SearchBox
-                onWeatherInput={handleWeatherInput}
-                setLoadingCity={setLoadingCity}
-              />
-            )}
-          </header>
+      <div
+        className={isDarkMode ? `container dark-mode` : `container ${backgroundClass}`}>
+        {/* HEADER = searchBox + params (light/dark mode + sound) */}
+        <header>
+          {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
+          {showNavBar && (
+            <SearchBox onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} isDarkMode={isDarkMode}/>
+          )}
+        </header>
 
-        <FiSettings
-          className="settings-icon"
-          onClick={showDrawer}
-        />
+        <FiSettings className="settings-icon" onClick={showDrawer} />
         <>
           <Drawer title="Paramètres" placement={placement} onClose={onClose} open={open}>
-              <div className='icon'>
-                <p>🔆</p>
-                <Switch onClick={toggleDarkMode} />
-                <p>🌙</p>
-              </div>
-              <div className='sound-display'>
-                <Switch
-                  checked={!isMuted}
-                  onClick={toggleMute}
-                  className={isMuted ? 'muted-switch' : 'unmuted-switch'}
-                />
-              </div>
+            <div className="icon">
+              <p>🔆</p>
+              <Switch onClick={toggleDarkMode} />
+              <p>🌙</p>
+            </div>
+            <div className="sound-display">
+              <Switch checked={!isMuted} onClick={toggleMute} className={isMuted ? "muted-switch" : "unmuted-switch"}/>
+            </div>
           </Drawer>
         </>
 
         {/* MAIN*/}
         <main>
-            <div className="group">
-                <section className="currentWeatherForecast">
-                  {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
-                  <CurrentCity
-                    currentWeather={weatherData}
-                    handleCityClick={handleCityClick}
-                  />
-                  {/* test de placement de la div alerts afin qu'elle soit tjr sous la ville desktop OU mobile  */}
-                <div className='alerts'>
-                  {alertsList}
-                </div>
-                </section>
+          <div className="group">
+            
+            <section className="currentWeatherForecast">
+              {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
+              <CurrentCity currentWeather={weatherData} handleCityClick={handleCityClick}
+              />
+              {/* test de placement de la div alerts afin qu'elle soit tjr sous la ville desktop OU mobile  */}
+              <div className="alerts">{alertsList}</div>
+            </section>
 
+            <section className="currentWeatherImage">
+              {weatherData && <WeatherImage currentWeather={weatherData} />}
+            </section>
+            <section className="meme">
+              {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
+              <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} isMuted={isMuted}/>
+            </section>
+          </div>
 
-                <section className="currentWeatherImage">
-                  {weatherData && <WeatherImage currentWeather={weatherData}/>}
-                </section>       
-                <section className="meme">
-                {/* Composant Weather Meme qui gère l'affichage du meme et le lancement du son selon les conditions météo*/}
-                <WeatherMeme currentWeatherText={currentWeatherText} memes={memes} musiques={musiques} isMuted={isMuted}/>
-                </section>
-            </div>
-
-            <div>
-              <section className="carousel">
-                <div className='carousel-container'>
-                  <Radio.Group
-                    onChange={handlePositionChange}
-                    value={dotPosition}
-                    style={{
-                      marginBottom: 8,
-                    }}
-                  >
-                  </Radio.Group>
-                  <Carousel dotPosition={dotPosition}>
-                    <div>
-                      <div className="week">
-                        {days}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="MiniCards">
-                        {filteredHours}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="precip">
-                        {rainPercent}
-                      </div>
-                    </div>
-                  </Carousel>
-                </div>
-                <>
-                  {/* modal déclenchée au clik sur un jour du carousel */}
-                  {selectedDayInfo && <Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />}
-                </>
-              </section>
-            </div>
-          </main>
+          <div>
+            <section className="carousel">
+              <div className="carousel-container">
+                <Radio.Group onChange={handlePositionChange} value={dotPosition} style={{ marginBottom: 8,}}></Radio.Group>
+                <Carousel dotPosition={dotPosition}>
+                  <div>
+                    <div className="week">{days}</div>
+                  </div>
+                  <div>
+                    <div className="MiniCards">{filteredHours}</div>
+                  </div>
+                  <div>
+                    <div className="precip">{rainPercent}</div>
+                  </div>
+                </Carousel>
+              </div>
+              <>
+                {/* modal déclenchée au clik sur un jour du carousel */}
+                {selectedDayInfo && (<Modal onClose={handleCloseModal} dayInfo={selectedDayInfo} />)}
+              </>
+            </section>
+          </div>
+        </main>
       </div>
     );
   }

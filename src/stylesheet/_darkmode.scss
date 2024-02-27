@@ -1,42 +1,47 @@
+@use "../stylesheet/variables" as v;
+
 .dark-mode {
     background-color: #212121;
-    color: #f8b993;
+    color: v.$color-peach;
 
     .navbar {
-        .logo {
-            background-color: #f8b993;
-            border-radius: 10%;
-            margin-top: 0.5rem;
-        }
 
         .geolocalisationIcon {
-            color: #f8b993
+            color: v.$color-peach;
+        }
+        button {
+            background-color: v.$color-peach;
+            color:#212121;
         }
     }
 
     .details-card img {
-        background-color: #f8b993;
+        background-color: v.$color-peach;
     }
 
     .days {
         background-color: #181616;
-        color: #f8b993;
+        color: v.$color-peach;
 
         .icon-display svg {
-            color: #f8b993;
+            color: v.$color-peach;
         }
     }
 
     .hour {
         background-color: #181616;
-        color: #f8b993;
+        color: v.$color-peach;
 
         .icon-display svg {
-            color: #f8b993;
+            color: v.$color-peach;
         }
     }
 
     .rain-time {
-        color: #f8b993;
+        color: v.$color-peach;
+    }
+
+    .suggestions {
+        color: #181616;
     }
 }

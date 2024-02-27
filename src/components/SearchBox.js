@@ -7,6 +7,7 @@ import { IoSearch } from "react-icons/io5";
 
 // import des assets
 import Logo from "../assets/memteo-logo-base.png";
+import LogoNega from "../assets/memteo-logo-base_nega.png";
 
 //import des feuilles de styles
 import "../stylesheet/_searchBox.scss";
@@ -15,7 +16,7 @@ import "../stylesheet/_suggestionBox.scss";
 //import des composants
 import SuggestionBox from "./SuggestionBox.js";
 
-export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
+export const SearchBox = ({ onWeatherInput, setLoadingCity, isDarkMode }) => {
   const [city, setCity] = useState("");
 
   // Suggestions de villes
@@ -88,7 +89,7 @@ export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
 
   return (
     <div className="navbar">
-      <img src={Logo} alt="Logo Memetéo" className="logo" />
+      <img src={isDarkMode ? `${LogoNega}` : `${Logo}`} alt="Logo Memetéo" className="logo" />
       <div class="setCity">
         <div>
           <MdMyLocation
