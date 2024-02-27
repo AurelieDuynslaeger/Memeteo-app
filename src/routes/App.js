@@ -25,6 +25,8 @@ import "../stylesheet/Root.scss";
 
 const App = () => {
 
+  const apiWeather = process.env.REACT_APP_WEATHER_API_KEY;
+
   /////////////////// HOOKS d'états (true/false) ///////////////////
 
   //Darkmode
@@ -82,9 +84,9 @@ const App = () => {
     const fetchWeatherData = async () => {
       let apiUrl;
       if (weatherInput) {
-        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${weatherInput}&days=5&aqi=no&alerts=yes`;
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiWeather}&q=${weatherInput}&days=5&aqi=no&alerts=yes`;
       } else {
-        apiUrl = 'http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=Lille&days=5&aqi=no&alerts=yes';
+        apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiWeather}&q=Lille&days=5&aqi=no&alerts=yes`;
       }
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -92,12 +94,11 @@ const App = () => {
       // console.log("Nouvelles données de prévisions 7 jours :", data);
     };
     fetchWeatherData();
-  }, [weatherInput]);
+  }, [weatherInput, apiWeather]);
 
   //Fetch pour aller chercher les memes et les sons sur notre API
   const fetchData = async (endpoint) => {
     const apiUrl = `https://memeteo-api.onrender.com/${endpoint}`;
-    // https://memeteo-api.onrender.com/memes
     const response = await fetch(apiUrl);
     return response.json();
   };
@@ -149,7 +150,7 @@ const App = () => {
     // Appel de l'API avec la city soumise dans la nav
     setWeatherInput(city);
     try {
-      const response = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${city}&days=5&aqi=no&alerts=yes`);
+      const response = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=${apiWeather}&q=${city}&days=5&aqi=no&alerts=yes`);
       const data = await response.json();
 
       setWeatherData(data);
@@ -164,9 +165,8 @@ const App = () => {
   // Au clik sur un des jours (props day) de prévisions dans le Carousel, la modal apparait avec le résumé des prévisions pour ce jour
   const handleDayClick = (day) => {
     const date = format(day.date, "eeee dd LLLL", { locale: fr });
-    console.log(date);
     const sunrise = hourConvert(day.astro.sunrise);
-    console.log(day.astro.sunset); //06:16 PM
+    // console.log(day.astro.sunset); //06:16 PM
     const sunset = hourConvert(day.astro.sunset);
     const maxTemp = day.day.maxtemp_c;
     const minTemp = day.day.mintemp_c;
@@ -201,19 +201,25 @@ const App = () => {
     );
   });
 
-//on récupère la date actuelle
-  const currentDate = new Date().toISOString().split('T')[0];
-  // currentDate = 2024-02-26
-  //on récupère l'heure actuelle
-  const currentTime = new Date().getHours();
-  // currentTime = 21
-  //on filtre les prévisions par heure à PARTIR de l'heure actuelle
-  const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index) =>
-  (
-    <div className="MiniCards" key={index}>
-    {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure DU jour*/}
-    {/* substr => "time": "2024-03-01 21:00", 11 caractère, puis 2 de longueur = 21, si hour.time >= 21 alors on affiche*/}
-    {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
+
+//step 1 get current_time_epoch en timestamp pour le comparer au timetamp unix de l'api "hour.time_epoch"
+const current_time_epoch = Math.floor(Date.now()/1000);
+// = 1709045760
+// diff de 86 400 millisecondes => 24h
+//récupérer le time_epoch à 12h de plus
+const next_day_time_epoch = current_time_epoch + 86400; 
+
+
+//Step 2 mapper et filtrer jusqu'au next_day_time_epoch
+const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index) => (
+  <>
+    {day.hour.filter(hour => {
+      // Conversion du timestamp de l'heure de la prévision en seconde
+      const hour_time_epoch = parseInt(hour.time_epoch);
+
+      // Filtre les heures à partir de l'heure actuelle jusqu'à celle du lendemain à la même heure
+      return hour_time_epoch >= current_time_epoch && hour_time_epoch <= next_day_time_epoch;
+    }).map((hour, index) => (
       <Day
         key={index}
         time={formatTime(hour.time)}
@@ -222,24 +228,30 @@ const App = () => {
         temperature={hour.temp_c}
       />
     ))}
-  </div>
+  </>
 ));
 
   //test composant RainDrop pour le % de pluie
-  // const rainTest = forecastWeather?.forecast?.forecastday;
-  // console.log('log du rest pluie' ,rainTest);
+  // const rainTest = weatherData?.forecast?.forecastday;
+  // console.log('log du test pluie' ,rainTest);
   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
   const rainPercent = weatherData && weatherData.forecast && weatherData.forecast.forecastday &&
     weatherData.forecast.forecastday.map((day, index) =>
     (
-      <div className="precip" key={index}>
-    {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
+      <> 
+      {day.hour.filter(hour => {
+      // Conversion du timestamp de l'heure de la prévision en seconde
+      const hour_time_epoch = parseInt(hour.time_epoch);
+
+      // Filtre les heures à partir de l'heure actuelle jusqu'à celle du lendemain à la même heure
+      return hour_time_epoch >= current_time_epoch && hour_time_epoch <= next_day_time_epoch;
+    }).map((hour, index) => (
       <div key={index}>
         <p className='rain-time'>{formatTime(hour.time)}</p>
         <RainDrop pourcentage={hour.chance_of_rain} />
       </div>
     ))}
-  </div>
+  </>
 ));
 
   //affichage des alertes si l'api en renvoit 
