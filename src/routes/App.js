@@ -94,7 +94,7 @@ const App = () => {
       // console.log("Nouvelles données de prévisions 7 jours :", data);
     };
     fetchWeatherData();
-  }, [weatherInput]);
+  }, [weatherInput, apiWeather]);
 
   //Fetch pour aller chercher les memes et les sons sur notre API
   const fetchData = async (endpoint) => {
