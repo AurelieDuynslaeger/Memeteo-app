@@ -72,7 +72,7 @@ const App = () => {
   const [musiques, setMusiques] = useState([]);
   //gestion du background, des memes et des sons grâce aux conditions actuelles renvoyées par l'api
   const currentWeatherText = weatherData?.current?.condition?.text;
-  // console.log(currentWeatherText);
+  // console.log(currentWeatherText) = Light rain
   //état du Background
   const [backgroundClass, setBackgroundClass] = useState("");
 
@@ -119,6 +119,7 @@ const App = () => {
       // on récup la class du background à mettre dans la className
       const weatherBackgroundClass =
         weatherConditionsGroup[currentWeatherText].background;
+        // console.log(weatherBackgroundClass) = rain-backgroung
       // on met à jour l'état du background dans le state
       setBackgroundClass(weatherBackgroundClass);
     } else {
@@ -130,9 +131,6 @@ const App = () => {
   }, [currentWeatherText]);
 
 
-
-  
-  
   //carousel dots
   const [dotPosition, setDotPosition] = useState("right");
   const handlePositionChange = ({ target: { value } }) => {
@@ -141,7 +139,6 @@ const App = () => {
   
   /*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
   const handleCityClick = () => {
-    console.log("déclenché");
     setShowNavBar(true);
   };
 

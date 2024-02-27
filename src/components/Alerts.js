@@ -10,7 +10,6 @@ const Alerts = (alertInfo) => {
     let iconColor = '';
     let eventTranslate = '';
 
-
     //alertes météo les plus courantes récupérées sur Meteo france
     // Violent wind = vents violents
     // Wind = Vent
