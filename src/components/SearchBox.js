@@ -67,13 +67,13 @@ export const SearchBox = ({ onWeatherInput, setLoadingCity, isDarkMode }) => {
       // Effacer l'input après la soumission
       setCity("");
       setShowSuggestions(false);
-      setShowFavoris(false);
     }
   };
 
   function handleSuggestionClick(value) {
     setCity(value);
     setShowSuggestions(false);
+    setShowFavoris(false);
   }
 
   /* geolocalisation */
@@ -112,7 +112,7 @@ export const SearchBox = ({ onWeatherInput, setLoadingCity, isDarkMode }) => {
             onChange={(e) => handleInputChange(e.target.value)}
           />
           <SuggestionBox
-            {...{ showSuggestions, suggestions, handleSuggestionClick, error }}
+            {...{ showSuggestions, showFavoris, suggestions, handleSuggestionClick, error }}
           />
           <button htmlType="submit" onClick={(e) => handleFormSubmit(e)}>
             <IoSearch class="iconSearch" />
