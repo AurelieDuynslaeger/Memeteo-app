@@ -202,16 +202,16 @@ const App = () => {
   });
 
 
-//step 1 get current_time_epoch en timestamp pour le comparer au timetamp unix de l'api "hour.time_epoch"
-const current_time_epoch = Math.floor(Date.now()/1000);
+//step 1 get current_time_epoch en timestamp pour le comparer au timestamp unix de l'api "hour.time_epoch"
+const current_time_epoch = Math.floor(Date.now()/1000); //millisecondes en secondes à l'entier inférieur le plus proche
 // = 1709045760
-// diff de 86 400 millisecondes => 24h
-//récupérer le time_epoch à 12h de plus
+// 24h de + = diff de 86 400 millisecondes
+//récupérer le time_epoch à 24h de plus
 const next_day_time_epoch = current_time_epoch + 86400; 
 
 
 //Step 2 mapper et filtrer jusqu'au next_day_time_epoch
-const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index) => (
+const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day) => (
   <>
     {day.hour.filter(hour => {
       // Conversion du timestamp de l'heure de la prévision en seconde

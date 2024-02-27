@@ -40,7 +40,9 @@
   }
 
   &.no-rain .rain-drop-inner:after {
-    content: "";
+    //pseudo class after qui genère un contenu (ici vide) esthétique à un élement (ici la div rain-drop-inner)
+    content: "0%";
+    color: white;
     position: absolute;
     top: 50%;
     left: 50%;
