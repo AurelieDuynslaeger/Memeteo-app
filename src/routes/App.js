@@ -140,7 +140,7 @@ const App = () => {
         body.classList.remove(value)
       }
       
-      // ici, on ajoute
+      // ici, on ajoute la classe 'dark-mode' ou 'backgroundClass' (pour la couleur dynamique)
       if (isDarkMode || backgroundClass) body.classList.add(isDarkMode ? 'dark-mode' : backgroundClass)
     }
   }, [backgroundClass, isDarkMode]) // dès qu'une de ces valeurs change, le code dans le useEffect sera executé
@@ -305,8 +305,8 @@ const App = () => {
               {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
               <CurrentCity currentWeather={weatherData}
               />
-              {/* test de placement de la div alerts afin qu'elle soit tjr sous la ville desktop OU mobile  */}
-              <div className="alerts">{alertsList}</div>
+              {/* Ajout d'une condition pour n'afficher la div des alerts que s'il y a des alertes */}
+              <div className={(alertsList && alertsList.length>0) ? "alerts" : "alerts hidden"}>{alertsList}</div>
             </section>
 
             <section className="currentWeatherImage">

@@ -4,7 +4,7 @@
 
     .days {
         background-color: rgb(0, 0, 0, 0.1);
-        
+        cursor: pointer;
         border-radius: 7%;
         padding: 0.5rem; 
         width: 5rem;
@@ -22,8 +22,11 @@
      text-align: center;
      justify-content: space-around;
      overflow-x: auto;
-     height: 15rem;
+     height: 12rem;
      align-items: center;
+     @media screen and (min-width: v.$md-breakpoint) {
+      height: 20rem;
+    }
 }
 
 
@@ -32,13 +35,16 @@
   text-align: center; 
   align-items: center;
   overflow-x: auto;
-  height: 15rem;
+  height: 12rem;
   gap:20px;
+  cursor: default;
   @media screen and (min-width: v.$md-breakpoint) {
     gap:50px;
+    height: 20rem;
   }
 
     .hour {
+      cursor: default;
       background-color: rgb(0, 0, 0, 0.1);
       border-radius: 50%;
       padding: 0.5rem;
@@ -69,15 +75,22 @@
     text-align: center;
     align-items:center;
     overflow-x: auto;
-    height: 15rem;
+    height: 12rem;
+    cursor: default;
+    @media screen and (min-width: v.$md-breakpoint) {
+      height: 20rem;
+    }
 }
 
 .ant-carousel {
     //box-shadow: 0 0.5rem 2rem v.$color-shadow;
     background-color: rgb(0, 0, 0, 0.1);
     border-radius: 30px;
-    margin: 1rem 1rem 0 1rem;
-    //height : 15rem !important;
+    margin: 0 1rem 0 1rem;
+    @media screen and (min-width: v.$md-breakpoint) {
+      margin-top:1rem;
+    }
+
     
     .slick-dots {
       gap:10px;
@@ -108,8 +121,8 @@
     /* .slick-dots {
       li {
         button {
-          width: 15px;
-          height: 15px;
+          width: 12px;
+          height: 12px;
           box-shadow: 0 0.5rem 2rem v.$color-shadow;
         }
         &.slick-active {
