@@ -70,7 +70,7 @@ const App = () => {
 
   //Fetch pour aller chercher les memes et les sons sur notre API
   const fetchData = async (endpoint) => {
-    const apiUrl = `http://localhost:7001/${endpoint}`;
+    const apiUrl = `https://memeteo-api.onrender.com/${endpoint}`;
     const response = await fetch(apiUrl);
     return response.json()
   }
