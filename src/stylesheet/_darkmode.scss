@@ -1,11 +1,12 @@
 @use "../stylesheet/variables" as v;
 
 .dark-mode {
+    /* Par défaut */
     background-color: #212121;
     color: v.$color-peach;
 
-    .navbar {
-
+    /* Search box */
+    .setCity {
         .geolocalisationIcon {
             color: v.$color-peach;
         }
@@ -14,6 +15,20 @@
             color:#212121;
         }
     }
+
+    /* Carousel */
+    .slick-dots {
+        li {
+          button {
+            background-color:black;
+          }
+          &.slick-active {
+            button {
+              background-color:v.$color-peach;
+            }
+          }
+        }
+      }
 
     .details-card img {
         background-color: v.$color-peach;
@@ -44,4 +59,6 @@
     .suggestions {
         color: #181616;
     }
+
+    
 }
