@@ -1,16 +1,16 @@
-@use "./variables" as v;
-@use '_alerts';
-@use '_carrousel';
-@use '_currentCity';
-@use '_darkMode';
-@use '_modal';
-@use '_rainDrop';
-@use '_searchBox';
-@use '_splashScreen';
-@use '_suggestionBox';
-@use '_weatherImage';
-@use '_weatherMeme';
-@use '_weatherSkeleton';
+@use "./variables.scss" as v;
+@use '_alerts.scss';
+@use '_carrousel.scss';
+@use '_currentCity.scss';
+@use '_darkMode.scss';
+@use '_modal.scss';
+@use '_rainDrop.scss';
+@use '_searchBox.scss';
+@use '_splashScreen.scss';
+@use '_suggestionBox.scss';
+@use '_weatherImage.scss';
+@use '_weatherMeme.scss';
+@use '_weatherSkeleton.scss';
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
