@@ -12,9 +12,10 @@ import weatherConditionsGroup from "../datas/weatherConditionsGroup.js";
 import Alerts from "../components/Alerts.js";
 import CurrentCity from "../components/CurrentCity.js";
 import Day from "../components/Day.js";
-import SearchBox from "../components/SearchBox.js";
+import Logo from "../components/Logo.js";
 import Modal from "../components/Modal.js";
 import RainDrop from "../components/RainDrop";
+import SearchBox from "../components/SearchBox.js";
 import WeatherImage from "../components/WeatherImage.js";
 import WeatherMeme from "../components/WeatherMeme.js";
 import WeatherSkeleton from "../components/WeatherSkeleton.js";
@@ -41,15 +42,12 @@ const App = () => {
     setIsMuted(!isMuted);
   };
 
-  //NavBAr => true clik sur la ville
-  const [showNavBar, setShowNavBar] = useState(false);
-
   //permet l'affichage ou non du weather skeletton
   const [loadingCity, setLoadingCity] = useState(false);
 
   //Drawer
   const [open, setOpen] = useState(false);
-  const [placement, setPlacement] = useState("left"); //par défaut sur la gauche, modifiable au onClick sur l'icone Settings
+  const [placement, setPlacement] = useState("right"); //par défaut sur la droite, modifiable au onClick sur l'icone Settings
   const showDrawer = (placementValue) => {
     setPlacement(placementValue);
     setOpen(true);
@@ -136,10 +134,6 @@ const App = () => {
     setDotPosition(value);
   };
 
-  /*Navbar qui apparait au clik avec l'input pour la saisie d'une ville*/
-  const handleCityClick = () => {
-    setShowNavBar(true);
-  };
 
   //saisie input et à la soumission la Navbar disparait
   const handleWeatherInput = async (city) => {
@@ -154,7 +148,6 @@ const App = () => {
       const data = await response.json();
 
       setWeatherData(data);
-      setShowNavBar(false);
       setLoadingCity(false);
     } catch (error) {
       console.error("Erreur lors de la récupération des données météo:", error);
@@ -270,21 +263,20 @@ const App = () => {
         className={isDarkMode ? `container dark-mode` : `container ${backgroundClass}`}>
         {/* HEADER = searchBox + params (light/dark mode + sound) */}
         <header>
-          {/* composant Navbar qui apparait au clik sur la ville et permet la saisie d'une ville ou la geolocalisation */}
-          {/* {showNavBar && ( */}
-            <SearchBox onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} isDarkMode={isDarkMode}/>
-          {/* )} */}
+          <Logo isDarkMode={isDarkMode}></Logo>
+          {/* composant Navbar qui permet la saisie d'une ville ou la geolocalisation */}
+          <SearchBox onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />
 
           {/* Affichage des params */}
-        <FiSettings className="settings-icon" onClick={showDrawer} />
-        <Drawer title="Paramètres" className="params" placement={placement} onClose={onClose} open={open}>
-          <div className="icon-display">
-            <Switch checked={isDarkMode} onClick={toggleDarkMode} className={isDarkMode ? "darkmode-switch" : "lightmode-switch"} />
-          </div>
-          <div className="sound-display">
-            <Switch checked={!isMuted} onClick={toggleMute} className={isMuted ? "muted-switch" : "unmuted-switch"}/>
-          </div>
-        </Drawer>
+          <FiSettings className="settings-icon" onClick={() => showDrawer("right")} />
+          <Drawer title="Paramètres" placement={placement} onClose={onClose} open={open}>
+            <div className="icon-display">
+              <Switch checked={isDarkMode} onClick={toggleDarkMode} className={isDarkMode ? "darkmode-switch" : "lightmode-switch"} />
+            </div>
+            <div className="sound-display">
+              <Switch checked={!isMuted} onClick={toggleMute} className={isMuted ? "muted-switch" : "unmuted-switch"}/>
+            </div>
+          </Drawer>
         </header>
 
         {/* MAIN*/}
@@ -293,7 +285,7 @@ const App = () => {
             
             <section className="currentWeatherForecast">
               {/* Composant qui reprend le display de la ville actuelle (Location Name, Current Temp, et Icon Display*/}
-              <CurrentCity currentWeather={weatherData} handleCityClick={handleCityClick}
+              <CurrentCity currentWeather={weatherData}
               />
               {/* test de placement de la div alerts afin qu'elle soit tjr sous la ville desktop OU mobile  */}
               <div className="alerts">{alertsList}</div>

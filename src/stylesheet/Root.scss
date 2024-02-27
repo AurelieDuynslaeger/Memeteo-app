@@ -3,6 +3,7 @@
 @use '_carrousel';
 @use '_currentCity';
 @use '_darkMode';
+@use '_logo';
 @use '_modal';
 @use '_rainDrop';
 @use '_searchBox';
@@ -35,6 +36,7 @@ body {
   }
 }
 
+
 .container {
   width: 100%;
   margin: auto;
@@ -46,6 +48,7 @@ body {
   text-align: center;
 }
 
+/* Drawer des params */
 .ant-drawer-body {
   display: flex;
   flex-direction: column;
@@ -54,11 +57,10 @@ body {
 
 }
 
-
 /* Responsive for desktop */
 @media screen and (min-width: v.$md-breakpoint) {
   main {
-    max-width: 80rem;
+    max-width: 80rem; //permet d'avoir des marges à gauche et à droite
     margin:0 auto; //permet de centrer horizontalement les div
   .group {
     display:flex;
@@ -115,7 +117,13 @@ body {
   background-repeat: no-repeat;
 }
 
-
+/* Header */
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
 
 
 
