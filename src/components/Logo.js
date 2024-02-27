@@ -7,8 +7,8 @@ import ImgLogoNega from "../assets/memteo-logo-base_nega.png";
 const Logo = ({ isDarkMode }) => {
 
     return (
-        <div>
-             <img src={isDarkMode ? `${ImgLogoNega}` : `${ImgLogo}`} alt="Logo Memetéo" className="logo" />
+        <div className="logo">
+             <img src={isDarkMode ? `${ImgLogoNega}` : `${ImgLogo}`} alt="Logo Memetéo"  />
         </div>
     )
 };

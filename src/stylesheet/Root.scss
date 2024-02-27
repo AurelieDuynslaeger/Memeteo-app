@@ -24,17 +24,21 @@ body {
   font-family: "Poppins", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  .sun-background{
+  &.sun-background{
     background-color: v.$color-peach;
   }
-  .cloudy-background {
+  &.cloudy-background {
     background-color: v.$color-green;
   }
-  .rain-background {
+  &.rain-background {
     background-color: v.$color-blue; 
   }
-  .default-background {
+  &.default-background {
     background-color: v.$color-default;
+  }
+  @media screen and (min-width: v.$md-breakpoint) {
+    max-width: 80rem; //permet d'avoir des marges à gauche et à droite
+    margin:0 auto; //permet de centrer horizontalement les div
   }
 }
 
@@ -62,8 +66,6 @@ body {
 /* Responsive for desktop */
 @media screen and (min-width: v.$md-breakpoint) {
   main {
-    max-width: 80rem; //permet d'avoir des marges à gauche et à droite
-    margin:0 auto; //permet de centrer horizontalement les div
   .group {
     display:flex;
     align-items:center;
@@ -125,6 +127,20 @@ header {
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  flex-wrap:wrap;
+
+  .settings {
+    flex-basis: 50%;
+    display: flex;
+    justify-content: center;
+    @media screen and (min-width: v.$md-breakpoint) {
+      order:1;
+      display: flex;
+      flex-basis: 33%;
+      justify-content: flex-end;
+    }
+  }
+
 }
 
 

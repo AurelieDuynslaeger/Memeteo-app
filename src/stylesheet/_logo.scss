@@ -1,3 +1,18 @@
+@use "./variables" as v;
+
 .logo {
-    width: 10rem;
+    display: flex;
+    justify-content: center;
+    flex-basis: 50%;
+    @media screen and (min-width: v.$md-breakpoint) {
+        flex-basis: 33%;
+        justify-content: flex-start;
+        /* display: flex;
+        justify-content: center; */
+    }
+
+
+    img {
+        width: 10rem;
+    }
 }

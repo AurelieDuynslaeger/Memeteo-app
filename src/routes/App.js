@@ -128,6 +128,23 @@ const App = () => {
     }
   }, [currentWeatherText]);
 
+  // ajout dynamique de la classe sur le body
+  useEffect(() => {
+    // on récupère le tag body
+    const body = window.document.getElementsByTagName('body')[0] || null;
+
+    // si body existe (cas contraire qui n'arrivera jamais mais bon)
+    if (body) {
+      // on supprime toutes les classes
+      for (let value of body.classList.values()) {
+        body.classList.remove(value)
+      }
+      
+      // ici, on ajoute
+      if (isDarkMode || backgroundClass) body.classList.add(isDarkMode ? 'dark-mode' : backgroundClass)
+    }
+  }, [backgroundClass, isDarkMode]) // dès qu'une de ces valeurs change, le code dans le useEffect sera executé
+
   //carousel dots
   const [dotPosition, setDotPosition] = useState("right");
   const handlePositionChange = ({ target: { value } }) => {
@@ -259,24 +276,25 @@ const App = () => {
     return <WeatherSkeleton />;
   } else {
     return (
-      <div
-        className={isDarkMode ? `container dark-mode` : `container ${backgroundClass}`}>
-        {/* HEADER = searchBox + params (light/dark mode + sound) */}
+      <div className="container">
+        {/* HEADER = logo + searchBox + params (light/dark mode + sound) */}
         <header>
           <Logo isDarkMode={isDarkMode}></Logo>
-          {/* composant Navbar qui permet la saisie d'une ville ou la geolocalisation */}
-          <SearchBox onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />
 
           {/* Affichage des params */}
-          <FiSettings className="settings-icon" onClick={() => showDrawer("right")} />
-          <Drawer title="Paramètres" placement={placement} onClose={onClose} open={open}>
-            <div className="icon-display">
-              <Switch checked={isDarkMode} onClick={toggleDarkMode} className={isDarkMode ? "darkmode-switch" : "lightmode-switch"} />
-            </div>
-            <div className="sound-display">
-              <Switch checked={!isMuted} onClick={toggleMute} className={isMuted ? "muted-switch" : "unmuted-switch"}/>
-            </div>
-          </Drawer>
+          <div className="settings"><FiSettings className="settings-icon" onClick={() => showDrawer("right")} /></div>
+            <Drawer title="Paramètres" placement={placement} onClose={onClose} open={open}>
+              <div className="icon-display">
+                <Switch checked={isDarkMode} onClick={toggleDarkMode} className={isDarkMode ? "darkmode-switch" : "lightmode-switch"} />
+              </div>
+              <div className="sound-display">
+                <Switch checked={!isMuted} onClick={toggleMute} className={isMuted ? "muted-switch" : "unmuted-switch"}/>
+              </div>
+            </Drawer>
+
+          {/* composant Navbar qui permet la saisie d'une ville ou la geolocalisation */}
+          <SearchBox onWeatherInput={handleWeatherInput} setLoadingCity={setLoadingCity} />
+          
         </header>
 
         {/* MAIN*/}
