@@ -1,93 +1,117 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegStar, FaStar } from "react-icons/fa";
 
-export default function SuggestionBox({ showSuggestions, suggestions, handleSuggestionClick, error }) {
+export default function SuggestionBox({ showSuggestions, showFavoris, suggestions, handleSuggestionClick, error,}) {
+  // get fav from localstorage
+  const [favs, setFavs] = useState(
+    JSON.parse(localStorage.getItem("memeteo-favourites-cities")) || []
+  );
+  const [results, setResults] = useState([]);
 
-  // Etape 1
-  // const fav  = get fav from localstorage
-  const [favs, setFavs] = useState(JSON.parse(localStorage.getItem("memeteo-favourites-cities")) || []);
-  const [isFav, setIsFav] = useState(false);
+  // Ajouter une ville en favori
+  const addToFavs = (item) => {
+    // Si la ville est déjà en favori (cas qui n'arrivera jamais, à part si l'app lag ou si l'user arrive à double-cliquer)
+    if (favs.includes(item)) return; // Ici, on sort de la fonction (comme un break)
 
-  // add a fav into localstorage
-    const addToFavs = (item) => {
-        // if city is not already in favs
-        if (!favs.includes(item)) {
-            const newFavouriteList = [...favs, item];
-            setFavs(newFavouriteList);
-            localStorage.setItem("memeteo-favourites-cities", JSON.stringify([...favs, item]));
-        // else (city is already in favs)
-        } else {
-            alert("L'élément existe déjà dans la liste des favoris.");
-        }
-  } 
+    const newFavouriteList = [...favs, item];
+    setFavs(newFavouriteList);
+    localStorage.setItem("memeteo-favourites-cities", JSON.stringify(newFavouriteList)); // On met à jour le localstorage
+  };
 
-  // remove a fav from localstorage
-  const removeFromFavs = (index) => {
-    const copyFavs = [...favs]; // Copie du tableau
-    copyFavs.splice(index, 1); // On supprime un élément du tableau copyFav à l'indice spécifié par index
-    setFavs(copyFavs); // On met à jour l'état products du composant avec la nouvelle valeur copyProducts, déclenchant ainsi une ré-renderisation du composant avec le panier mis à jour.
-    localStorage.setItem("memeteo-favourites-cities", JSON.stringify(copyFavs)); // On met à jour la valeur stockée dans le localStorage
-  }
+  // Supprimer un favori
+  const removeFromFavs = (item) => {
+    if (!favs.includes(item)) return;
 
-  // display all the favs
+    const newFavs = favs.filter((fav) => fav !== item);
+    setFavs(newFavs); // On met à jour l'état, déclenchant ainsi une ré-renderisation du composant
+    localStorage.setItem("memeteo-favourites-cities", JSON.stringify(newFavs)); // On met à jour le localStorage
+  };
+
+  // Afficher tous les favoris
   const listFavs = favs.map((item, index) => {
-        return (
-        <li 
+    return (
+      <li
         key={index}
-        onClick={() => handleSuggestionClick(item)}
-        className="suggestion"> 
-        {index+1}. {item}<span className="fav" onClick={() => removeFromFavs(index)}><FaStar /></span></li>
-    )
-})
+        onClick={(e) => {
+          handleSuggestionClick(item);
+        }}
+        className="suggestion"
+      >
+        {index + 1}. {item}
+        <span
+          className="fav"
+          onClick={(e) => {
+            e.stopPropagation();
+            removeFromFavs(item);
+          }}
+        >
+          <FaStar className="icon" />
+        </span>
+      </li>
+    );
+  });
 
-  // isFav() => { return city in fav }
+  useEffect(() => {
+    // On filtre les résultats pour avoir des objets uniques (éviter les "Paris, United States of America" multiples)
+    const res = [...new Set(suggestions)]; 
 
-  // handleFav () => { 
-  //  if (!isFav()) {
-  //   add to fav > parcourir le tableau des fav et vérifier que l'id ne soit pas dedans
-  //  } else {
-  //   remove city from fav
-  //  }
-  //   save fav to local storage
-  // }
-  
+    // On trie les résultats pour avoir les favoris en premier puis les suggestions
+    res.sort((a, b) => {
+      return favs.includes(a) ? -1 : favs.includes(b) ? 0 : 1;
+    });
 
-  // Etape 2
-  // Merge fav + suggestions (sans les fav)
+    setResults(res);
+  }, [suggestions, favs]);
 
   return (
-    <>{ ((showSuggestions && suggestions.length > 1) || error) && (
+    <>
+      {((showSuggestions && results.length) || error) && (
         <ul className="suggestions">
-          {error && suggestions.length<1 &&  (
-            <li className="error">{error}</li>
-          )}
-          {/* Display suggestions */}
-          {suggestions.map((item, index) => (
+          {error && results.length < 1 && <li className="error">{error}</li>}
+          {/* Afficher les suggestions */}
+          {results.map((item, index) => (
             <li
               key={index}
               onClick={() => handleSuggestionClick(item)}
-              className="suggestion"> 
-                {item} {/* Here = location name / place name */}
-                {/* IF the city is not in fav > the user can add it into the fav */}
-                {(!favs.includes(item)) && (<span className="fav" onClick={() => addToFavs(item)}><FaRegStar /> </span>)}
-                {/* IF the city is already in fav > the user can remove it from the fav */}
-                {(favs.includes(item)) && (<span className="fav" onClick={() => removeFromFavs(index)}><FaStar /> </span>)}
-                { /* Add a span here for fav + class for fav (isFav) */} 
+              className="suggestion"
+            >
+              {item} {/* On affiche le nom de la ville et le pays */}
+              {/* Si la ville n'est pas en favori, l'utilisateur peut l'ajouter en favori */}
+              {!favs.includes(item) && (
+                <span
+                  className="fav"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToFavs(item);
+                  }}
+                >
+                  <FaRegStar className="icon" />
+                </span>
+              )}
+              {/* Si la ville est déjà en favori, l'utilisateur peut la supprimer des favoris */}
+              {favs.includes(item) && (
+                <span
+                  className="fav"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeFromFavs(item);
+                  }}
+                >
+                  <FaStar className="icon" />
+                </span>
+              )}
             </li>
           ))}
         </ul>
       )}
-      {/* Display favs list */}
-      { (suggestions.length < 1) && (
-        console.log(favs.length),
-        <ul className="suggestions">
-          {listFavs}
-        </ul>
+      {/* Afficher la liste des favoris */}
+      {showFavoris && results.length < 1 && (
+        <ul className="suggestions">{listFavs}</ul>
       )}
-      {/* Display a msg when no fav */}
-      { (suggestions.length < 1 && favs.length === 0) && (
+      {/* Afficher un msg si aucun favori */}
+      {showFavoris && results.length < 1 && favs.length === 0 && (
         <p className="suggestions">Aucun favori.</p>
       )}
     </>
-  )
+  );
 }
