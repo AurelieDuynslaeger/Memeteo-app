@@ -280,7 +280,7 @@ const filteredHours = weatherData.forecast && weatherData.forecast.forecastday &
 
           {/* Affichage des params */}
           <div className="settings"><FiSettings className="settings-icon" onClick={() => showDrawer("right")} /></div>
-            <Drawer title="Paramètres" placement={placement} onClose={onClose} open={open}>
+            <Drawer className="drawer" title="Paramètres" placement={placement} onClose={onClose} open={open}>
               <div className="icon-display">
                 <Switch checked={isDarkMode} onClick={toggleDarkMode} className={isDarkMode ? "darkmode-switch" : "lightmode-switch"} />
               </div>
