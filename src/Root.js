@@ -16,7 +16,7 @@ const Root = () => (
       <Router>
           <Routes>
             <Route path='/' element={<SplashScreen/>} />
-              <Route path='/home' element={<App/>} />
+            <Route path='/home' element={<App/>} />
           </Routes>
       </Router>
   );

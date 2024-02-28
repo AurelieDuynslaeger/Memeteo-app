@@ -5,13 +5,6 @@ import { FaStar } from "react-icons/fa";
 import { MdMyLocation } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 
-// import des assets
-import Logo from "../assets/memteo-logo-base.png";
-
-//import des feuilles de styles
-import "../stylesheet/_searchBox.scss";
-import "../stylesheet/_suggestionBox.scss";
-
 //import des composants
 import SuggestionBox from "./SuggestionBox.js";
 
@@ -66,13 +59,13 @@ export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
       // Effacer l'input après la soumission
       setCity("");
       setShowSuggestions(false);
-      setShowFavoris(false);
     }
   };
 
   function handleSuggestionClick(value) {
     setCity(value);
     setShowSuggestions(false);
+    setShowFavoris(false);
   }
 
   /* geolocalisation */
@@ -87,37 +80,34 @@ export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
   };
 
   return (
-    <div className="navbar">
-      <img src={Logo} alt="Logo Memetéo" className="logo" />
-      <div class="setCity">
-        <div>
-          <MdMyLocation
-            title="Votre position actuelle" // légende affichée lors du hover
-            onClick={handleGeolocation}
-            className="iconLarger"
-          />
-        </div>
-        <div>
-          <FaStar
-            title="Vos favoris" // légende affichée lors du hover
-            onClick={() => {setShowFavoris(!showFavoris);}}
-            className="iconLarger"
-          />
-        </div>
-        <form>
-          <input
-            placeholder="Tapez votre recherche ici..."
-            value={city}
-            onChange={(e) => handleInputChange(e.target.value)}
-          />
-          <SuggestionBox
-            {...{ showSuggestions, suggestions, handleSuggestionClick, error }}
-          />
-          <button htmlType="submit" onClick={(e) => handleFormSubmit(e)}>
-            <IoSearch class="iconSearch" />
-          </button>
-        </form>
+    <div class="setCity">
+      <div>
+        <MdMyLocation
+          title="Votre position actuelle" // légende affichée lors du hover
+          onClick={handleGeolocation}
+          className="iconLarger"
+        />
       </div>
+      <div>
+        <FaStar
+          title="Vos favoris" // légende affichée lors du hover
+          onClick={() => {setShowFavoris(!showFavoris);}}
+          className="iconLarger"
+        />
+      </div>
+      <form>
+        <input
+          placeholder="Tapez votre recherche ici..."
+          value={city}
+          onChange={(e) => handleInputChange(e.target.value)}
+        />
+        <SuggestionBox
+          {...{ showSuggestions, showFavoris, suggestions, handleSuggestionClick, error }}
+        />
+        <button htmlType="submit" onClick={(e) => handleFormSubmit(e)}>
+          <IoSearch class="iconSearch" />
+        </button>
+      </form>
     </div>
   );
 };

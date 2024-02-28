@@ -19,8 +19,9 @@ const Alerts = (alertInfo) => {
     // Snow = "Neige"
     // black ice = "Verglas"
     // Avalanches = "Avalanches"
-    // Heat wave = "Chaleur"
+    // Heat wave = "Canicule"
     // Extreme cold = "Grand Froid"
+    // Dense Fog = "Brouillard Intense"
 
     // Traduction de l'événement
     //si dans la chaine retournée par l'api => weatherData.alerts.alert.event = "Green Warning for wind" où "wind" (=true) alors au lieu de wind on affiche Vent etc...
@@ -50,13 +51,19 @@ const Alerts = (alertInfo) => {
             eventTranslate = "Avalanches";
             break;
         case event.includes("heat wave"):
-            eventTranslate = "Chaleur";
+            eventTranslate = "Canicule";
             break;
         case event.includes("extreme cold"):
             eventTranslate = "Grand Froid";
             break;
+        case event.includes("Fog"):
+            eventTranslate = "Brouillard";
+            break;
+        case event.includes("Current"):
+            eventTranslate = "Courants Dangereux";
+            break;
         default:
-            eventTranslate = "Autre";
+            eventTranslate = "";
     }
 
     // Couleur de l'icône en fonction de l'événement de l'alerte (green, yellow, orange, red)
@@ -68,14 +75,14 @@ const Alerts = (alertInfo) => {
         case event.includes("Yellow") || event.includes("Moderate"):
             iconColor = 'yellow';
             break;
-        case event.includes("Orange"):
+        case event.includes("Orange") || event.includes("Dense"):
             iconColor = 'orange';
             break;
-        case event.includes("Severe") || event.includes("Red"):
+        case event.includes("Severe") || event.includes("Red") || event.includes("Rip"):
             iconColor = 'red';
             break;
         default:
-            iconColor = 'gray'; 
+            iconColor = "transparent"; 
     }
 
     return (
@@ -86,7 +93,7 @@ const Alerts = (alertInfo) => {
             {/* couleur de l'icone react dynamique en fonction de ce qui est retournée dans la chaine de l'api pour l'event */}
             <BsCircleFill color={iconColor} />
             <p className='alert-event'>
-                {/* alert.event="wind" ou "flood" ou "thunderstorms", alors l'event est traduit grace au switch du dessus */}
+                {/* alert.event.includes="wind" ou "flood" ou "thunderstorms", alors l'event est traduit grace au switch du dessus */}
                 {eventTranslate} jusque {format(expires, 'HH', { locale: fr })}h
             </p>
         </div>
