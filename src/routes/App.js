@@ -74,10 +74,17 @@ const App = () => {
   const [memes, setMemes] = useState([]);
   //Etat des Sons
   const [musiques, setMusiques] = useState([]);
-  //gestion du background, des memes et des sons grâce aux conditions actuelles renvoyées par l'api
-  const currentWeatherText = weatherData?.current?.condition?.text;
-  // console.log(currentWeatherText) = Light rain
-  //état du Background
+  //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
+  const [autoplayEnabled, setAutoplayEnabled] = useState(false);
+  //carousel dots, le right va indiquer le côté où mettre les points
+  const [dotPosition, setDotPosition] = useState("right");
+  //ce qui va permettre de passer à une slide du carrousel en cliquant sur le point
+  const handlePositionChange = ({ target: { value } }) => {
+    setDotPosition(value);
+  };
+  //permet l'affichage ou non du weather skeletton
+  const [loadingCity, setLoadingCity] = useState(false);
+  //état du background
   const [backgroundClass, setBackgroundClass] = useState("");
 
   /////////////////// HOOKS d'effets (WeatherData, Background, Memes/Sons) ///////////////////
@@ -326,7 +333,9 @@ const filteredHours = weatherData.forecast && weatherData.forecast.forecastday &
 
             <div>
               <section className="carousel">
-                <div className='carousel-container'>
+                <div className="carousel-container">
+
+                  {/* //radio.group va permettre de définir le mode de changement de diapo et la position des points */}
                   <Radio.Group
                     onChange={handlePositionChange}
                     value={dotPosition}
