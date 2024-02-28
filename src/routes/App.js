@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 //import composant Ant Design et React Icons
 import { Carousel, Drawer, Radio, Switch } from "antd";
@@ -128,11 +128,6 @@ const App = () => {
       // console.log(weatherBackgroundClass) = rain-backgroung
       // on met à jour l'état du background dans le state
       setBackgroundClass(weatherBackgroundClass);
-    } else {
-      // Sinon on affiche les erreurs
-      console.error(
-        `Aucune correspondance trouvée pour les conditions météorologiques actuelles : ${currentWeatherText}`
-      );
     }
   }, [currentWeatherText]);
 
@@ -201,7 +196,6 @@ const App = () => {
     const dayDate = new Date(day.date);
     // console.log(format(day.date, 'dd', { locale: fr }));
     return (
-      <>
         <Week
           key={index}
           day={formatDay(dayDate)}
@@ -210,7 +204,6 @@ const App = () => {
           temperature={day.day.avgtemp_c}
           onClick={() => handleDayClick(day)}
         />
-      </>
     );
   });
 
@@ -224,24 +217,24 @@ const next_day_time_epoch = current_time_epoch + 86400;
 
 
 //Step 2 mapper et filtrer jusqu'au next_day_time_epoch
-const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day) => (
-  <>
+const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index1) => (
+  <Fragment key={index1}>
     {day.hour.filter(hour => {
       // Conversion du timestamp de l'heure de la prévision en seconde
       const hour_time_epoch = parseInt(hour.time_epoch);
 
       // Filtre les heures à partir de l'heure actuelle jusqu'à celle du lendemain à la même heure
       return hour_time_epoch >= current_time_epoch && hour_time_epoch <= next_day_time_epoch;
-    }).map((hour, index) => (
+    }).map((hour, index2) => (
       <Day
-        key={index}
+        key={index2}
         time={formatTime(hour.time)}
         weather={hour.condition.code}
         isDay={hour.is_day}
         temperature={hour.temp_c}
       />
     ))}
-  </>
+  </Fragment>
 ));
 
   //test composant RainDrop pour le % de pluie
@@ -251,7 +244,7 @@ const filteredHours = weatherData.forecast && weatherData.forecast.forecastday &
   const rainPercent = weatherData && weatherData.forecast && weatherData.forecast.forecastday &&
     weatherData.forecast.forecastday.map((day, index) =>
     (
-      <> 
+      <React.Fragment key={index}> 
       {day.hour.filter(hour => {
       // Conversion du timestamp de l'heure de la prévision en seconde
       const hour_time_epoch = parseInt(hour.time_epoch);
@@ -264,7 +257,7 @@ const filteredHours = weatherData.forecast && weatherData.forecast.forecastday &
         <RainDrop pourcentage={hour.chance_of_rain} />
       </div>
     ))}
-  </>
+  </React.Fragment>
 ));
 
   //affichage des alertes si l'api en renvoit
