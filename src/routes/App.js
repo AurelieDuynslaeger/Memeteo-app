@@ -38,7 +38,6 @@ const App = () => {
   //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
   //Fonction pour activer/désactiver le mute
   const toggleMute = () => {
-    console.log(isMuted);
     setIsMuted(!isMuted);
   };
 
@@ -175,9 +174,9 @@ const App = () => {
   // Au clik sur un des jours (props day) de prévisions dans le Carousel, la modal apparait avec le résumé des prévisions pour ce jour
   const handleDayClick = (day) => {
     const date = format(day.date, "eeee dd LLLL", { locale: fr });
-    console.log(date);
+    //console.log(date);
     const sunrise = hourConvert(day.astro.sunrise);
-    console.log(day.astro.sunset); //06:16 PM
+    //console.log(day.astro.sunset); //06:16 PM
     const sunset = hourConvert(day.astro.sunset);
     const maxTemp = day.day.maxtemp_c;
     const minTemp = day.day.mintemp_c;
