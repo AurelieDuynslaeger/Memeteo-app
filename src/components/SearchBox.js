@@ -9,6 +9,10 @@ import { IoSearch } from "react-icons/io5";
 import SuggestionBox from "./SuggestionBox.js";
 
 export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
+
+  const apiWeather = process.env.REACT_APP_WEATHER_API_KEY;
+
+
   const [city, setCity] = useState("");
 
   // Suggestions de villes
@@ -23,7 +27,7 @@ export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
     if (value.length >= 3) {
       try {
         const response = await fetch(
-          `http://api.weatherapi.com/v1/search.json?key=5929e663f6c74ae192890247240802&q=${value}`
+          `https://api.weatherapi.com/v1/search.json?key=${apiWeather}&q=${value}`
         );
         if (!response.ok) {
           throw new Error("Ville non trouvée");
