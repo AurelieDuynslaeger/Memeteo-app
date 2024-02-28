@@ -1,4 +1,6 @@
 
+@use "variables" as v;
+
 // CurrentCity Component style
 .city {
     display: flex;
@@ -7,10 +9,13 @@
     justify-content: space-between;
     margin: auto;
     .current-temp {
-      font-size: 6.5rem;
+      font-size: 5rem;
       margin-top: 1rem;
       margin-bottom: -1rem;
       font-weight: 300;
+      @media screen and (min-width: v.$md-breakpoint) {
+        font-size: 6.5rem;
+      }
     }
     .city-search {
       display: flex;

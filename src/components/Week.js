@@ -8,8 +8,8 @@ const Week = ({ day , date, weather, temperature, onClick }) => {
     return (
         // test inversement des elements à voir sur le rendu avec la maquette
         <div className="days" onClick={onClick}>
-            <h4>{day} {date}</h4>
-            <h6>{temperature}°C</h6>
+            <p>{day} {date}</p>
+            <p>{temperature}°C</p>
             {weather && <WeatherIcon code={weather} isDay={true} />}
         </div>
     );
