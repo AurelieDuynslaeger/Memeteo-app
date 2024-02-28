@@ -27,6 +27,8 @@ const App = () => {
 
   const apiWeather = process.env.REACT_APP_WEATHER_API_KEY;
 
+
+
   /////////////////// HOOKS d'états (true/false) ///////////////////
 
   //Darkmode
@@ -106,7 +108,6 @@ const App = () => {
   //Fetch pour aller chercher les memes et les sons sur notre API
   const fetchData = async (endpoint) => {
     const apiUrl = `https://memeteo-api.onrender.com/${endpoint}`;
-    // https://memeteo-api.onrender.com/memes
     const response = await fetch(apiUrl);
     return response.json();
   };
@@ -173,9 +174,8 @@ const App = () => {
   // Au clik sur un des jours (props day) de prévisions dans le Carousel, la modal apparait avec le résumé des prévisions pour ce jour
   const handleDayClick = (day) => {
     const date = format(day.date, "eeee dd LLLL", { locale: fr });
-    console.log(date);
     const sunrise = hourConvert(day.astro.sunrise);
-    console.log(day.astro.sunset); //06:16 PM
+    // console.log(day.astro.sunset); //06:16 PM
     const sunset = hourConvert(day.astro.sunset);
     const maxTemp = day.day.maxtemp_c;
     const minTemp = day.day.mintemp_c;
@@ -197,8 +197,7 @@ const App = () => {
     const dayDate = new Date(day.date);
     // console.log(format(day.date, 'dd', { locale: fr }));
     return (
-      <div className="week" key={index}>
-        {/* //récupération du composant week */}
+      <>
         <Week
           key={index}
           day={formatDay(dayDate)}
@@ -207,56 +206,70 @@ const App = () => {
           temperature={day.day.avgtemp_c}
           onClick={() => handleDayClick(day)}
         />
-      </div>
+      </>
     );
   });
 
-//on récupère la date actuelle
-  const currentDate = new Date().toISOString().split('T')[0];
-  // currentDate = 2024-02-26
-  //on récupère l'heure actuelle
-  const currentTime = new Date().getHours();
-  // currentTime = 21
-  //on filtre les prévisions par heure à PARTIR de l'heure actuelle
-  const filteredHours =
-    forecastWeather.forecast &&
-    forecastWeather.forecast.forecastday &&
-    forecastWeather.forecast.forecastday.map((day, index) => (
-      <div className="MiniCards" key={index}>
-        {/* substr extrait une partie de la chaîne de caractères hour.time. Elle commence à l'index 11 (pour obtenir les deux premiers caractères de l'heure) et extrait 2 caractères (pour obtenir les heures). */}
-        {day.hour
-          .filter((hour) => parseInt(hour.time.substr(11, 2)) > currentTime)
-          .map((hour, index) => (
-            //récupération du composant day
-            <Day
-              key={index}
-              time={formatTime(hour.time)}
-              weather={hour.condition.code}
-              temperature={hour.temp_c}
-            />
-          ))}
-      </div>
-    ));
 
- 
+//step 1 get current_time_epoch en timestamp pour le comparer au timestamp unix de l'api "hour.time_epoch"
+const current_time_epoch = Math.floor(Date.now()/1000); //millisecondes en secondes à l'entier inférieur le plus proche
+// = 1709045760
+// 24h de + = diff de 86 400 millisecondes
+//récupérer le time_epoch à 24h de plus
+const next_day_time_epoch = current_time_epoch + 86400; 
+
+
+//Step 2 mapper et filtrer jusqu'au next_day_time_epoch
+const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day) => (
+  <>
+    {day.hour.filter(hour => {
+      // Conversion du timestamp de l'heure de la prévision en seconde
+      const hour_time_epoch = parseInt(hour.time_epoch);
+
+      // Filtre les heures à partir de l'heure actuelle jusqu'à celle du lendemain à la même heure
+      return hour_time_epoch >= current_time_epoch && hour_time_epoch <= next_day_time_epoch;
+    }).map((hour, index) => (
+      <Day
+        key={index}
+        time={formatTime(hour.time)}
+        weather={hour.condition.code}
+        isDay={hour.is_day}
+        temperature={hour.temp_c}
+      />
+    ))}
+  </>
+));
+
+  //test composant RainDrop pour le % de pluie
+  // const rainTest = weatherData?.forecast?.forecastday;
+  // console.log('log du test pluie' ,rainTest);
   ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
-  const rainPercent =
-    forecastWeather &&
-    forecastWeather.forecast &&
-    forecastWeather.forecast.forecastday &&
-    forecastWeather.forecast.forecastday.map((day, index) => (
-      <>
-        {day.hour
-          .filter((hour) => parseInt(hour.time.substr(11, 2)) > currentTime)
-          .map((hour, index) => (
-            <div>
-              <p className="rain-time">{formatTime(hour.time)}</p>
-              {/* //récupération du composant RainDrop */}
-              <RainDrop pourcentage={hour.chance_of_rain} />
-            </div>
-          ))}
-      </>
-    ));
+  const rainPercent = weatherData && weatherData.forecast && weatherData.forecast.forecastday &&
+    weatherData.forecast.forecastday.map((day, index) =>
+    (
+      <> 
+      {day.hour.filter(hour => {
+      // Conversion du timestamp de l'heure de la prévision en seconde
+      const hour_time_epoch = parseInt(hour.time_epoch);
+
+      // Filtre les heures à partir de l'heure actuelle jusqu'à celle du lendemain à la même heure
+      return hour_time_epoch >= current_time_epoch && hour_time_epoch <= next_day_time_epoch;
+    }).map((hour, index) => (
+      <div key={index}>
+        <p className='rain-time'>{formatTime(hour.time)}</p>
+        <RainDrop pourcentage={hour.chance_of_rain} />
+      </div>
+    ))}
+  </>
+));
+
+  //affichage des alertes si l'api en renvoit 
+  const alertsList = weatherData.forecast &&
+  weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
+    return(
+      <Alerts key={index} event={alert.event} expires={alert.expires}/>
+    )
+  });
 
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {

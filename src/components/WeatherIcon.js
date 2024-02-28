@@ -7,7 +7,7 @@ import { BsCloudRainHeavyFill, BsCloudRainHeavy, BsCloudSleetFill, BsCloudSleet 
 
 
 
-//récup des données json pour les icones météo (reconstruction du tableau en gardant les codes de l'api, afin de dispather notre propre set dd'icones)
+//récup des données json pour les icones météo (copie du tableau de l'api en gardant les codes des conditions météo, afin de dispather notre propre set d'icones)
 const weatherIcons = [
   {
     "code": 1000,

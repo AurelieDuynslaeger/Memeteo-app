@@ -12,10 +12,15 @@ const RainDrop = ({ pourcentage }) => {
     height: `${pourcentage}%`
   };
 
-  return (
-    <div className="rain-drop">
-      <div className="filled-raindrop" style={styleRemplissage}>
-        <span>{pourcentage}%</span>
+   // "no-rain" si le pourcentage est égal à 0
+   const className = pourcentage === 0 ? 'no-rain' : '';
+
+   return (
+    <div className={`rain-drop ${className}`}>
+      <div className="rain-drop-inner">
+        <div className="filled-raindrop" style={styleRemplissage}>
+          <span>{pourcentage}%</span>
+        </div>
       </div>
     </div>
   );
