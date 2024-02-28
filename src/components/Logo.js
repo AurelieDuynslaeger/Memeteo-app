@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 // import des assets
 import ImgLogo from "../assets/memteo-logo-base.png";

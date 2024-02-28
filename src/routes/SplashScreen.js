@@ -17,7 +17,6 @@ function SplashScreen() {
     return (
       <div className="SplashScreen-page">
         <img className="LogoMemeteo" src={logo} alt="logo de Memétéo" />
-       
       </div>
     );
   }

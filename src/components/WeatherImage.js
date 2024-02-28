@@ -1,6 +1,6 @@
 import React from "react"
 import blizzard from "../assets/Weather Icons/blizzard.png";
-// import blowingSnow from "../assets/Weather Icons/blowingSnow.png";
+import blowingSnow from "../assets/Weather Icons/blowingSnow.png";
 import cloudyDay from "../assets/Weather Icons/cloudyDay.png";
 import cloudyNight from "../assets/Weather Icons/cloudyNight.png";
 import fogDay from "../assets/Weather Icons/fogDay.png";
@@ -122,8 +122,8 @@ const weatherImages = [
     {
         "code": 1114,
         "day": "Blowing snow",
-        "dayDisplay": patchySnowPossibleDay,
-        "nightDisplay": patchySnowPossibleNight,
+        "dayDisplay": blowingSnow,
+        "nightDisplay": blowingSnow,
     },
     {
         "code": 1117,
@@ -190,8 +190,8 @@ const weatherImages = [
     {
         "code": 1189,
         "day": "Moderate rain",
-        "dayDisplay": heavyRainAtTime,
-        "nightDisplay": heavyRainAtTime,
+        "dayDisplay": ModerateOrHeavyRainShower,
+        "nightDisplay": ModerateOrHeavyRainShower,
     },
     {
         "code": 1192,
@@ -256,8 +256,8 @@ const weatherImages = [
     {
         "code": 1222,
         "day": "Patchy heavy snow",
-        "dayDisplay": moderateSnow,
-        "nightDisplay": moderateSnow,
+        "dayDisplay": patchySnowPossibleDay,
+        "nightDisplay": patchySnowPossibleNight,
     },
     {
         "code": 1225,

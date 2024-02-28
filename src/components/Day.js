@@ -1,6 +1,7 @@
 import React from 'react'
 import WeatherIcon from './WeatherIcon';
 
+//ce composant permet d'afficher la deuxième page du carrousel avec les prévisions heure par heure de la journée
 const Day = ({time, weather, temperature, isDay}) => {
   return (
     <div className="hour">
