@@ -80,7 +80,7 @@ export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
   };
 
   return (
-    <div class="setCity">
+    <div className="setCity">
       <div>
         <MdMyLocation
           title="Votre position actuelle" // légende affichée lors du hover

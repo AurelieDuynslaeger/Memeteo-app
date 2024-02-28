@@ -62,6 +62,9 @@ const Alerts = (alertInfo) => {
         case event.includes("Current"):
             eventTranslate = "Courants Dangereux";
             break;
+        case event.includes("Wind Chill"):
+            eventTranslate = "Vents Glaciaux";
+            break;
         default:
             eventTranslate = "";
     }
@@ -78,7 +81,7 @@ const Alerts = (alertInfo) => {
         case event.includes("Orange") || event.includes("Dense"):
             iconColor = 'orange';
             break;
-        case event.includes("Severe") || event.includes("Red") || event.includes("Rip"):
+        case event.includes("Severe") || event.includes("Red") || event.includes("Rip") || event.includes("Advisory"):
             iconColor = 'red';
             break;
         default:
