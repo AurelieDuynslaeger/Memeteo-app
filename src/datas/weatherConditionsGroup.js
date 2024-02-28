@@ -13,7 +13,7 @@ const weatherConditionsGroup = {
       },
       'Partly cloudy': {
         meme: 'partlycloudy',
-        sound: 'cloudy',
+        sound: 'partlycloudy',
         background: 'cloudy-background'
       },
       'Cloudy': {
