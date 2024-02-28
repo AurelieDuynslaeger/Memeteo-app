@@ -27,6 +27,8 @@ const App = () => {
 
   const apiWeather = process.env.REACT_APP_WEATHER_API_KEY;
 
+
+
   /////////////////// HOOKS d'états (true/false) ///////////////////
 
   //Darkmode
@@ -188,7 +190,7 @@ const App = () => {
     const dayDate = new Date(day.date);
     // console.log(format(day.date, 'dd', { locale: fr }));
     return (
-      <div className="week" key={index}>
+      <>
         <Week
           key={index}
           day={formatDay(dayDate)}
@@ -197,7 +199,7 @@ const App = () => {
           temperature={day.day.avgtemp_c}
           onClick={() => handleDayClick(day)}
         />
-      </div>
+      </>
     );
   });
 
