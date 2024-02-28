@@ -2,18 +2,20 @@
 
 
 
-.SplashScreen-page {
+.splashScreen {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: v.$color-default;
+    background-color: #212121;
+
+    .logo {
+      display: flex;
+      justify-content: center;
+    }
   
     .LogoMemeteo {
-      max-width: 50%;
-      @media screen and (min-width: v.$md-breakpoint) {
-        max-width: 30%;
-      }
+      width: 50%;
     }
   }

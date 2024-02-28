@@ -9,6 +9,10 @@
       width:auto;
       height: 12rem;
       @media screen and (min-width: v.$md-breakpoint) {
+        height:16rem;
+        width:auto;
+      }
+      @media screen and (min-width: v.$lg-breakpoint) {
         height:20rem;
         width:auto;
       }
