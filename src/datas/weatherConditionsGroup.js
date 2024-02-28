@@ -168,37 +168,37 @@ const weatherConditionsGroup = {
         },
       'Patchy freezing drizzle possible': {
         meme: 'freezing',
-        sound: 'freezing',
+        sound: 'wind',
         background: 'rain-background'
         },
       'Freezing drizzle': {
         meme: 'freezing',
-        sound: 'freezing',
+        sound: 'wind',
         background: 'rain-background'
         },
       'Light sleet': {
         meme: 'freezing',
-        sound: 'freezing',
+        sound: 'wind',
         background: 'rain-background'
         },
       'Light sleet showers': {
         meme: 'freezing',
-        sound: 'freezing',
+        sound: 'wind',
         background: 'rain-background'
         },
       'Moderate or heavy sleet showers': {
         meme: 'freezing',
-        sound: 'freezing',
+        sound: 'wind',
         background: 'rain-background'
         },
       'Light showers of ice pellets': {
         meme: 'freezing',
-        sound: 'freezing',
+        sound: 'wind',
         background: 'rain-background'
         },
       'Ice pellets': {
         meme: 'verglas',
-        sound: 'verglas',
+        sound: 'wind',
         background: 'rain-background'
         },
       'Thundery outbreaks possible': {
