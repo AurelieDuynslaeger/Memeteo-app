@@ -80,7 +80,7 @@ export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
   };
 
   return (
-    <div class="setCity">
+    <div className="setCity">
       <div>
         <MdMyLocation
           title="Votre position actuelle" // légende affichée lors du hover
@@ -104,7 +104,7 @@ export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
         <SuggestionBox
           {...{ showSuggestions, showFavoris, suggestions, handleSuggestionClick, error }}
         />
-        <button htmlType="submit" onClick={(e) => handleFormSubmit(e)}>
+        <button type="submit" onClick={(e) => handleFormSubmit(e)}>
           <IoSearch class="iconSearch" />
         </button>
       </form>
