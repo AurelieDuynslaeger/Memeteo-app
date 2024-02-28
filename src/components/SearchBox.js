@@ -105,7 +105,7 @@ export const SearchBox = ({ onWeatherInput, setLoadingCity }) => {
           {...{ showSuggestions, showFavoris, suggestions, handleSuggestionClick, error }}
         />
         <button type="submit" onClick={(e) => handleFormSubmit(e)}>
-          <IoSearch class="iconSearch" />
+          <IoSearch className="iconSearch" />
         </button>
       </form>
     </div>
