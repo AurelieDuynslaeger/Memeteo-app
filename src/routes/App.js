@@ -72,10 +72,17 @@ const App = () => {
   const [memes, setMemes] = useState([]);
   //Etat des Sons
   const [musiques, setMusiques] = useState([]);
-  //gestion du background, des memes et des sons grâce aux conditions actuelles renvoyées par l'api
-  const currentWeatherText = weatherData?.current?.condition?.text;
-  // console.log(currentWeatherText) = Light rain
-  //état du Background
+  //toggle qui permet l'utilisateur de diffuser ou non le son, par défaut il est désactivé
+  const [autoplayEnabled, setAutoplayEnabled] = useState(false);
+  //carousel dots, le right va indiquer le côté où mettre les points
+  const [dotPosition, setDotPosition] = useState("right");
+  //ce qui va permettre de passer à une slide du carrousel en cliquant sur le point
+  const handlePositionChange = ({ target: { value } }) => {
+    setDotPosition(value);
+  };
+  //permet l'affichage ou non du weather skeletton
+  const [loadingCity, setLoadingCity] = useState(false);
+  //état du background
   const [backgroundClass, setBackgroundClass] = useState("");
 
   /////////////////// HOOKS d'effets (WeatherData, Background, Memes/Sons) ///////////////////
@@ -191,6 +198,7 @@ const App = () => {
     // console.log(format(day.date, 'dd', { locale: fr }));
     return (
       <div className="week" key={index}>
+        {/* //récupération du composant week */}
         <Week
           key={index}
           day={formatDay(dayDate)}
@@ -210,47 +218,45 @@ const App = () => {
   const currentTime = new Date().getHours();
   // currentTime = 21
   //on filtre les prévisions par heure à PARTIR de l'heure actuelle
-  const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index) =>
-  (
-    <>
-    {/* Vérifie si la date de la prévision est égale à la date actuelle car on est sur un seul appel api pour les 5 jrs à venir et là nous voulons l'heure par heure DU jour*/}
-    {/* substr => "time": "2024-03-01 21:00", 11 caractère, puis 2 de longueur = 21, si hour.time >= 21 alors on affiche*/}
-    {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
-      <Day
-        key={index}
-        time={formatTime(hour.time)}
-        weather={hour.condition.code}
-        isDay={hour.is_day}
-        temperature={hour.temp_c}
-      />
-    ))}
-  </>
-));
-
-  //test composant RainDrop pour le % de pluie
-  // const rainTest = forecastWeather?.forecast?.forecastday;
-  // console.log('log du rest pluie' ,rainTest);
-  ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
-  const rainPercent = weatherData && weatherData.forecast && weatherData.forecast.forecastday &&
-    weatherData.forecast.forecastday.map((day, index) =>
-    (
-      <div className="precip" key={index}>
-    {day.date === currentDate && day.hour.filter(hour => parseInt(hour.time.substr(11, 2)) >= currentTime).map((hour, index) => (
-      <div key={index}>
-        <p className='rain-time'>{formatTime(hour.time)}</p>
-        <RainDrop pourcentage={hour.chance_of_rain} />
+  const filteredHours =
+    forecastWeather.forecast &&
+    forecastWeather.forecast.forecastday &&
+    forecastWeather.forecast.forecastday.map((day, index) => (
+      <div className="MiniCards" key={index}>
+        {/* substr extrait une partie de la chaîne de caractères hour.time. Elle commence à l'index 11 (pour obtenir les deux premiers caractères de l'heure) et extrait 2 caractères (pour obtenir les heures). */}
+        {day.hour
+          .filter((hour) => parseInt(hour.time.substr(11, 2)) > currentTime)
+          .map((hour, index) => (
+            //récupération du composant day
+            <Day
+              key={index}
+              time={formatTime(hour.time)}
+              weather={hour.condition.code}
+              temperature={hour.temp_c}
+            />
+          ))}
       </div>
-    ))}
-  </div>
-));
+    ));
 
-  //affichage des alertes si l'api en renvoit 
-  const alertsList = weatherData.forecast &&
-  weatherData.alerts && weatherData.alerts.alert.map((alert, index) => {
-    return(
-      <Alerts key={index} event={alert.event} expires={alert.expires}/>
-    )
-  });
+ 
+  ///// Carrousel page 3 pour les précipitations des 24 prochaines heures /////
+  const rainPercent =
+    forecastWeather &&
+    forecastWeather.forecast &&
+    forecastWeather.forecast.forecastday &&
+    forecastWeather.forecast.forecastday.map((day, index) => (
+      <>
+        {day.hour
+          .filter((hour) => parseInt(hour.time.substr(11, 2)) > currentTime)
+          .map((hour, index) => (
+            <div>
+              <p className="rain-time">{formatTime(hour.time)}</p>
+              {/* //récupération du composant RainDrop */}
+              <RainDrop pourcentage={hour.chance_of_rain} />
+            </div>
+          ))}
+      </>
+    ));
 
   // Utilisation du WeatherSkeleton si loadingCity (chargement de la ville) = true
   if (loadingCity) {
@@ -314,7 +320,9 @@ const App = () => {
 
             <div>
               <section className="carousel">
-                <div className='carousel-container'>
+                <div className="carousel-container">
+
+                  {/* //radio.group va permettre de définir le mode de changement de diapo et la position des points */}
                   <Radio.Group
                     onChange={handlePositionChange}
                     value={dotPosition}
