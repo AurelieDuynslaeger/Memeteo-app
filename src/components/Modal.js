@@ -22,7 +22,7 @@ const Modal = ({ onClose, dayInfo }) => {
         <div className="modal">
             <div className="modal-content">
                 <span className="close" onClick={onClose}><IoIosCloseCircle /></span>
-                <h5>{date}</h5>
+                <p className='modal-date'>{date}</p>
                 <div className='modal-part'>
                     <DetailCard iconSrc={sunriseIcon} description="" value={`${sunrise}`}/>
                     <DetailCard iconSrc={sunsetIcon} description="" value={`${sunset}`}/>

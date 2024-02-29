@@ -1,7 +1,6 @@
 @use "variables" as v;
 
 .week {
-
     .days {
         background-color: rgb(0, 0, 0, 0.1);
         cursor: pointer;
@@ -9,8 +8,10 @@
         padding: 0.5rem; 
         width: 5rem;
         font-size: 0.8rem;
+        .day-date {
+          font-weight: 500;
+        }
     }
-
      display: flex;
      text-align: center;
      justify-content: space-around;
@@ -37,7 +38,6 @@
     gap:50px;
     height: 20rem;
   }
-
     .hour {
       cursor: default;
       background-color: rgb(0, 0, 0, 0.1);
@@ -46,7 +46,6 @@
       width: 3.8rem;
       margin: 0.1rem; 
       //border: solid 1px black; 
-  
       .icon-display svg{
           color: black;
       }
@@ -56,16 +55,6 @@
 
 
 .precip{
-
-    .rain{
-        padding: 0.5rem;
-        margin: 1rem;
-
-        img{
-            width: 2.5rem;
-        }
-    }
-
     display: flex;
     text-align: center;
     align-items:center;
@@ -85,8 +74,6 @@
     @media screen and (min-width: v.$md-breakpoint) {
       margin-top:1rem;
     }
-
-    
     .slick-dots {
       gap:10px;
       li {
@@ -136,8 +123,8 @@
   position: relative;
   .days, .hour{
     .icon-display svg{
-      width: 3rem;
-      height: 3rem;
+      width: 2.5rem;
+      height: 2.5rem;
       // color: v.$color-peach;
     }
   }
