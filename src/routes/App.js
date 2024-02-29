@@ -155,10 +155,8 @@ const App = () => {
   const handleWeatherInput = async (city) => {
     setLoadingCity(true);
     setWeatherInput(city);
-    // Appel de l'API avec la city soumise dans la nav
-    setWeatherInput(city);
     try {
-      const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=5929e663f6c74ae192890247240802&q=${city}&days=5&aqi=no&alerts=yes`);
+      const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiWeather}&q=${city}&days=5&aqi=no&alerts=yes`);
       const data = await response.json();
 
       setWeatherData(data);
