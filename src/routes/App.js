@@ -69,6 +69,7 @@ const App = () => {
   //Etat des Sons
   const [musiques, setMusiques] = useState([]);
   //gestion du background, des memes et des sons grâce aux conditions actuelles renvoyées par l'api
+  // ?. opérateur de coalescence de null => op de navigation optionnel
   const currentWeatherText = weatherData?.current?.condition?.text;
   // console.log(currentWeatherText) = Light rain
   //carousel dots, le right va indiquer le côté où mettre les points
@@ -213,7 +214,7 @@ const current_time_epoch = Math.floor(Date.now()/1000); //millisecondes en secon
 //récupérer le time_epoch à 24h de plus
 const next_day_time_epoch = current_time_epoch + 86400; 
 
-
+// && verification si chaque niveau de propriété existe mais renvoit la dernière valeur vérifiée
 //Step 2 mapper et filtrer jusqu'au next_day_time_epoch
 const filteredHours = weatherData.forecast && weatherData.forecast.forecastday && weatherData.forecast.forecastday.map((day, index1) => (
   <Fragment key={index1}>
